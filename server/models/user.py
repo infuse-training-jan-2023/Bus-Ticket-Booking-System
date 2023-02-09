@@ -5,7 +5,6 @@ class User:
 		self.db = Database()
 		self.collection_name = "User"
 		self.fields = {
-			"user_id": "string",
 			"emailid": "string",
 			"password": "string",
 			"gender": "string",
