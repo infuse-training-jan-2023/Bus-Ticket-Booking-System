@@ -12,4 +12,4 @@ class User:
 			cursor = table.find()
 			return cursor
 		except Exception as e:
-			return {}
+			return {"Errors": e}
