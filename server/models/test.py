@@ -12,5 +12,7 @@ bus = Bus()
 #     "is_admin":"false"
 # }
 # result = user.register(user_data)
-result = bus.delete_bus('63e4af4b219ec66d45de9b2d')
-print(result)
+# result = bus.delete_bus('63e4af4b219ec66d45de9b2d')
+result = bus.cancel_tickets_for_bus('63e4af4b219ec66d45de9b2d')
+# bus.arrival_before_6()
+# print(result)

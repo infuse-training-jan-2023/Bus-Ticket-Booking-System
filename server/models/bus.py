@@ -12,6 +12,7 @@ class Bus:
             deleted_bus = self.fetch_bus(id)
             print(deleted_bus)
             table.delete_one({"_id":ObjectId(id)})
+            num_of_update_tickets = self.cancel_tickets_for_bus(id)
             return str(deleted_bus)
         except Exception as e :
             return e
@@ -20,6 +21,21 @@ class Bus:
         table = self.db.Bus
         bus = table.find_one({'_id':ObjectId(id)})
         return bus
+
+# # filters
+#     def arrival_before_6(self):
+#         table = self.db.Bus
+#         result = table.find({'routine.arrival_time':{'$lt':600}})
+#         for i in result:
+#             print(i)
+    def cancel_tickets_for_bus(self,id):
+        table = self.db.Ticket
+        query = {'bus_id':str(id)}
+        new_value = { "$set": { "status": False } }
+        tickets = table.update_many(query,new_value)
+        return str(tickets.modified_count)+ " documents updated."
+
+
 
 
 
