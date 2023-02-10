@@ -18,7 +18,6 @@ class Bus:
         except Exception as e :
             return e
 
-
     def cancel_tickets_for_bus(self,id):
         table = self.db.Ticket
         query = {'bus_id':str(id)}
@@ -58,6 +57,38 @@ class Bus:
         except Exception as e:
             return {'Message': 'Failed to apply filter'}
 
+    def add_selected_seats(self, bus_id, selected_seats, date, day):
+        try:
+            table = self.db.Bus
+            table.update_one(
+                {
+                    "_id": ObjectId(bus_id),
+                    "booked_seat.date_of_journey": date
+                },
+                {"$push": {
+                    "booked_seat.$.seat_numbers": {"$each": selected_seats}
+                    },
+                },
+            )
+            bus_cursor = self.find_a_bus(bus_id)
+            routines = bus_cursor["routine"]
+            for routine in routines:
+                if routine["day"] == day:
+                    arrival_time = routine["arrival_time"]
+                    departure_time = routine["departure_time"]
+            return {
+                "start_city": bus_cursor["start_city"],
+                "destination_city": bus_cursor["destination_city"],
+                "arrival_time": arrival_time,
+                "departure_time": departure_time
+            }
+        except Exception as e:
+            print(e)
+
+bus = Bus()
+bus.add_selected_seats("63e4b5ac219ec66d45de9b35", ['a2', 'a3'], "2023-02-12")
+
+
 # if __name__ == "__main__":
     # x = Bus()
     # print(list(x.find_all_buses()))
@@ -75,4 +106,3 @@ class Bus:
     #     }
     # }
     # print(x.filter_search(filter))
-    

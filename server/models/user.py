@@ -42,6 +42,3 @@ class User:
 		table = self.db.User
 		user = table.find_one({'emailid':emailid})
 		return user
-
-
-
