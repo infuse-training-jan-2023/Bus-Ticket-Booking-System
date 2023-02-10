@@ -1,5 +1,3 @@
-import sys
-sys.path.append('../')
 from DB.database import Database
 
 class User:
@@ -13,10 +11,10 @@ class User:
 			retrieved_password = retreived_record["password"]
 			retreived_record.pop('password')
 			if(retrieved_password==password):
-				return str(retreived_record)
-			return {'Error':'invalid password'}
+				return retreived_record
+			return {'Error':'Invalid password'}
 		except StopIteration as e:
-			return {'Error':"email address does not exist"}
+			return {'Error':"EmailID address does not exist"}
 
 
 	def register(self, user_data):
@@ -35,10 +33,25 @@ class User:
 			record = self.fetch_user(received_emailid)
 			return str(record)
 		except Exception as e:
-			return {'Error': e}
+			return {}
 
 
 	def fetch_user(self,emailid):
-		table = self.db.User
-		user = table.find_one({'emailid':emailid})
-		return user
+		try:
+			return self.db.User.find_one({"emailid": emailid})
+		except Exception as e:
+			return {"Error": e}
+	
+	def fetch_users(self):
+		try:
+			cursor = self.db.User.find({})
+			users = []
+			for user in cursor:
+				# x = user["_id"]
+				# user.pop('_id')
+				# print(id.oid)
+				users.append(user)
+			# users = [user for user in cursor]
+			return users
+		except Exception as e:
+			return {}

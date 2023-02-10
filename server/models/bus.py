@@ -1,6 +1,5 @@
-import sys
-sys.path.append('../')
 from DB.database import Database
+from models import ticket
 from bson.objectid import ObjectId
 
 class Bus:
@@ -10,24 +9,16 @@ class Bus:
     def delete_bus(self,id):
         try:
             table = self.db.Bus
-            deleted_bus = self.fetch_bus(id)
-            print(deleted_bus)
             table.delete_one({"_id":ObjectId(id)})
-            num_of_update_tickets = self.cancel_tickets_for_bus(id)
-            return str(deleted_bus)
+            return {"Success": "Bus deleted successfully"}
         except Exception as e :
-            return e
-
-    def cancel_tickets_for_bus(self,id):
-        table = self.db.Ticket
-        query = {'bus_id':str(id)}
-        new_value = { "$set": { "status": False } }
-        tickets = table.update_many(query,new_value)
-        return str(tickets.modified_count)+ " documents updated."
+            return {}
 
     def find_all_buses(self):
         try:
-            return self.db.Bus.find({})
+            cursor = self.db.Bus.find({})
+            buses = [bus for bus in cursor]
+            return buses
         except Exception as e:
             return {'Message': 'Failed to find buses'}
 
@@ -55,7 +46,7 @@ class Bus:
                 res.append(x)
             return res
         except Exception as e:
-            return {'Message': 'Failed to apply filter'}
+            return {}
 
     def add_selected_seats(self, bus_id, selected_seats, date, day):
         try:
@@ -84,9 +75,30 @@ class Bus:
             }
         except Exception as e:
             print(e)
+    
+    def remove_bus_seats(self,ticket_id,date):
+        try:
+            bus_collection=self.db.Bus
+            cursor=ticket.Ticket().get_ticket(ticket_id)
+            for item in cursor:
+                cancelled_seats=item["selected_seats"]
+                bus_id=str(item["bus_id"])
+            bus_collection.update_many( 
+                {
+                    "_id": ObjectId(bus_id),
+                    "booked_seat.date_of_journey": date
+                },
+                {"$pull":{
+                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats} 
+                },
+              },
+            )
+            return True
+        except Exception as e:
+            return {"Error": e}
 
-bus = Bus()
-bus.add_selected_seats("63e4b5ac219ec66d45de9b35", ['a2', 'a3'], "2023-02-12")
+# bus = Bus()
+# bus.add_selected_seats("63e4b5ac219ec66d45de9b35", ['a2', 'a3'], "2023-02-12")
 
 
 # if __name__ == "__main__":
