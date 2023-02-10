@@ -1,6 +1,7 @@
 import sys
 sys.path.append('../')
 from DB.database import Database
+import bson.json_util as json_util
 
 class User:
 	def __init__(self):
@@ -13,9 +14,9 @@ class User:
 			retrieved_password = retreived_record["password"]
 			retreived_record.pop('password')
 			if(retrieved_password==password):
-				return str(retreived_record)
+				return json_util.dumps(retreived_record)
 			return {'Error':'invalid password'}
-		except StopIteration as e:
+		except Exception as e:
 			return {'Error':"email address does not exist"}
 
 

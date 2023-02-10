@@ -87,6 +87,7 @@ body {
 	font-weight: 700;
 	width: 75%;
 	transition: .2s;
+	border-right: 5px;
 }
 
 .login__input:active,
@@ -144,6 +145,7 @@ body {
 }
 input{
 	margin: 1rem;
+	border-radius: 10px;
 }
 
 .login__input:active,

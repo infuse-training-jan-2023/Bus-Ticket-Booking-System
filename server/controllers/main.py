@@ -16,27 +16,19 @@ CORS(app)
 
 # user login
 user = User()
-@app.route('/login', methods=['GET'])
+@app.route('/login', methods=['POST'])
 def verify_login():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        json_data = request.json
-        email = json_data['email']
-        password = json_data['password']
-        return user.login(email,password)
-    else:
-        return 'Content-Type not supported!'
+    json_data = request.json
+    email = json_data['email']
+    password = json_data['password']
+    return user.login(email,password)
 
 # user registration
-@app.route('/register', methods=['post'])
+@app.route('/register', methods=['POST'])
 def register_user():
-    content_type = request.headers.get('Content-Type')
-    if (content_type == 'application/json'):
-        json_data = request.json
-        return user.register(json_data)
-    else:
-        return 'Content-Type not supported!'
-    return "welcome"
+    json_data = request.json
+    print(json_data)
+    return user.register(json_data)
 
 
 bus = Bus()
