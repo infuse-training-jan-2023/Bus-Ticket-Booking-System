@@ -7,6 +7,25 @@ class Bus:
     def __init__(self)->None:
         self.db = Database().get_database()
 
+    def delete_bus(self,id):
+        try:
+            table = self.db.Bus
+            deleted_bus = self.fetch_bus(id)
+            print(deleted_bus)
+            table.delete_one({"_id":ObjectId(id)})
+            num_of_update_tickets = self.cancel_tickets_for_bus(id)
+            return str(deleted_bus)
+        except Exception as e :
+            return e
+
+
+    def cancel_tickets_for_bus(self,id):
+        table = self.db.Ticket
+        query = {'bus_id':str(id)}
+        new_value = { "$set": { "status": False } }
+        tickets = table.update_many(query,new_value)
+        return str(tickets.modified_count)+ " documents updated."
+
     def find_all_buses(self):
         try:
             return self.db.Bus.find({})
@@ -56,9 +75,4 @@ class Bus:
     #     }
     # }
     # print(x.filter_search(filter))
-
     
-
-
-
-
