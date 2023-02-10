@@ -1,4 +1,5 @@
 from flask import Flask,Response,request
+from flask_cors import CORS
 import sys
 sys.path.append('../')
 from DB.database import Database
@@ -9,6 +10,8 @@ from models.bus import Bus
 
 
 app = Flask(__name__)
+cors = CORS(app, resources={"": {"origins": "*"}})
+CORS(app)
 
 
 # user login
