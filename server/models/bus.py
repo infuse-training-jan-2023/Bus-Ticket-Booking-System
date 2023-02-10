@@ -1,9 +1,10 @@
+import sys
+sys.path.append('../')
 from DB.database import Database
-from bson import ObjectId
-
+from bson.objectid import ObjectId
 
 class Bus:
-    def __init__(self):
+    def __init__(self)->None:
         self.db = Database().get_database()
 
     def delete_bus(self,id):
@@ -17,17 +18,7 @@ class Bus:
         except Exception as e :
             return e
 
-    def fetch_bus(self,id):
-        table = self.db.Bus
-        bus = table.find_one({'_id':ObjectId(id)})
-        return bus
 
-# # filters
-#     def arrival_before_6(self):
-#         table = self.db.Bus
-#         result = table.find({'routine.arrival_time':{'$lt':600}})
-#         for i in result:
-#             print(i)
     def cancel_tickets_for_bus(self,id):
         table = self.db.Ticket
         query = {'bus_id':str(id)}
@@ -35,8 +26,53 @@ class Bus:
         tickets = table.update_many(query,new_value)
         return str(tickets.modified_count)+ " documents updated."
 
+    def find_all_buses(self):
+        try:
+            return self.db.Bus.find({})
+        except Exception as e:
+            return {'Message': 'Failed to find buses'}
 
+    def find_a_bus(self, bus_id):
+        try:
+            return self.db.Bus.find_one({"_id": ObjectId(bus_id)})
+        except Exception as e:
+            return {'Message': 'Failed to find the bus'}
 
+    # call the same function for search(src, dst, day)
+    def filter_search(self, filters):
+        try:
+            buses = self.db.Bus.find(filters)
+            res = []
+            for bus in buses:
+                x = {
+                    "start_city": bus["start_city"],
+                    "destination_city": bus["destination_city"],
+                    "seat_price": bus["seat_price"]
+                }
+                for routine in bus["routine"]:
+                    if routine["day"] == filters["routine.day"]:
+                        x["arrival_time"] = routine["arrival_time"]
+                        x["departure_time"] = routine["departure_time"]
+                res.append(x)
+            return res
+        except Exception as e:
+            return {'Message': 'Failed to apply filter'}
 
-
-
+# if __name__ == "__main__":
+    # x = Bus()
+    # print(list(x.find_all_buses()))
+    # print(x.find_a_bus("63e4af4b219ec66d45d9b2d"))
+    # print(x.search_bus("goa", "delhi", "sunday"))
+    # filter = {
+    #     "start_city": "goa",
+    #     "destination_city": "delhi",
+    #     "routine.day": "sunday",
+    #     "seat_price": {
+    #         "$lte": 1500
+    #     },
+    #     "routine.arrival_time": {
+    #         "$gte": 1800
+    #     }
+    # }
+    # print(x.filter_search(filter))
+    
