@@ -6,12 +6,12 @@ class Bus:
     def __init__(self)->None:
         self.db = Database().get_database()
 
-    def delete_bus(self,id):
+    def delete_bus(self, bus_id):
         try:
             table = self.db.Bus
-            table.delete_one({"_id":ObjectId(id)})
+            table.delete_one({"_id": ObjectId(bus_id)})
             return {"Success": "Bus deleted successfully"}
-        except Exception as e :
+        except:
             return {}
 
     def find_all_buses(self):
@@ -19,14 +19,15 @@ class Bus:
             cursor = self.db.Bus.find({})
             buses = [bus for bus in cursor]
             return buses
-        except Exception as e:
-            return {'Message': 'Failed to find buses'}
+        except:
+            return {}
 
     def find_a_bus(self, bus_id):
         try:
-            return self.db.Bus.find_one({"_id": ObjectId(bus_id)})
-        except Exception as e:
-            return {'Message': 'Failed to find the bus'}
+            bus = self.db.Bus.find_one({"_id": ObjectId(bus_id)})
+            return bus
+        except:
+            return {}
 
     # call the same function for search(src, dst, day)
     def filter_search(self, filters):
@@ -34,6 +35,7 @@ class Bus:
             buses = self.db.Bus.find(filters)
             res = []
             for bus in buses:
+                print(bus)
                 x = {
                     "start_city": bus["start_city"],
                     "destination_city": bus["destination_city"],
@@ -45,7 +47,7 @@ class Bus:
                         x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
-        except Exception as e:
+        except:
             return {}
 
     def add_selected_seats(self, bus_id, selected_seats, date, day):
@@ -73,8 +75,8 @@ class Bus:
                 "arrival_time": arrival_time,
                 "departure_time": departure_time
             }
-        except Exception as e:
-            print(e)
+        except:
+            return {}
     
     def remove_bus_seats(self,ticket_id,date):
         try:
@@ -94,8 +96,8 @@ class Bus:
               },
             )
             return True
-        except Exception as e:
-            return {"Error": e}
+        except:
+            return {}
 
 # bus = Bus()
 # bus.add_selected_seats("63e4b5ac219ec66d45de9b35", ['a2', 'a3'], "2023-02-12")

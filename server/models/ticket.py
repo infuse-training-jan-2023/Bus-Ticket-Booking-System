@@ -18,6 +18,7 @@ class Ticket():
                 "status": True
             })
             bus_data = bus.Bus().add_selected_seats(bus_id, selected_seats, date, day)
+            print(bus_data)
             return {
                 "ticket_id": cursor.inserted_id,
                 "bus_id": bus_id,
@@ -31,40 +32,39 @@ class Ticket():
                 "selected_seats": selected_seats,
                 "status": True
             }
-        except Exception as e:
+        except:
             return {}
 
-    def view_tickets_of_user(self,id):
+    def view_tickets_of_user(self,user_id):
         try:
-            ticket_collection=self.db.Ticket
-            cursor=ticket_collection.find({"user_id":id})
+            cursor=self.db.Ticket.find({"user_id":user_id})
             tickets = [ticket for ticket in cursor]
             return tickets
-        except Exception as e:
-            return {"Error": e}
+        except:
+            return {}
 
     def get_ticket(self,ticket_id):
         try:
             ticket=self.db.Ticket.find({"_id": ObjectId(ticket_id)})
             return ticket
-        except Exception as e:
-            return {"Error": e}
+        except:
+            return {}
 
     def get_bus(self,bus_id):
         try:
             bus_collection=self.db.Bus
             cursor=bus_collection.find({"_id": ObjectId(bus_id)})
             return cursor
-        except Exception as e:
-            return {"Error": e}
+        except:
+            return {}
 
     def view_all_tickets(self):
         try:
             ticket_collection=self.db.Ticket
             for ticket in ticket_collection.find():
                     print(ticket["selected_seats"])
-        except Exception as e:
-            return {"Error": e}
+        except:
+            return {}
 
     def cancel_tickets(self,ticket_id,date):
         try:
