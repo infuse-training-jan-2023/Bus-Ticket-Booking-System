@@ -3,19 +3,21 @@ sys.path.append('../')
 from DB.database import Database
 
 class User:
-	def __init__(self) -> None:
+	def __init__(self):
 		self.db = Database().get_database()
 
 	def login(self,email,password):
 		try:
 			table = self.db.User
-			retreived_record = table.find({"emailid":email})
-			retrieved_password = retreived_record.next()["password"]
+			retreived_record = table.find_one({"emailid":email})
+			retrieved_password = retreived_record["password"]
+			retreived_record.pop('password')
 			if(retrieved_password==password):
-				return 'valid'
-			return 'invalid password'
+				return str(retreived_record)
+			return {'Error':'invalid password'}
 		except StopIteration as e:
-			return "email address does not exist"
+			return {'Error':"email address does not exist"}
+
 
 	def register(self, user_data):
 		try:
@@ -30,8 +32,16 @@ class User:
 				"password":str(received_password),
 				"is_admin":str(received_is_admin)
 				})
-			return "user added successfully"
+			record = self.fetch_user(received_emailid)
+			return str(record)
 		except Exception as e:
-			print(e)
+			return {'Error': e}
+
+
+	def fetch_user(self,emailid):
+		table = self.db.User
+		user = table.find_one({'emailid':emailid})
+		return user
+
 
 

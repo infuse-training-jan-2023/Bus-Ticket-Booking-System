@@ -5,6 +5,7 @@ from DB.database import Database
 from pymongo import MongoClient
 import json
 from models.user import User
+from models.bus import Bus
 
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def verify_login():
         return user.login(email,password)
     else:
         return 'Content-Type not supported!'
-        
+
 # user registration
 @app.route('/register', methods=['post'])
 def register_user():
@@ -33,6 +34,14 @@ def register_user():
     else:
         return 'Content-Type not supported!'
     return "welcome"
+
+
+bus = Bus()
+# delete bus
+@app.route('/bus/delete/<id>', methods=['GET'])
+def delete_bus(id):
+    return bus.delete_bus(str(id))
+
 
 if __name__ == '__main__':
     app.run(debug=True,host = '127.0.0.1',port = 4000)
