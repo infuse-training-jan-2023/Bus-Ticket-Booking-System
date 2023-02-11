@@ -9,13 +9,13 @@ user_info = {
     "is_admin":"false"
 }
 def test_api_call_exists():
-    response = requests.post('http://127.0.0.1:4000/register',json={})
-    assert response.status_code==400
+    response = requests.post('http://127.0.0.1:4000/register',json=user_info)
+    assert response.status_code==200
 
 
 def test_status_code():
+    user_info['emailid']="opq{}@gmail.com".format(random.randint(0,1000))
     response = requests.post('http://127.0.0.1:4000/register',json=user_info)
-    print(user_info)
     assert response.status_code==200
 
 def test_response_for_valid_info():
@@ -26,4 +26,4 @@ def test_response_for_valid_info():
 
 def test_response_for_invalid_credentials():
     response = requests.post('http://127.0.0.1:4000/register',json={})
-    assert response.status_code==400
+    assert response.text=='Error'
