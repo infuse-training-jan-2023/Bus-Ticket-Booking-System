@@ -76,7 +76,7 @@ class Ticket():
             return {"status":"cancel success"}
         except:
             return {}
-    
+
 
 
 # ticket= Ticket()

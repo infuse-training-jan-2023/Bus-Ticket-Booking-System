@@ -77,7 +77,7 @@ class Bus:
             }
         except:
             return {}
-    
+
     def remove_bus_seats(self,ticket_id,date):
         try:
             bus_collection=self.db.Bus
@@ -85,13 +85,13 @@ class Bus:
             for item in cursor:
                 cancelled_seats=item["selected_seats"]
                 bus_id=str(item["bus_id"])
-            bus_collection.update_many( 
+            bus_collection.update_many(
                 {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
                 },
                 {"$pull":{
-                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats} 
+                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
                 },
               },
             )
