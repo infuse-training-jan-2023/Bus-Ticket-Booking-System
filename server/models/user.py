@@ -1,6 +1,6 @@
 from DB.database import Database
 import bson.json_util as json_util
-import bcrypt
+# import bcrypt
 
 class User:
 	def __init__(self):
@@ -29,6 +29,8 @@ class User:
 			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
 			# hash = str(bcrypt.hashpw(bytes, salt))
 			# print(hash)
+			if (table.find_one({'emailid':user_data['emailid']})):
+				raise Exception
 			table.insert_one({
 				"emailid": user_data["emailid"],
 				"password": password,

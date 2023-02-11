@@ -37,7 +37,7 @@ def register_user():
     if new_user == {}:
         return Response({"Error": "Could not register user. Try again."}, mimetype="application/json", status=400)
     json_data = Encoder().encode(new_user)
-    return Response(json_data, mimetype="application/json", status=501)
+    return Response(json_data, mimetype="application/json", status=200)
 
 #search buses
 @app.route('/bus_search', methods = ['POST'])
@@ -84,7 +84,7 @@ def cancel_tickets():
     date = request_data["date"]
     stat = ticket.cancel_tickets(ticket_id, date)
     if stat == {}:
-        return Response({"Error": "Could not cancel ticket"}, mimetype="application/json", status=201)
+        return Response({"Error": "Could not cancel ticket"}, mimetype="application/json", status=400)
     return Response(json.dumps(stat), mimetype="application/json", status=201)
 
 #ADMIN

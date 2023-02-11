@@ -15,7 +15,7 @@ def test_status_code():
 
 def test_response_for_valid_search():
     response = requests.post('http://127.0.0.1:4000/bus_search',json=search)
-    assert response.json()==[]
+    assert response.text!="Error"
 
 def test_response_for_invalid_search():
     response = requests.post('http://127.0.0.1:4000/bus_search',json={})

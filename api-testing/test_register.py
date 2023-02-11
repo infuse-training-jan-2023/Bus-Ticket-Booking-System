@@ -21,7 +21,7 @@ def test_status_code():
 def test_response_for_valid_info():
     user_info['emailid']="opq{}@gmail.com".format(random.randint(0,1000))
     response = requests.post('http://127.0.0.1:4000/register',json=user_info)
-    assert response.json()!={}
+    assert response.text!="Error"
 
 
 def test_response_for_invalid_credentials():
