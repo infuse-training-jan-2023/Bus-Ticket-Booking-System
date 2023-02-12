@@ -6,35 +6,6 @@ class Ticket():
     def __init__(self):
         self.db = Database().get_database()
 
-    def book_ticket(self, bus_id, user_id, ticket_price, date, selected_seats, day):
-        try:
-            table = self.db.Ticket
-            cursor = table.insert_one({
-                "bus_id": bus_id,
-                "user_id": user_id,
-                "date": date,
-                "ticket_price": ticket_price,
-                "selected_seats": selected_seats,
-                "status": True
-            })
-            bus_data = bus.Bus().add_selected_seats(bus_id, selected_seats, date, day)
-            print(bus_data)
-            return {
-                "ticket_id": cursor.inserted_id,
-                "bus_id": bus_id,
-                "user_id": user_id,
-                "date": date,
-                "start_city": bus_data["start_city"],
-                "destination_city": bus_data["destination_city"],
-                "arrival_time": bus_data["arrival_time"],
-                "departure_time": bus_data["departure_time"],
-                "ticket_price": ticket_price,
-                "selected_seats": selected_seats,
-                "status": True
-            }
-        except:
-            return {}
-
     def view_tickets_of_user(self,user_id):
         try:
             cursor=self.db.Ticket.find({"user_id":user_id})
@@ -49,20 +20,32 @@ class Ticket():
             return ticket
         except:
             return {}
-
-    def get_bus(self,bus_id):
+    
+    def book_ticket(self, bus_id, user_id, ticket_price, date, selected_seats, day):
         try:
-            bus_collection=self.db.Bus
-            cursor=bus_collection.find({"_id": ObjectId(bus_id)})
-            return cursor
-        except:
-            return {}
-
-    def view_all_tickets(self):
-        try:
-            ticket_collection=self.db.Ticket
-            for ticket in ticket_collection.find():
-                    print(ticket["selected_seats"])
+            table = self.db.Ticket
+            cursor = table.insert_one({
+                "bus_id": bus_id,
+                "user_id": user_id,
+                "date": date,
+                "ticket_price": ticket_price,
+                "selected_seats": selected_seats,
+                "status": True
+            })
+            bus_data = bus.Bus().add_selected_seats(bus_id, selected_seats, date, day)
+            return {
+                "ticket_id": cursor.inserted_id,
+                "bus_id": bus_id,
+                "user_id": user_id,
+                "date": date,
+                "start_city": bus_data["start_city"],
+                "destination_city": bus_data["destination_city"],
+                "arrival_time": bus_data["arrival_time"],
+                "departure_time": bus_data["departure_time"],
+                "ticket_price": ticket_price,
+                "selected_seats": selected_seats,
+                "status": True
+            }
         except:
             return {}
 
