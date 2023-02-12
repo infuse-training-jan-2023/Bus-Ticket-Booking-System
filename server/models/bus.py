@@ -8,8 +8,7 @@ class Bus:
 
     def delete_bus(self, bus_id):
         try:
-            table = self.db.Bus
-            table.delete_one({"_id": ObjectId(bus_id)})
+            self.db.Bus.delete_one({"_id": ObjectId(bus_id)})
             return {"Success": "Bus deleted successfully"}
         except:
             return {}
@@ -35,7 +34,6 @@ class Bus:
             buses = self.db.Bus.find(filters)
             res = []
             for bus in buses:
-                print(bus)
                 x = {
                     "start_city": bus["start_city"],
                     "destination_city": bus["destination_city"],
@@ -52,8 +50,7 @@ class Bus:
 
     def add_selected_seats(self, bus_id, selected_seats, date, day):
         try:
-            table = self.db.Bus
-            table.update_one(
+            result = self.db.Bus.update_one(
                 {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
@@ -63,6 +60,20 @@ class Bus:
                     },
                 },
             )
+            if result.modified_count == 0:
+                booked_seat = {
+                    "seat_numbers": selected_seats,
+                    "date_of_journey": date
+                }
+                self.db.Bus.update_one(
+                    {
+                        "_id": ObjectId(bus_id)
+                    },
+                    {"$push": {
+                        "booked_seat": booked_seat
+                        },
+                    },
+                )
             bus_cursor = self.find_a_bus(bus_id)
             routines = bus_cursor["routine"]
             for routine in routines:
@@ -80,12 +91,11 @@ class Bus:
     
     def remove_bus_seats(self,ticket_id,date):
         try:
-            bus_collection=self.db.Bus
             cursor=ticket.Ticket().get_ticket(ticket_id)
             for item in cursor:
                 cancelled_seats=item["selected_seats"]
                 bus_id=str(item["bus_id"])
-            bus_collection.update_many( 
+            self.db.Bus.update_many( 
                 {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
