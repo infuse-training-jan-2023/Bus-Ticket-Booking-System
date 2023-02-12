@@ -2,7 +2,7 @@ import './App.css';
 import BookSeats from './components/seats'
 import SeatLegends from './components/seatLegends'
 import Deck from './components/deck'
-import BusSeatBooking from './components/busseat3'
+import BusSeatBooking from './components/busseat'
 import 'bootstrap/dist/css/bootstrap.min.css';
 function App() {
   return (

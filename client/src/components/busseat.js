@@ -30,6 +30,38 @@ const BusSeatBooking = () => {
     }
   }
 
+
+  const hanledisable=(seat)=>{
+    if(booked.includes(seat)){
+      return true
+    }
+    else if(ignore.includes(seat)){
+      console.log(seat)
+      return true
+    }
+
+  }
+
+  const handlevariant=(seat)=>{
+    if(ignore.includes(seat)){
+      //return 'danger';
+      return 'outline-light'
+    }
+    if(booked.includes(seat)){
+      return 'danger'
+    }
+    return selectedSeats.includes(seat)? 'success' : 'primary';
+  }
+
+  const checkmiddleline=(seat)=>{
+    if(ignore.includes(seat)){
+      return false
+    }
+    else{
+      return true
+    }
+  }
+
   const renderPassengerData = (seatArray) => {
     return seatArray.map((seat, idx) => {
         return (
@@ -51,7 +83,8 @@ const BusSeatBooking = () => {
   }
 
   const seats = ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5', 'C1', 'C2', 'C3', 'C4', 'C5', 'D1', 'D2', 'D3', 'D4', 'D5'];
-  const booked=['A1','A2']
+  const booked=['A1','D5']
+  const ignore=['B3','D3','C3']
   return (
     <div>
       <div>
@@ -62,27 +95,13 @@ const BusSeatBooking = () => {
             return (
               <div key={index} className="d-flex">
                 {seats.slice(index, index + 5).map((innerSeat) => (
+                  //checkmiddleline(innerSeat)&&
                   <Button
                     key={innerSeat}
-                    variant={selectedSeats.includes(innerSeat)? 'success' : 'primary'}
-                    disabled={booked.includes(innerSeat)}
-                    onClick={() => handleSeatSelection(innerSeat)}
-                    className="m-1 btn-lg"
-                    style={{width: "80px",height:"80px"}}
-                  >
-                    {innerSeat}
-                  </Button>
-                ))}
-              </div>
-            );
-          }
-          else if (index % 4 === 0) {
-            return (
-              <div key={index} className="d-flex mt-3">
-                {seats.slice(index, index + 4).map((innerSeat) => (
-                  <Button
-                    key={innerSeat}
-                    variant={selectedSeats.includes(innerSeat) ? 'success' : 'primary'}
+                    //variant={selectedSeats.includes(innerSeat)? 'success' : 'primary'}
+                    variant={handlevariant(innerSeat)}
+                    // disabled={booked.includes(innerSeat)}
+                    disabled={hanledisable(innerSeat)}
                     onClick={() => handleSeatSelection(innerSeat)}
                     className="m-1 btn-lg"
                     style={{width: "80px",height:"80px"}}
