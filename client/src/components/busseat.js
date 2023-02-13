@@ -8,7 +8,6 @@ export default function  BusSeatBooking(){
 
   const [name, setName] = useState([])
   const [gender, setGender] = useState([])
-  const [seatNumber, setSeatnumber] = useState([])
   const [booked,setBookedSeats]=useState([])
 
   const handleSeatSelection = (seat) => {
@@ -46,7 +45,6 @@ export default function  BusSeatBooking(){
 
   const handlevariant=(seat)=>{
     if(ignore.includes(seat)){
-      //return 'danger';
       return 'outline-light'
     }
     if(booked.includes(seat)){
@@ -112,7 +110,6 @@ export default function  BusSeatBooking(){
       const response = await fetch('http://127.0.0.1:4000/bus/63e4b5ac219ec66d45de9b35', {
         method: 'GET', 
       })
-      //  console.log(response)
       const bus_res = await response.json()
       setBus(bus_res);
       setSeatPrice(bus_res['seat_price'])
@@ -142,8 +139,6 @@ useEffect(() => {
   return (
     <div className='mt-5'>
       <Container>
-        {/* <div className="d-flex flex-column align-items-bottom col-md-4 position-absolute top-50 start-0 translate-middle-y" style={{"marginLeft":"100px"}}>
-         */}
         <Row>
           <Col className="" md={6}>
             <div>
@@ -214,9 +209,6 @@ useEffect(() => {
                 <div>{selectedSeats.join(', ') || 'None'}</div>
                 <div><p>Total Number of selected Seats : {selectedSeats.length}</p></div>
                 <div style={{color:"red"}}><p className='fs-4'>Total Price:{seatPrice*selectedSeats.length}</p></div>
-                {/* <form className="form-group">
-                          {renderPassengerData(selectedSeats)}
-                </form> */}
                 <Button
                  className="m-1 btn-md"
                  variant='primary'
@@ -225,8 +217,6 @@ useEffect(() => {
               </div>
           </Col>
         </Row>
-             
-      {/*<p><div>{selectedSeats.join(', ') || 'None'}</div></p> */}
       </Container>
     </div>
   );
