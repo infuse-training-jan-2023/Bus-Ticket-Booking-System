@@ -1,33 +1,42 @@
 import React from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 
-export default function BusCard() {
+export default function BusCard(props) {
+  const {startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney} = props
+  const duration = Math.abs(departureTime - arrivalTime).toString()
+  const mins = duration.slice(-2), hrs = (duration.length === 3) ? '0' + duration.substring(0, 1) : duration.substring(0, 2)
+  const aTime = ((arrivalTime.toString().length === 3) ? '0' + arrivalTime.toString().substring(0, 1) : arrivalTime.toString().substring(0, 2)) + ':' + arrivalTime.toString().slice(-2)
+  const dTime = ((departureTime.toString().length === 3) ? '0' + departureTime.toString().substring(0, 1) : departureTime.toString().substring(0, 2)) + ':' + departureTime.toString().slice(-2)
+
   return (
         <Card
-          className="mb-2"
-          style={{ width: '54rem', textAlign: 'center'}}
+          className="mb-2 p-4 bg-light"
+          style={{textAlign: 'center'}}
         >
-          <Row className='justify-content-md-center'>
-            <Col className='justify-content-md-center'>
+          <Row className='justify-content-md-center align-items-center'>
+            <p style={{fontWeight: 'bold'}}>{dateOfJourney}</p>
+            <Col xs={8}>
                 <Row>
                     <Col sm>
-                        <div>04:30PM</div>
-                        <div>Panjim</div>
+                        <div>{aTime}</div>
+                        <div>{startCity.charAt(0).toUpperCase() + startCity.slice(1)}</div>
                     </Col>
                     <Col sm>
-                        <div>04:30PM</div>
-                        <div><img src='../../images/right-arrow.png' width={50} height={10} /></div>
+                        <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}}>{`${hrs}hrs ${mins}mins`}</div>
+                        <div><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
                     </Col>           
                     <Col sm>                
-                        <div>12:30AM</div>
-                        <div>Mumbai</div>
+                        <div>{dTime}</div>
+                        <div>{destinationCity.charAt(0).toUpperCase() + destinationCity.slice(1)}</div>
                     </Col>
                 </Row>
             </Col>
-            <Col sm className='m-2'>
-                <div>Rs. 1000</div>
+            <Col className='m-2'>
+                <div>Rs.{seatPrice}</div>
                 <div>
-                    <Button variant="success">Book</Button>
+                    {
+                      buttonType !== '' && <Button variant="danger" as='Link' style={{width: '100%'}}>{buttonType}</Button>
+                    }
                 </div>
             </Col>
           </Row>
