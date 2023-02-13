@@ -137,10 +137,10 @@ useEffect(() => {
   const seats = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5'];
   const ignore=['b3','d3','c3']
   return (
-    <div className='mt-5'>
+    <div className='mt-5 text-nowrap'>
       <Container>
         <Row>
-          <Col className="" md={6}>
+          <Col className="overflow-auto" md={6}>
             <div>
                 {seats.map((seat, index) => {
                 if (index % 5=== 0) {
@@ -204,7 +204,7 @@ useEffect(() => {
                 <p>Selected Seats</p>
               </div>
             </div>
-              <div className='border'>
+              <div className='border text-wrap'>
                 <h4 className="mt-3">Selected seats:</h4>
                 <div>{selectedSeats.join(', ') || 'None'}</div>
                 <div><p>Total Number of selected Seats : {selectedSeats.length}</p></div>
