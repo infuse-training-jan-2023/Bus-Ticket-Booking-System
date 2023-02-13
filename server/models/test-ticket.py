@@ -1,7 +1,5 @@
 import unittest
-from unittest.mock import Mock
-import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 from models.ticket import Ticket
 
 class UserAPITestCase(unittest.TestCase):
@@ -35,26 +33,26 @@ class UserAPITestCase(unittest.TestCase):
                 "status": True
         }
 
-    # @patch("pymongo.collection.Collection.insert_one")
-    # @patch("models.bus.Bus.add_selected_seats")
-    # # @patch("pymongo.collection.Collection.ticket._id", "63e4be76219ec66d45de9b42")
-    # def test_book_ticket(self, mock_add_selected_seats,mock_insert_one):
+    @patch("pymongo.collection.Collection.insert_one")
+    @patch("models.bus.Bus.add_selected_seats")
+    # @patch("pymongo.collection.Collection.ticket._id", "63e4be76219ec66d45de9b42")
+    def test_book_ticket(self, mock_add_selected_seats,mock_insert_one):
 
-    #     mock_insert_one.return_value = self.ticket
-    #     # mock_inserted_id.return_value = self.ticket['_id']
-    #     mock_add_selected_seats.return_value= {
-    #             "start_city": 'goa',
-    #             "destination_city": 'delhi',
-    #             "arrival_time": 1600,
-    #             "departure_time": 1800}
-    #     api = Ticket()
-    #     bus_id = self.ticket['bus_id']
-    #     user_id = self.ticket['user_id']
-    #     date = self.ticket['date']
-    #     ticket_price = self.ticket['ticket_price']
-    #     selected_seats = self.ticket['selected_seats']
-    #     result = api.book_ticket(bus_id,user_id,date,ticket_price,selected_seats,'sunday')
-    #     self.assertEqual(self.ticket_booked, result)
+        mock_insert_one.return_value = self.ticket
+        # mock_inserted_id.return_value = self.ticket['_id']
+        mock_add_selected_seats.return_value= {
+                "start_city": 'goa',
+                "destination_city": 'delhi',
+                "arrival_time": 1600,
+                "departure_time": 1800}
+        api = Ticket()
+        bus_id = self.ticket['bus_id']
+        user_id = self.ticket['user_id']
+        date = self.ticket['date']
+        ticket_price = self.ticket['ticket_price']
+        selected_seats = self.ticket['selected_seats']
+        result = api.book_ticket(bus_id,user_id,date,ticket_price,selected_seats,'sunday')
+        self.assertEqual(self.ticket_booked, result)
 
     @patch("pymongo.collection.Collection.find")
     def test_view_tickets_of_user(self,mock_find):
