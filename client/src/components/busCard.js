@@ -1,7 +1,10 @@
+import { start } from '@popperjs/core'
 import React from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 
-export default function BusCard() {
+export default function BusCard(props) {
+  const {startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType} = props
+
   return (
         <Card
           className="mb-2 p-4"
@@ -11,23 +14,23 @@ export default function BusCard() {
             <Col xs={8}>
                 <Row>
                     <Col sm>
-                        <div>04:30PM</div>
-                        <div>Panjim</div>
+                        <div>{arrivalTime}</div>
+                        <div>{startCity}</div>
                     </Col>
                     <Col sm>
-                        <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}}>12hrs 15mins</div>
+                        <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}}>{departureTime - arrivalTime}</div>
                         <div><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
                     </Col>           
                     <Col sm>                
-                        <div>12:30AM</div>
-                        <div>Mumbai</div>
+                        <div>{departureTime}</div>
+                        <div>{destinationCity}</div>
                     </Col>
                 </Row>
             </Col>
             <Col className='m-2'>
-                <div>Rs.1000</div>
+                <div>{seatPrice}</div>
                 <div>
-                    <Button variant="success" style={{width: '100%'}}>Book</Button>
+                    <Button variant="success" style={{width: '100%'}}>{buttonType}</Button>
                 </div>
             </Col>
           </Row>

@@ -1,9 +1,9 @@
-import { React, useState } from 'react'
+import { React, useEffect, useState } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import BusCard from './busCard'
 
 export default function SearchPage() {
-  const cities = ['goa', 'banglore', 'delhi']
+  const cities = ['goa', 'bangalore', 'delhi']
   const [filters, setFilters] = useState({})
   const setField = (field,  value) => {
     setFilters({...filters,[field]: value})
@@ -15,6 +15,8 @@ export default function SearchPage() {
   const [evening, setEvening] = useState({})
   const [busACType, setACBusType] = useState({})
   const [busNACType, setNACBusType] = useState({})
+  const [buses, setBuses] = useState([])
+  const [search, setSearch] = useState(0)
 
   const handleSearch = () => {
     if(!Object.keys(filters).length) {
@@ -34,7 +36,8 @@ export default function SearchPage() {
       }
       filters["routine.day"] = days[inputDate.getDay()]
     }
-    // console.log(filters)
+    console.log(filters)
+    setSearch(Math.floor((Math.random() * 1000) + 1))
   }
 
   const applyFilters = () => {
@@ -54,9 +57,34 @@ export default function SearchPage() {
     if(Object.keys(busNACType).length)
       filterArr.push(busNACType)
 
+    // setField("$or", filterArr)
     filters["$or"] = filterArr
     console.log(filters)
   }
+
+  const fetchBus = async() => {
+      try {
+        const response = await fetch('http://127.0.0.1:4000/bus_search', {
+          method: 'POST', 
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: JSON.stringify(filters),
+        })
+        // console.log(response)
+        const bus_res = await response.json()
+        // console.log(bus_res)
+        setBuses(bus_res)
+        // console.log(buses)
+      } 
+      catch (error) {
+        console.error('Error:', error);
+      }
+  }
+
+  useEffect(() => {
+    fetchBus()
+  }, [search]);
 
   return (
     <Container>
@@ -139,9 +167,13 @@ export default function SearchPage() {
                 <option value="departure_time">Departure Time</option>
               </select>
             </div>
-            <BusCard/>
-            <BusCard/>
-            <BusCard/>
+            {buses.length !== 0 && buses.map(bus => {
+              return(
+                <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book"/>
+              )
+            })
+
+            }
           </Col>
         </Row>
     </Container>
