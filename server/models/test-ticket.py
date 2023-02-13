@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 from models.ticket import Ticket
 
-class UserAPITestCase(unittest.TestCase):
+class TicketUnitTesting(unittest.TestCase):
     def setUp(self):
         self.ticket = {
             '_id':'63e4be76219ec66d45de9b42',

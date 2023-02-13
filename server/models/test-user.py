@@ -2,7 +2,7 @@ import unittest
 from models.user import User
 from unittest.mock import patch
 
-class UnitTestCase(unittest.TestCase):
+class UserUnitTesting(unittest.TestCase):
     def setUp(self):
         self.mock_user_data = {
             "emailid": "testuser@email.com",
