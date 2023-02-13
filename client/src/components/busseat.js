@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { React, useEffect, useState } from 'react'
+import { Button,Container,Row ,Col} from 'react-bootstrap';
 
-const BusSeatBooking = () => {
+export default function  BusSeatBooking(){
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [bus,setBus]=useState([]);
+  const [seatPrice,setSeatPrice]=useState([])
 
   const [name, setName] = useState([])
   const [gender, setGender] = useState([])
   const [seatNumber, setSeatnumber] = useState([])
+  const [booked,setBookedSeats]=useState([])
 
   const handleSeatSelection = (seat) => {
     if (!selectedSeats.includes(seat)) {
@@ -36,7 +39,6 @@ const BusSeatBooking = () => {
       return true
     }
     else if(ignore.includes(seat)){
-      console.log(seat)
       return true
     }
 
@@ -50,7 +52,7 @@ const BusSeatBooking = () => {
     if(booked.includes(seat)){
       return 'danger'
     }
-    return selectedSeats.includes(seat)? 'success' : 'primary';
+    return selectedSeats.includes(seat)? 'success' : 'secondary';
   }
 
   const checkmiddleline=(seat)=>{
@@ -82,53 +84,152 @@ const BusSeatBooking = () => {
     })
   }
 
-  const seats = ['A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'B5', 'C1', 'C2', 'C3', 'C4', 'C5', 'D1', 'D2', 'D3', 'D4', 'D5'];
-  const booked=['A1','D5']
-  const ignore=['B3','D3','C3']
-  return (
-    <div>
-      <div>
-        <div className="d-flex flex-column align-items-bottom col-md-4 position-absolute top-50 start-0 translate-middle-y" style={{"margin-left":"100px"}}>
-          <div>
-            {seats.map((seat, index) => {
-            if (index % 5=== 0) {
-            return (
-              <div key={index} className="d-flex">
-                {seats.slice(index, index + 5).map((innerSeat) => (
-                  //checkmiddleline(innerSeat)&&
-                  <Button
-                    key={innerSeat}
-                    //variant={selectedSeats.includes(innerSeat)? 'success' : 'primary'}
-                    variant={handlevariant(innerSeat)}
-                    // disabled={booked.includes(innerSeat)}
-                    disabled={hanledisable(innerSeat)}
-                    onClick={() => handleSeatSelection(innerSeat)}
-                    className="m-1 btn-lg"
-                    style={{width: "80px",height:"80px"}}
-                  >
-                    {innerSeat}
-                  </Button>
-                ))}
-              </div>
-            );
-          }
+  const handleBookNowClick =async()=>{
+    try{
+      const response = await fetch('http://127.0.0.1:4000/ticket', {
+        method: 'POST', 
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          selected_seats: selectedSeats,
+          date: bus,
+          bus_id:bus["bus_id"],
+          user_id:localStorage.user_id,
+          ticket_price:bus["ticket_price"],
+          day:"tuesday",
+        })
+      });
+      const data = await response.json();
+      }catch(error) {
 
-          return null;
-        })}
-        </div>
-      </div>
+         console.log(error)
+      } 
+  }
+
+  const fetchBus = async() => {
+    try {
+      const response = await fetch('http://127.0.0.1:4000/bus/63e4b5ac219ec66d45de9b35', {
+        method: 'GET', 
+      })
+      //  console.log(response)
+      const bus_res = await response.json()
+      setBus(bus_res);
+      setSeatPrice(bus_res['seat_price'])
+      const routes=bus_res["booked_seat"]
+      routes.forEach(element => {
+        if(element.date_of_journey==="2023-02-12"){
+          console.log(element)
+          setBookedSeats(element.seat_numbers)
+        }
+        
+      });
+      console.log(routes)
       
-      <div className='' style={{width: "30%","margin-left":"600px"}}>
-      <h4 className="mt-3">Selected seats:</h4>
-      <form className="form-group">
-                {renderPassengerData(selectedSeats)}
-      </form>
-      </div>
+    } 
+    catch (error) {
+      console.error('Error:', error);
+    }
+}
+
+useEffect(() => {
+  fetchBus()
+  
+}, []);
+
+  const seats = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5'];
+  const ignore=['b3','d3','c3']
+  return (
+    <div className='mt-5'>
+      <Container>
+        {/* <div className="d-flex flex-column align-items-bottom col-md-4 position-absolute top-50 start-0 translate-middle-y" style={{"marginLeft":"100px"}}>
+         */}
+        <Row>
+          <Col className="" md={6}>
+            <div>
+                {seats.map((seat, index) => {
+                if (index % 5=== 0) {
+                return (
+                  <div key={index}>
+                    {seats.slice(index, index + 5).map((innerSeat) => (
+                      //checkmiddleline(innerSeat)&&
+                      <Button
+                        key={innerSeat}
+                        //variant={selectedSeats.includes(innerSeat)? 'success' : 'primary'}
+                        variant={handlevariant(innerSeat)}
+                        // disabled={booked.includes(innerSeat)}
+                        disabled={hanledisable(innerSeat)}
+                        onClick={() => handleSeatSelection(innerSeat)}
+                        className="m-1 btn-lg"
+                        style={{width: "80px",height:"80px"}}
+                      >
+                        {innerSeat}
+                      </Button>
+                    ))}
+                  </div>
+                );
+              }
+
+              return null;
+            })}
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className='border lg'>
+              <div className='d-flex justify-content-center align-items-center gap-2'>
+                <p>
+                  <Button
+                    className="m-1 btn-lg"
+                    variant='secondary'
+                    style={{width: "40px",height:"40px"}}>
+                  </Button>
+                </p>
+                <p>Available Seats</p>
+              </div>
+
+              <div className='d-flex justify-content-center align-items-center gap-2'>
+                <p>
+                  <Button
+                    className="m-1 btn-lg"
+                    variant='danger'
+                    style={{width: "40px",height:"40px"}}>
+                  </Button>
+                </p>
+                <p style={{marginLeft: '6px'}}>Booked Seats</p>
+              </div>
+
+              <div className='d-flex justify-content-center align-items-center gap-2'>
+                <p>
+                  <Button
+                    className="m-1 btn-lg"
+                    variant='success'
+                    style={{width: "40px",height:"40px"}}>
+                  </Button>
+                </p>
+                <p>Selected Seats</p>
+              </div>
+            </div>
+              <div className='border'>
+                <h4 className="mt-3">Selected seats:</h4>
+                <div>{selectedSeats.join(', ') || 'None'}</div>
+                <div><p>Total Number of selected Seats : {selectedSeats.length}</p></div>
+                <div style={{color:"red"}}><p className='fs-4'>Total Price:{seatPrice*selectedSeats.length}</p></div>
+                {/* <form className="form-group">
+                          {renderPassengerData(selectedSeats)}
+                </form> */}
+                <Button
+                 className="m-1 btn-md"
+                 variant='primary'
+                 onClick={handleBookNowClick()}
+                 >BOOK-NOW</Button>
+              </div>
+          </Col>
+        </Row>
              
       {/*<p><div>{selectedSeats.join(', ') || 'None'}</div></p> */}
-      </div>
+      </Container>
     </div>
   );
 };
 
-export default BusSeatBooking;
+// export default BusSeatBooking;
