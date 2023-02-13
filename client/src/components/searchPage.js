@@ -17,6 +17,10 @@ export default function SearchPage() {
   const [busNACType, setNACBusType] = useState({})
   const [buses, setBuses] = useState([])
   const [search, setSearch] = useState(0)
+  const [addFilter, setAddFilter] = useState(0)
+  const [priceLimit, setPriceLimit] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [sortValue, setSortValue] = useState('seat_price')
 
   const handleSearch = () => {
     if(!Object.keys(filters).length) {
@@ -58,8 +62,10 @@ export default function SearchPage() {
       filterArr.push(busNACType)
 
     // setField("$or", filterArr)
-    filters["$or"] = filterArr
+    if(filterArr.length > 0)
+      filters["$or"] = filterArr
     console.log(filters)
+    setAddFilter(Math.floor((Math.random() * 1000) + 1))
   }
 
   const fetchBus = async() => {
@@ -76,15 +82,40 @@ export default function SearchPage() {
         // console.log(bus_res)
         setBuses(bus_res)
         // console.log(buses)
-      } 
+      }  
       catch (error) {
-        console.error('Error:', error);
+        console.log('Error:', error);
       }
   }
 
+  const sortBuses = (order) => {
+    console.log(order)
+    console.log(sortValue)
+    let sortedBuses = []
+    if(order === 'asc')
+      sortedBuses = [...buses].sort((a,b) => a[sortValue] - b[sortValue])
+    else
+      sortedBuses = [...buses].sort((a,b) => b[sortValue] - a[sortValue])
+    setBuses(sortedBuses)
+    // console.log(buses)
+  }
+
+  const displayBuses = () => {
+    return (
+        buses && buses.map(bus => {
+        return(
+          <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney=""/>
+        )
+      })
+    )
+  }
+
   useEffect(() => {
-    fetchBus()
-  }, [search]);
+    if(search !== 0 || addFilter !== 0) {
+      fetchBus()
+      setLoading(true)
+    }
+  }, [search, addFilter]);
 
   return (
     <Container>
@@ -123,59 +154,66 @@ export default function SearchPage() {
                 </Col>
             </Row>
             <Row className='justify-content-end px-3'>
-              <Button variant='primary' style={{width: '20%'}} onClick={handleSearch}>Search</Button>
+              <Button variant='danger' style={{width: '20%'}} onClick={handleSearch}>Search</Button>
             </Row>
           </Form>
         </Row>
 
-        <Row>
-          <Col md={3}>
-            <div>
-              <h3>FILTERS</h3>
-              <hr/>
-              <Form>
-                <div className='mb-4'>
-                  <h5>Bus Price</h5>
-                  0<input type="range" min="1" max="1000" style={{width: '80%'}} onChange={e => {setField("seat_price", {'$lte': Number(e.target.value)})}}/>1000
-                </div>
-                <div className='mb-4'>
-                  <h5>Bus Time</h5>
-                  <select class="form-select form-select-md mb-3" onChange={(e) => {setTimeType(`routine.${e.target.value}`)}}>
-                    <option value="arrival_time">Arrival</option>
-                    <option value="departure_time">Departure</option>
-                  </select>
-                  <Form.Check type="checkbox" label="Before 6am" onClick={(e) => {e.target.checked?setEarlyMorning({"$lt": 600}):setEarlyMorning({})}}/>
-                  <Form.Check type="checkbox" label="6am to 12pm" onClick={(e) => {e.target.checked?setMorning({"$gte": 600, "$lt": 1200}):setMorning({})}}/>
-                  <Form.Check type="checkbox" label="12pm to 6pm" onClick={(e) => {e.target.checked?setAfternoon({"$gte": 1200, "$lt": 1800}):setAfternoon({})}}/>
-                  <Form.Check type="checkbox" label="After 6pm" onClick={(e) => {e.target.checked?setEvening({"$gte": 1800}):setEvening({})}}/>
-                </div>
-                <div className='mb-4'>
-                  <h5>Bus Types</h5>
-                  <Form.Check type="checkbox" label="AC" onClick={(e) => {e.target.checked?setACBusType({"bus_type": "ac"}):setACBusType('')}}/>
-                  <Form.Check type="checkbox" label="NON-AC" onClick={(e) => {e.target.checked?setNACBusType({"bus_type": "non-ac"}):setNACBusType('')}}/>
-                </div>
-                <Button variant='warning' style={{width: '100%'}} onClick={applyFilters}>Apply Filters</Button>
-              </Form>
-            </div>
-          </Col>
-          <Col md={9}>
-            <div className='d-flex justify-content-center align-items-baseline gap-4 mb-2'>
-              <span>Sort: </span>
-              <select class="form-select form-select-sm mb-3">
-                <option value="seat_price">Price</option>
-                <option value="arrival_time">Arrival Time</option>
-                <option value="departure_time">Departure Time</option>
-              </select>
-            </div>
-            {buses.length !== 0 && buses.map(bus => {
-              return(
-                <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book"/>
-              )
-            })
-
-            }
-          </Col>
-        </Row>
+        {buses.length > 0 ? (
+            <Row>
+            <Col md={3}>
+              <div>
+                <h3>FILTERS</h3>
+                <hr/>
+                <Form>
+                  <div className='mb-4'>
+                    <h5>Bus Price</h5>
+                    <input type="range" min={1} max={3000} style={{width: '100%'}} onChange={e => {setField("seat_price", {'$lte': Number(e.target.value)}); setPriceLimit(e.target.value)}}/>
+                    <p>Limit: {priceLimit}</p>
+                  </div>
+                  <div className='mb-4'>
+                    <h5>Bus Time</h5>
+                    <select class="form-select form-select-md mb-3" onChange={(e) => {setTimeType(`routine.${e.target.value}`)}}>
+                      <option value="arrival_time">Arrival</option>
+                      <option value="departure_time">Departure</option>
+                    </select>
+                    <Form.Check type="checkbox" label="Before 6am" onClick={(e) => {e.target.checked?setEarlyMorning({"$lt": 600}):setEarlyMorning({})}}/>
+                    <Form.Check type="checkbox" label="6am to 12pm" onClick={(e) => {e.target.checked?setMorning({"$gte": 600, "$lt": 1200}):setMorning({})}}/>
+                    <Form.Check type="checkbox" label="12pm to 6pm" onClick={(e) => {e.target.checked?setAfternoon({"$gte": 1200, "$lt": 1800}):setAfternoon({})}}/>
+                    <Form.Check type="checkbox" label="After 6pm" onClick={(e) => {e.target.checked?setEvening({"$gte": 1800}):setEvening({})}}/>
+                  </div>
+                  <div className='mb-4'>
+                    <h5>Bus Types</h5>
+                    <Form.Check type="checkbox" label="AC" onClick={(e) => {e.target.checked?setACBusType({"bus_type": "ac"}):setACBusType('')}}/>
+                    <Form.Check type="checkbox" label="NON-AC" onClick={(e) => {e.target.checked?setNACBusType({"bus_type": "non-ac"}):setNACBusType('')}}/>
+                  </div>
+                  <Button variant='danger' style={{width: '100%'}} onClick={applyFilters}>Apply Filters</Button>
+                </Form>
+              </div>
+            </Col>
+            <Col md={9}>
+              <div className='d-flex justify-content-center align-items-baseline gap-4 mb-2'>
+                <span>Sort: </span>
+                <select class="form-select form-select-sm mb-3" onChange={(e) => {setSortValue(e.target.value)}}>
+                  <option value="seat_price">Price</option>
+                  <option value="arrival_time">Arrival Time</option>
+                  <option value="departure_time">Departure Time</option>
+                </select>
+                <span><Button variant='danger' onClick={() => sortBuses('asc')}>&uarr;</Button></span>
+                <span><Button variant='danger' onClick={() => sortBuses('desc')}>&darr;</Button></span>
+              </div>
+              {buses.length !== 0 && buses.map(bus => {
+                return(
+                  <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney=""/>
+                )
+              })
+              }
+              {/* {displayBuses} */}
+            </Col>
+          </Row>
+        ) : (
+          !loading ? (<p></p>) : (<p className='text-center'>No data found</p>)
+        )}
     </Container>
   )
 }
