@@ -19,7 +19,11 @@ class Ticket():
             })
             bus_data = bus.Bus().add_selected_seats(bus_id, selected_seats, date, day)
             print(bus_data)
+            # new_ticket = table.find({"_id": cursor.inserted_id})
+            # ticket_id = new_ticket["_id"]
             return {
+                # cannot mock inserted_id so in the test it raises exception since the return object of add_selected_seats
+                # is dict and not a cursor specified in the mock test
                 "ticket_id": cursor.inserted_id,
                 "bus_id": bus_id,
                 "user_id": user_id,
@@ -50,30 +54,16 @@ class Ticket():
         except:
             return {}
 
-    def get_bus(self,bus_id):
-        try:
-            bus_collection=self.db.Bus
-            cursor=bus_collection.find({"_id": ObjectId(bus_id)})
-            return cursor
-        except:
-            return {}
-
-    def view_all_tickets(self):
-        try:
-            ticket_collection=self.db.Ticket
-            for ticket in ticket_collection.find():
-                    print(ticket["selected_seats"])
-        except:
-            return {}
-
     def cancel_tickets(self,ticket_id,date):
         try:
             self.db.Ticket.update_one(
                 {"_id": ObjectId(ticket_id)},
                 {"$set": { "status" : False}}
             )
-            bus.Bus().remove_bus_seats(ticket_id,date)
-            return {"status":"cancel success"}
+
+            if bus.Bus().remove_bus_seats(ticket_id,date):
+                return {"status":"cancel success"}
+            raise Exception
         except:
             return {}
 
