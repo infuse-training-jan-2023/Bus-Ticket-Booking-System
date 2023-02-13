@@ -41,6 +41,7 @@ class Bus:
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
+                print(x)
                 for routine in bus["routine"]:
                     if routine["day"] == filters["routine.day"]:
                         x["arrival_time"] = routine["arrival_time"]
@@ -93,7 +94,7 @@ class Bus:
                 {"$pull":{
                     "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
                 },
-              },
+              }
             )
             return True
         except:
