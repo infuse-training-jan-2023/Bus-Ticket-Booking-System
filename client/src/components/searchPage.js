@@ -85,7 +85,7 @@ export default function SearchPage() {
         const bus_res = await response.json()
         // console.log(bus_res)
         setBuses(bus_res)
-        // console.log(buses)
+        console.log(buses)
       }  
       catch (error) {
         console.log('Error:', error);

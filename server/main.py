@@ -3,6 +3,7 @@ from flask_cors import CORS
 from controllers.user.user import part_user
 from controllers.ticket.ticket import part_ticket
 from controllers.bus.bus import part_bus
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)

@@ -1,4 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import NavBar from './components/navbar'
+import Footer from './components/footer'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchPage from './components/searchPage';
 import HomePage from './components/HomePage';
@@ -9,6 +11,7 @@ import UserProfile from './components/userProfile';
 function App() {
   return (
     <BrowserRouter>
+    <NavBar/>
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="/search_bus" element={<SearchPage />} />
@@ -16,8 +19,9 @@ function App() {
         <Route path="/user_profile" element={<UserProfile />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
+    <Footer/>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
