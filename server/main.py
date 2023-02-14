@@ -1,8 +1,8 @@
 from flask import Flask
 from flask_cors import CORS
-from controllers.user.user import part_user
-from controllers.ticket.ticket import part_ticket
-from controllers.bus.bus import part_bus
+from controllers.user.user import user_controller
+from controllers.ticket.ticket import ticket_controller
+from controllers.bus.bus import bus_controller
 
 app = Flask(__name__)
 CORS(app)
@@ -11,9 +11,9 @@ CORS(app)
 def welcome():
 	return "Hello World"
 
-app.register_blueprint(part_user)
-app.register_blueprint(part_ticket)
-app.register_blueprint(part_bus)
+app.register_blueprint(user_controller)
+app.register_blueprint(ticket_controller)
+app.register_blueprint(bus_controller)
 
 if __name__ == '__main__':
     app.run(debug=True,host = '0.0.0.0',port = 4000)

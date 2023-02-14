@@ -2,12 +2,12 @@ from flask import Blueprint, Response, request
 from models.bus import Bus
 from encoder import Encoder
 import json
-part_bus = Blueprint('part_bus', __name__)
+bus_controller = Blueprint('bus_controller', __name__)
 
 bus = Bus()
 
 #search buses
-@part_bus.route('/bus_search', methods = ['POST'])
+@bus_controller.route('/bus_search', methods = ['POST'])
 def filter_search():
     request_data = request.get_json()
     buses = bus.filter_search(request_data)
@@ -17,7 +17,7 @@ def filter_search():
     return Response(json_data, mimetype="application/json", status=200)
 
 #view user buses
-@part_bus.route('/bus', methods = ['GET'])
+@bus_controller.route('/bus', methods = ['GET'])
 def find_user_buses():
     bus_id = request.args.get("bus_id")
     day = request.args.get("day")
@@ -28,7 +28,7 @@ def find_user_buses():
     return Response(json_data, mimetype="application/json", status=201)
 
 #view buses
-@part_bus.route('/buses', methods = ['GET'])
+@bus_controller.route('/buses', methods = ['GET'])
 def find_all_buses():
     buses = bus.find_all_buses()
     if len(buses) == 0:
@@ -37,7 +37,7 @@ def find_all_buses():
     return Response(json_data, mimetype="application/json", status=201)
 
 # find a bus
-@part_bus.route('/bus/<string:bus_id>', methods = ['GET'])
+@bus_controller.route('/bus/<string:bus_id>', methods = ['GET'])
 def find_a_bus(bus_id):
     get_bus = bus.find_a_bus(bus_id)
     if get_bus == {}:
@@ -46,7 +46,7 @@ def find_a_bus(bus_id):
     return Response(json_data, mimetype="application/json", status=200)
 
 # delete bus
-@part_bus.route('/bus/<string:bus_id>', methods = ['DELETE'])
+@bus_controller.route('/bus/<string:bus_id>', methods = ['DELETE'])
 def delete_bus(bus_id):
     stat = bus.delete_bus(bus_id)
     if stat == {}:

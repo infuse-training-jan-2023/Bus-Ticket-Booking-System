@@ -2,12 +2,12 @@ from flask import Blueprint, Response, request
 from models.ticket import Ticket
 from encoder import Encoder
 import json
-part_ticket = Blueprint('part_ticket', __name__)
+ticket_controller = Blueprint('ticket_controller', __name__)
 
 ticket = Ticket()
 
 #book ticket
-@part_ticket.route('/ticket', methods = ['POST'])
+@ticket_controller.route('/ticket', methods = ['POST'])
 def book_ticket():
     request_data = request.get_json()
     bus_id = request_data["bus_id"]
@@ -23,7 +23,7 @@ def book_ticket():
     return Response(json_data, mimetype="application/json", status=201)
 
 #view ticket of users
-@part_ticket.route('/ticket/<string:user_id>', methods = ['GET'])
+@ticket_controller.route('/ticket/<string:user_id>', methods = ['GET'])
 def view_tickets_of_user(user_id):
     # request_data = request.get_json()
     # user_id = request_data["user_id"]
@@ -34,7 +34,7 @@ def view_tickets_of_user(user_id):
     return Response(json_data, mimetype="application/json", status=201)
 
 #cancel ticket
-@part_ticket.route('/ticket', methods = ['PUT'])
+@ticket_controller.route('/ticket', methods = ['PUT'])
 def cancel_tickets():
     request_data = request.get_json()
     ticket_id = request_data["ticket_id"]

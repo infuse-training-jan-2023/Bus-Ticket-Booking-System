@@ -2,12 +2,12 @@ from flask import Blueprint, Response, request
 from models.user import User
 from encoder import Encoder
 import json
-part_user = Blueprint('part_user', __name__)
+user_controller = Blueprint('user_controller', __name__)
 
 user = User()
 
 # user login
-@part_user.route('/login', methods = ['GET'])
+@user_controller.route('/login', methods = ['GET'])
 def login():
     request_data = request.get_json()
     email = request_data['emailid']
@@ -19,7 +19,7 @@ def login():
     return Response(json_data, mimetype="application/json", status=200)
 
 # user registration
-@part_user.route('/register', methods = ['POST'])
+@user_controller.route('/register', methods = ['POST'])
 def register_user():
     request_data = request.get_json()
     new_user =  user.register(request_data)
@@ -29,7 +29,7 @@ def register_user():
     return Response(json_data, mimetype="application/json", status=501)
 
 # fetch all users
-@part_user.route('/users', methods = ['GET'])
+@user_controller.route('/users', methods = ['GET'])
 def fetch_users():
     users = user.fetch_users()
     if len(users) == 0:
@@ -38,7 +38,7 @@ def fetch_users():
     return Response(data_json, mimetype="application/json", status=201)
 
 # fetch a user
-@part_user.route('/user', methods = ['GET'])
+@user_controller.route('/user', methods = ['GET'])
 def fetch_user():
     # request_data = request.get_json()
     # emailid = request_data["emailid"]
