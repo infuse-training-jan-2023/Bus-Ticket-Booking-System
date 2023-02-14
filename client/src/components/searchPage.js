@@ -119,7 +119,7 @@ export default function SearchPage() {
             <Row>
               <Col sm={4}>
                 <select class="form-select form-select-md mb-3" required onChange={e => {setField("start_city", e.target.value)}}>
-                  <option>Select a city</option>
+                  <option>From: Select a city</option>
                 {cities.map(city => {
                     return (
                       <option value={city}>{city.charAt(0).toUpperCase() + city.slice(1)}</option>
@@ -130,7 +130,7 @@ export default function SearchPage() {
                 </Col>
                 <Col sm={4}>
                   <select class="form-select form-select-md mb-3" required onChange={e => {setField("destination_city", e.target.value)}}>
-                    <option>Select a city</option>
+                    <option>To: Select a city</option>
                   {cities.map(city => {
                     return (
                       <option value={city}>{city.charAt(0).toUpperCase() + city.slice(1)}</option>
