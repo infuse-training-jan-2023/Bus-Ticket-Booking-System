@@ -34,7 +34,8 @@ class Ticket():
                 "selected_seats": selected_seats,
                 "status": True
             })
-            bus_data = bus.Bus().add_selected_seats(bus_id, selected_seats, date, day)
+            bus_object = bus.Bus()
+            bus_data = bus_object.add_selected_seats(bus_id, selected_seats, date, day)
             return {
                 "ticket_id": cursor.inserted_id,
                 "bus_id": bus_id,
@@ -58,7 +59,8 @@ class Ticket():
                 {"_id": ObjectId(ticket_id)},
                 {"$set": { "status" : False}}
             )
-            bus.Bus().remove_bus_seats(ticket_id,date)
+            bus_object = bus.Bus()
+            bus_object.remove_bus_seats(ticket_id,date)
             return {"Status":"Ticket cancelled successfully"}
         except Exception as e:
             print(e)

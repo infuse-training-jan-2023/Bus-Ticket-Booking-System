@@ -122,7 +122,8 @@ class Bus:
     
     def remove_bus_seats(self,ticket_id,date):
         try:
-            cursor=ticket.Ticket().get_ticket(ticket_id)
+            ticket_object = ticket.Ticket()
+            cursor = ticket_object.get_ticket(ticket_id)
             for item in cursor:
                 cancelled_seats=item["selected_seats"]
                 bus_id=str(item["bus_id"])
