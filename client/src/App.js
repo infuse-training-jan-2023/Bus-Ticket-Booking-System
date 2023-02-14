@@ -1,4 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import NavBar from './components/navbar'
+import Footer from './components/footer'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchPage from './components/searchPage';
 import BusSeatBooking from './components/busseat'
@@ -14,6 +16,6 @@ function App() {
       </Routes>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
