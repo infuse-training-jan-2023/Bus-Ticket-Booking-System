@@ -1,14 +1,60 @@
 import { React, useEffect, useState } from 'react'
 import { Button,Container,Row ,Col} from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import BusCard from '../components/busCard'
 
 export default function  BusSeatBooking(){
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bus,setBus]=useState([]);
   const [seatPrice,setSeatPrice]=useState([])
+  const [arrivalTime,setArrivalTime]=useState([])
+  const [departureTime,setDepartureTime]=useState([])
 
   const [name, setName] = useState([])
   const [gender, setGender] = useState([])
   const [booked,setBookedSeats]=useState([])
+
+  const {id,doj}=useParams()
+  console.log(id)
+  console.log(doj)
+
+  const javascript_date = new Date(doj);
+  console.log(javascript_date)
+  const day=javascript_date.getDay()
+ // console.log(getweekday(day))
+
+
+
+  // const queryParameters = new URLSearchParams(window.location.search)
+  // const b_id = queryParameters.get("id")
+  // const dateOfJourney = queryParameters.get("doj")
+  // console.log(b_id)
+  // console.log(dateOfJourney)
+
+  const getweekday=(day)=>{
+    if(day==0){
+      return 'sunday'
+    }
+    else if(day==1){
+      return 'monday'
+    }
+    else if(day==2){
+      return 'tuesday'
+    }
+    else if(day==3){
+      return 'wednesday'
+    }
+    else if(day==4){
+      return 'thursday'
+    }
+    else if(day==5){
+      return 'friday'
+    }
+    else{
+      return 'saturday'
+    }
+  }
+  
 
   const handleSeatSelection = (seat) => {
     if (!selectedSeats.includes(seat)) {
@@ -84,38 +130,58 @@ export default function  BusSeatBooking(){
 
   const handleBookNowClick =async()=>{
     try{
+      console.log(getweekday(day));
+      // const post_data = {
+      //   selected_seats: selectedSeats,
+      //   date: doj,
+      //   bus_id:bus["_id"],
+      //   user_id:"1",
+      //   ticket_price:bus["ticket_price"],
+      //   day:getweekday(day),
+      // }
+      const post_data = {
+        selected_seats:selectedSeats ,
+        date: doj,
+        bus_id:bus["_id"],
+        user_id:"4",
+        ticket_price:seatPrice,
+        day:`${getweekday(day)}`,
+      }
       const response = await fetch('http://127.0.0.1:4000/ticket', {
         method: 'POST', 
+        mode:'cors',
         headers: {
-        'Content-Type': 'application/json'
+          'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: JSON.stringify({
-          selected_seats: selectedSeats,
-          date: bus,
-          bus_id:bus["bus_id"],
-          user_id:localStorage.user_id,
-          ticket_price:bus["ticket_price"],
-          day:"tuesday",
-        })
+        body: JSON.stringify(post_data)
       });
       const data = await response.json();
+      console.log(data)
       }catch(error) {
-
          console.log(error)
       } 
   }
 
   const fetchBus = async() => {
     try {
-      const response = await fetch('http://127.0.0.1:4000/bus/63e4b5ac219ec66d45de9b35', {
+      const response = await fetch(`http://127.0.0.1:4000/bus/${id}`, {
         method: 'GET', 
       })
       const bus_res = await response.json()
       setBus(bus_res);
       setSeatPrice(bus_res['seat_price'])
       const routes=bus_res["booked_seat"]
+      const routine=bus_res['routine']
+      routine.forEach(element => {
+        if(element.day===`${getweekday(day)}`){
+          setArrivalTime(element.arrival_time)
+          setDepartureTime(element.departure_time)
+        }
+        
+      });
+
       routes.forEach(element => {
-        if(element.date_of_journey==="2023-02-12"){
+        if(element.date_of_journey===`${doj}`){
           console.log(element)
           setBookedSeats(element.seat_numbers)
         }
@@ -139,7 +205,8 @@ useEffect(() => {
   return (
     <div className='mt-5 text-nowrap'>
       <Container>
-        <Row>
+       <BusCard id={`${id}`} startCity={`${bus['start_city']}`} destinationCity={`${bus['destination_city']}`} seatPrice={seatPrice} arrivalTime={arrivalTime} departureTime={departureTime} buttonType="" dateOfJourney={`${doj}`}/>
+        <Row className='mt-5'>
           <Col className="overflow-auto" md={6}>
             <div>
                 {seats.map((seat, index) => {
@@ -169,8 +236,8 @@ useEffect(() => {
             })}
             </div>
           </Col>
-          <Col md={4}>
-            <div className='border lg'>
+          <Col md={6}>
+            <div className='border lg pt-3'>
               <div className='d-flex justify-content-center align-items-center gap-2'>
                 <p>
                   <Button
@@ -204,15 +271,16 @@ useEffect(() => {
                 <p>Selected Seats</p>
               </div>
             </div>
-              <div className='border text-wrap'>
+              <div className='border text-wrap text-center'>
                 <h4 className="mt-3">Selected seats:</h4>
                 <div>{selectedSeats.join(', ') || 'None'}</div>
                 <div><p>Total Number of selected Seats : {selectedSeats.length}</p></div>
                 <div style={{color:"red"}}><p className='fs-4'>Total Price:{seatPrice*selectedSeats.length}</p></div>
                 <Button
                  className="m-1 btn-md"
-                 variant='primary'
-                 onClick={handleBookNowClick()}
+                 variant={selectedSeats.length==0?'outline-light':'primary'}
+                 disabled={selectedSeats.length==0?true:false}
+                 onClick={() => handleBookNowClick()}
                  >BOOK-NOW</Button>
               </div>
           </Col>

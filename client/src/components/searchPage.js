@@ -81,7 +81,7 @@ export default function SearchPage() {
         const bus_res = await response.json()
         // console.log(bus_res)
         setBuses(bus_res)
-        // console.log(buses)
+        console.log(buses)
       }  
       catch (error) {
         console.log('Error:', error);
@@ -204,7 +204,7 @@ export default function SearchPage() {
               </div>
               {buses.length !== 0 && buses.map(bus => {
                 return(
-                  <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney=""/>
+                  <BusCard id={"63e4b5ac219ec66d45de9b35"} startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney="2023-02-12"/>
                 )
               })
               }
