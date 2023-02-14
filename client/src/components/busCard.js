@@ -36,8 +36,7 @@ export default function BusCard(props) {
                 <div>Rs.{seatPrice}</div>
                 <div>
                     {
-                      buttonType === 'Book' ? <Button variant="danger" as={Link} to={`/book_ticket/${id}/${dateOfJourney}`} style={{width: '100%'}}>Book</Button>:
-                      buttonType === 'Cancel' ? <Button variant="danger" style={{width: '100%'}}>Cancelk</Button>:''
+                      buttonType === 'Book' && <Button variant="danger" as={Link} to={`/book_ticket/${id}/${dateOfJourney}`} style={{width: '100%'}}>Book</Button>
                     }
                 </div>
             </Col>
