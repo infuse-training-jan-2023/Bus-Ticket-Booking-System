@@ -8,6 +8,7 @@ import BusSeatBooking from './components/busseat'
 function App() {
   return (
     <BrowserRouter>
+    <Navbar/>
       <Routes>
         {/* <Route index element={<Home />} /> */}
         <Route path="/search_bus" element={<SearchPage />} />
