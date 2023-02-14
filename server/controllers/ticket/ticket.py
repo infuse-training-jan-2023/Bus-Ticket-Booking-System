@@ -23,10 +23,10 @@ def book_ticket():
     return Response(json_data, mimetype="application/json", status=201)
 
 #view ticket of users
-@part_ticket.route('/ticket', methods = ['GET'])
-def view_tickets_of_user():
-    request_data = request.get_json()
-    user_id = request_data["user_id"]
+@part_ticket.route('/ticket/<string:user_id>', methods = ['GET'])
+def view_tickets_of_user(user_id):
+    # request_data = request.get_json()
+    # user_id = request_data["user_id"]
     tickets = ticket.view_tickets_of_user(user_id)
     if len(tickets) == 0:
         return Response({"Error": "No tickets available"}, mimetype="application/json", status=400)

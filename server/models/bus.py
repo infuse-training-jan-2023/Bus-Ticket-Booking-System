@@ -13,6 +13,29 @@ class Bus:
         except:
             return {}
 
+    def find_user_buses(self, bus_id, day):
+        try:
+            buses = self.db.Bus.find({
+                "_id": ObjectId(bus_id),
+                "routine.day": day
+            })
+            res = []
+            for bus in buses:
+                x = {
+                    "id": str(bus["_id"]),
+                    "start_city": bus["start_city"],
+                    "destination_city": bus["destination_city"],
+                    "seat_price": bus["seat_price"]
+                }
+                for routine in bus["routine"]:
+                    if routine["day"] == day:
+                        x["arrival_time"] = routine["arrival_time"]
+                        x["departure_time"] = routine["departure_time"]
+                res.append(x)
+            return res
+        except:
+            return {}
+
     def find_all_buses(self):
         try:
             cursor = self.db.Bus.find({})
@@ -35,14 +58,16 @@ class Bus:
             res = []
             for bus in buses:
                 x = {
+                    "id": str(bus["_id"]),
                     "start_city": bus["start_city"],
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
-                for routine in bus["routine"]:
-                    if routine["day"] == filters["routine.day"]:
-                        x["arrival_time"] = routine["arrival_time"]
-                        x["departure_time"] = routine["departure_time"]
+                if "routine.day" in filters:
+                    for routine in bus["routine"]:
+                        if routine["day"] == filters["routine.day"]:
+                            x["arrival_time"] = routine["arrival_time"]
+                            x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
         except:

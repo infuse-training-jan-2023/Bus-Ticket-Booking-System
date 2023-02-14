@@ -40,8 +40,9 @@ def fetch_users():
 # fetch a user
 @part_user.route('/user', methods = ['GET'])
 def fetch_user():
-    request_data = request.get_json()
-    emailid = request_data["emailid"]
+    # request_data = request.get_json()
+    # emailid = request_data["emailid"]
+    emailid = request.args.get("emailid")
     get_user = user.fetch_user(emailid)
     if get_user == {}:
         return Response(json.dumps({"Error": "Failed to fetch user"}), mimetype="application/json", status=404)

@@ -1,9 +1,11 @@
 from flask import Flask
+from flask_cors import CORS
 from controllers.user.user import part_user
 from controllers.ticket.ticket import part_ticket
 from controllers.bus.bus import part_bus
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/', methods = ['GET'])
 def welcome():

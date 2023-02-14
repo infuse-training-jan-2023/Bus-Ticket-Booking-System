@@ -16,6 +16,17 @@ def filter_search():
     json_data = Encoder().encode(list(buses))
     return Response(json_data, mimetype="application/json", status=200)
 
+#view user buses
+@part_bus.route('/bus', methods = ['GET'])
+def find_user_buses():
+    bus_id = request.args.get("bus_id")
+    day = request.args.get("day")
+    buses = bus.find_user_buses(bus_id, day)
+    if buses == {}:
+        return Response(json.dumps({"Error": "No buses found"}), mimetype="application/json", status=401)
+    json_data = Encoder().encode(buses)
+    return Response(json_data, mimetype="application/json", status=201)
+
 #view buses
 @part_bus.route('/buses', methods = ['GET'])
 def find_all_buses():
@@ -26,10 +37,8 @@ def find_all_buses():
     return Response(json_data, mimetype="application/json", status=201)
 
 # find a bus
-@part_bus.route('/bus', methods = ['GET'])
-def find_a_bus():
-    request_data = request.get_json()
-    bus_id = request_data["bus_id"]
+@part_bus.route('/bus/<string:bus_id>', methods = ['GET'])
+def find_a_bus(bus_id):
     get_bus = bus.find_a_bus(bus_id)
     if get_bus == {}:
         return Response({"Error": "Failed to find the bus"}, mimetype="application/json", status=404)

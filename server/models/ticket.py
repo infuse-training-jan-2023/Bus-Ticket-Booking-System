@@ -46,7 +46,7 @@ class Ticket():
                 "selected_seats": selected_seats,
                 "status": True
             }
-        except Exception as e:
+        except Exception:
             return {}
 
     def cancel_tickets(self,ticket_id,date):
