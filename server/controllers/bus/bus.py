@@ -23,7 +23,7 @@ def find_user_buses():
     day = request.args.get("day")
     buses = bus.find_user_buses(bus_id, day)
     if buses == {}:
-        return Response(json.dumps({"Error": "No buses found"}), mimetype="application/json", status=401)
+        return Response(json.dumps({"Error": "No buses found"}), mimetype="application/json", status=400)
     json_data = Encoder().encode(buses)
     return Response(json_data, mimetype="application/json", status=201)
 
@@ -32,7 +32,7 @@ def find_user_buses():
 def find_all_buses():
     buses = bus.find_all_buses()
     if len(buses) == 0:
-        return Response(json.dumps({"Error": "No buses found"}), mimetype="application/json", status=401)
+        return Response(json.dumps({"Error": "No buses found"}), mimetype="application/json", status=400)
     json_data = Encoder().encode(buses)
     return Response(json_data, mimetype="application/json", status=201)
 
@@ -41,7 +41,7 @@ def find_all_buses():
 def find_a_bus(bus_id):
     get_bus = bus.find_a_bus(bus_id)
     if get_bus == {}:
-        return Response({"Error": "Failed to find the bus"}, mimetype="application/json", status=404)
+        return Response({"Error": "Failed to find the bus"}, mimetype="application/json", status=400)
     json_data = Encoder().encode(get_bus)
     return Response(json_data, mimetype="application/json", status=200)
 
@@ -50,5 +50,5 @@ def find_a_bus(bus_id):
 def delete_bus(bus_id):
     stat = bus.delete_bus(bus_id)
     if stat == {}:
-        return Response({"Error": "Failed to delete the bus"}, mimetype="application/json", status=401)
+        return Response({"Error": "Failed to delete the bus"}, mimetype="application/json", status=400)
     return Response(json.dumps(stat), mimetype="application/json", status=201)

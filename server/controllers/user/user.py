@@ -14,7 +14,7 @@ def login():
     password = request_data['password']
     login_user = user.login(email,password)
     if login_user == {}:
-        return Response(json.dumps({"Error": "Enter proper credentials"}), mimetype="application/json", status=400)
+        return Response(json.dumps({"Error": "Enter proper credentials"}), mimetype="application/json", status=401)
     json_data = Encoder().encode(login_user)
     return Response(json_data, mimetype="application/json", status=200)
 
@@ -33,7 +33,7 @@ def register_user():
 def fetch_users():
     users = user.fetch_users()
     if len(users) == 0:
-        return Response(json.dumps({"Error": "Failed to fetch users"}), mimetype="application/json", status=404)
+        return Response(json.dumps({"Error": "Failed to fetch users"}), mimetype="application/json", status=400)
     data_json = Encoder().encode(list(users))
     return Response(data_json, mimetype="application/json", status=201)
 
@@ -45,6 +45,6 @@ def fetch_user():
     emailid = request.args.get("emailid")
     get_user = user.fetch_user(emailid)
     if get_user == {}:
-        return Response(json.dumps({"Error": "Failed to fetch user"}), mimetype="application/json", status=404)
+        return Response(json.dumps({"Error": "Failed to fetch user"}), mimetype="application/json", status=400)
     data_json = Encoder().encode(get_user)
     return Response(data_json, mimetype="application/json", status=201)

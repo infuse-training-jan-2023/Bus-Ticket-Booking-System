@@ -41,5 +41,5 @@ def cancel_tickets():
     date = request_data["date"]
     stat = ticket.cancel_tickets(ticket_id, date)
     if stat == {}:
-        return Response({"Error": "Could not cancel ticket"}, mimetype="application/json", status=201)
+        return Response({"Error": "Could not cancel ticket"}, mimetype="application/json", status=400)
     return Response(json.dumps(stat), mimetype="application/json", status=201)
