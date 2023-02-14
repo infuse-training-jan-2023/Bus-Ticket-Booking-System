@@ -43,7 +43,6 @@ function get_email(e){
 }
 function get_password(e){
     password = e.target.value
-    console.log(password)
 }
 
 function prevent_default(e){
