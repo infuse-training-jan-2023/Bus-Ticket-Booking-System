@@ -14,7 +14,7 @@ def login():
     password = request_data['password']
     login_user = user.login(email,password)
     if login_user == {}:
-        return Response(json.dumps({"Error": "Enter proper credentials"}), mimetype="application/json", status=401)
+        return Response(json.dumps({"Error": "Incorrect credentials"}), mimetype="application/json", status=401)
     json_data = Encoder().encode(login_user)
     return Response(json_data, mimetype="application/json", status=200)
 

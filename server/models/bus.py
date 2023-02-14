@@ -10,7 +10,8 @@ class Bus:
         try:
             self.db.Bus.delete_one({"_id": ObjectId(bus_id)})
             return {"Success": "Bus deleted successfully"}
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_user_buses(self, bus_id, day):
@@ -33,7 +34,8 @@ class Bus:
                         x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_all_buses(self):
@@ -41,14 +43,16 @@ class Bus:
             cursor = self.db.Bus.find({})
             buses = [bus for bus in cursor]
             return buses
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_a_bus(self, bus_id):
         try:
             bus = self.db.Bus.find_one({"_id": ObjectId(bus_id)})
             return bus
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     # call the same function for search(src, dst, day)
@@ -70,7 +74,8 @@ class Bus:
                             x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def add_selected_seats(self, bus_id, selected_seats, date, day):
@@ -111,7 +116,8 @@ class Bus:
                 "arrival_time": arrival_time,
                 "departure_time": departure_time
             }
-        except:
+        except Exception as e:
+            print(e)
             return {}
     
     def remove_bus_seats(self,ticket_id,date):
@@ -131,7 +137,8 @@ class Bus:
               },
             )
             return True
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
 # bus = Bus()

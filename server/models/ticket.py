@@ -11,14 +11,16 @@ class Ticket():
             cursor=self.db.Ticket.find({"user_id":user_id})
             tickets = [ticket for ticket in cursor]
             return tickets
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def get_ticket(self,ticket_id):
         try:
             ticket=self.db.Ticket.find({"_id": ObjectId(ticket_id)})
             return ticket
-        except:
+        except Exception as e:
+            print(e)
             return {}
     
     def book_ticket(self, bus_id, user_id, ticket_price, date, selected_seats, day):
@@ -46,7 +48,8 @@ class Ticket():
                 "selected_seats": selected_seats,
                 "status": True
             }
-        except Exception:
+        except Exception as e:
+            print(e)
             return {}
 
     def cancel_tickets(self,ticket_id,date):
@@ -56,8 +59,9 @@ class Ticket():
                 {"$set": { "status" : False}}
             )
             bus.Bus().remove_bus_seats(ticket_id,date)
-            return {"status":"cancel success"}
-        except:
+            return {"Status":"Ticket cancelled successfully"}
+        except Exception as e:
+            print(e)
             return {}
     
 

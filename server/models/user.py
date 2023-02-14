@@ -1,5 +1,5 @@
 from DB.database import Database
-import bcrypt
+# import bcrypt
 
 class User:
 	def __init__(self):
@@ -13,11 +13,14 @@ class User:
 			# print(salt)
 			# print("b'$2b$12$VV7W1vaScWnMGMtaN1nd2O14qQu/TwvyUNRW.4MprjJmKXJmRaYTi'")
 			user = self.db.User.find_one({"emailid":email})
+			if user == {}:
+				raise TypeError("Incorrect credentials")
 			if(user["password"]==password):
 				user.pop("password")
 				return user
-			return {}
-		except:
+			raise TypeError("Incorrect credentials")
+		except Exception as e:
+			print(e)
 			return {}
 
 	def register(self, user_data):
@@ -36,6 +39,7 @@ class User:
 			})
 			return self.fetch_user(user_data["emailid"])
 		except Exception as e:
+			print(e)
 			return {}
 
 
@@ -44,6 +48,7 @@ class User:
 			user = self.db.User.find_one({"emailid": emailid})
 			return user
 		except Exception as e:
+			print(e)
 			return {}
 	
 	def fetch_users(self):
@@ -52,4 +57,5 @@ class User:
 			users = [user for user in cursor]
 			return users
 		except Exception as e:
+			print(e)
 			return {}
