@@ -7,3 +7,44 @@
 	left: 0;
 	background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
 }
+
+@media screen and (max-width: 1280px) {
+	.homeHeading {
+		font-size: 1em;
+	}
+
+	.homeTagLine {
+		font-size: 0.7em;
+	}
+
+	.homeButton {
+		padding: 0;
+		font-size: 0.5em;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.homeHeading {
+		font-size: 0.8em;
+	}
+
+	.homeTagLine {
+		font-size: 0.5em;
+	}
+
+	.homeButton {
+		font-size: 0.4em;
+	}
+}
+
+@media screen and (max-width: 580px) {
+	.homeCaption {
+		margin-top: -10%;
+	}
+}
+
+@media screen and (max-width: 450px) {
+	.homeCaption {
+		margin-top: -20%;
+	}
+}

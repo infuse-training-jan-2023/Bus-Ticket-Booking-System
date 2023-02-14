@@ -21,6 +21,7 @@ export default function SearchPage() {
   const [priceLimit, setPriceLimit] = useState(0)
   const [loading, setLoading] = useState(false)
   const [sortValue, setSortValue] = useState('seat_price')
+  const [doj, setDOJ] = useState('')
 
   const handleSearch = () => {
     if(!Object.keys(filters).length) {
@@ -34,10 +35,13 @@ export default function SearchPage() {
     else {
       const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
       let inputDate = new Date(filters["routine.day"]), currentDate = new Date()
+      // doj = filters["routine.day"]
+      // console.log(doj)
       if(inputDate.getTime() < currentDate.getTime()) {
         alert('Invalid date selected')
         return
       }
+      setDOJ(filters["routine.day"])
       filters["routine.day"] = days[inputDate.getDay()]
     }
     console.log(filters)
@@ -98,16 +102,6 @@ export default function SearchPage() {
       sortedBuses = [...buses].sort((a,b) => b[sortValue] - a[sortValue])
     setBuses(sortedBuses)
     // console.log(buses)
-  }
-
-  const displayBuses = () => {
-    return (
-        buses && buses.map(bus => {
-        return(
-          <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney=""/>
-        )
-      })
-    )
   }
 
   useEffect(() => {
@@ -204,11 +198,10 @@ export default function SearchPage() {
               </div>
               {buses.length !== 0 && buses.map(bus => {
                 return(
-                  <BusCard startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney=""/>
+                  <BusCard id={bus.id} startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney={doj} showDate={false}/>
                 )
               })
               }
-              {/* {displayBuses} */}
             </Col>
           </Row>
         ) : (

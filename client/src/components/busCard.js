@@ -1,8 +1,9 @@
 import React from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 export default function BusCard(props) {
-  const {startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney} = props
+  const {id, startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney, showDate} = props
   const duration = Math.abs(departureTime - arrivalTime).toString()
   const mins = duration.slice(-2), hrs = (duration.length === 3) ? '0' + duration.substring(0, 1) : duration.substring(0, 2)
   const aTime = ((arrivalTime.toString().length === 3) ? '0' + arrivalTime.toString().substring(0, 1) : arrivalTime.toString().substring(0, 2)) + ':' + arrivalTime.toString().slice(-2)
@@ -14,7 +15,7 @@ export default function BusCard(props) {
           style={{textAlign: 'center'}}
         >
           <Row className='justify-content-md-center align-items-center'>
-            <p style={{fontWeight: 'bold'}}>{dateOfJourney}</p>
+            {showDate && <p style={{fontWeight: 'bold'}}>{dateOfJourney}</p>}
             <Col xs={8}>
                 <Row>
                     <Col sm>
@@ -35,7 +36,8 @@ export default function BusCard(props) {
                 <div>Rs.{seatPrice}</div>
                 <div>
                     {
-                      buttonType !== '' && <Button variant="danger" as='Link' style={{width: '100%'}}>{buttonType}</Button>
+                      buttonType === 'Book' ? <Button variant="danger" as={Link} to={`/book_ticket/${id}/${dateOfJourney}`} style={{width: '100%'}}>Book</Button>:
+                      buttonType === 'Cancel' ? <Button variant="danger" style={{width: '100%'}}>Cancelk</Button>:''
                     }
                 </div>
             </Col>
