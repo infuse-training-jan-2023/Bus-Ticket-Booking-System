@@ -1,5 +1,6 @@
 from DB.database import Database
-import bcrypt
+import bson.json_util as json_util
+# import bcrypt
 
 class User:
 	def __init__(self):
@@ -28,6 +29,8 @@ class User:
 			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
 			# hash = str(bcrypt.hashpw(bytes, salt))
 			# print(hash)
+			if (table.find_one({'emailid':user_data['emailid']})):
+				raise Exception
 			table.insert_one({
 				"emailid": user_data["emailid"],
 				"password": password,
@@ -45,7 +48,7 @@ class User:
 			return user
 		except Exception as e:
 			return {}
-	
+
 	def fetch_users(self):
 		try:
 			cursor = self.db.User.find({})
@@ -53,3 +56,4 @@ class User:
 			return users
 		except Exception as e:
 			return {}
+>>>>>>>>> Temporary merge branch 2

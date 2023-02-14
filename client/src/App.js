@@ -1,22 +1,29 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+
+// import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Login_form from './components/login_form/login_form';
+import Registration_form from './components/registeration_form/registeration_form';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SearchPage from './components/searchPage';
-import HomePage from './components/HomePage';
-import PageNotFound from './components/PageNotFound';
-import BusSeatBooking from './components/busseat';
-import UserProfile from './components/userProfile';
+import Home_page from './components/home_page/home_page';
+import Button from './components/button/button'
+
+
+
+
 
 function App() {
   return (
+    // <div className="App">
+    //   <Login_form on_submit={login_validation}/>
+    //   <Registration_form on_submit={register_user}/>
+    // </div>
     <BrowserRouter>
-      <Routes>
-        <Route index element={<HomePage />} />
-        <Route path="/search_bus" element={<SearchPage />} />
-        <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
-        <Route path="/user_profile" element={<UserProfile />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+    <Route path='/successful_login' index element={<Home_page emailid={window.localStorage.getItem('emailid')}/>}/>
+    <Route path="/login" element={[<Login_form/>,<Button/>]} />
+    <Route path='/register' index element={<Registration_form/>} />
+    </Routes>
+  </BrowserRouter>
   );
 }
 

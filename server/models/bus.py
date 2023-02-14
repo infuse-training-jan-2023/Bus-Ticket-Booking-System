@@ -63,11 +63,11 @@ class Bus:
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
-                if "routine.day" in filters:
-                    for routine in bus["routine"]:
-                        if routine["day"] == filters["routine.day"]:
-                            x["arrival_time"] = routine["arrival_time"]
-                            x["departure_time"] = routine["departure_time"]
+                print(x)
+                for routine in bus["routine"]:
+                    if routine["day"] == filters["routine.day"]:
+                        x["arrival_time"] = routine["arrival_time"]
+                        x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
         except:
@@ -113,22 +113,22 @@ class Bus:
             }
         except:
             return {}
-    
+
     def remove_bus_seats(self,ticket_id,date):
         try:
             cursor=ticket.Ticket().get_ticket(ticket_id)
             for item in cursor:
                 cancelled_seats=item["selected_seats"]
                 bus_id=str(item["bus_id"])
-            self.db.Bus.update_many( 
+            bus_collection.update_many(
                 {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
                 },
                 {"$pull":{
-                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats} 
+                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
                 },
-              },
+              }
             )
             return True
         except:
