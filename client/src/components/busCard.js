@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 
 export default function BusCard(props) {
   const {id, startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney, showDate} = props
-  const duration = Math.abs(departureTime - arrivalTime).toString()
-  const mins = duration.slice(-2), hrs = (duration.length === 3) ? '0' + duration.substring(0, 1) : duration.substring(0, 2)
+  const duration = departureTime < arrivalTime ? Math.abs(departureTime - arrivalTime) + 2400 : Math.abs(departureTime - arrivalTime)
+  const mins = duration.toString().slice(-2), hrs = (duration.toString().length === 3) ? '0' + duration.toString().substring(0, 1) : duration.toString().substring(0, 2)
   const aTime = ((arrivalTime.toString().length === 3) ? '0' + arrivalTime.toString().substring(0, 1) : arrivalTime.toString().substring(0, 2)) + ':' + arrivalTime.toString().slice(-2)
   const dTime = ((departureTime.toString().length === 3) ? '0' + departureTime.toString().substring(0, 1) : departureTime.toString().substring(0, 2)) + ':' + departureTime.toString().slice(-2)
 
