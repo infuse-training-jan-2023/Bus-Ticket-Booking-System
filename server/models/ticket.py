@@ -4,20 +4,22 @@ from models import bus
 
 class Ticket():
     def __init__(self):
-        self.db = Database().get_database()
+        self.db = Database()
+        self.table_name = 'Ticket'
 
-    def view_tickets_of_user(self,user_id):
+    def view_tickets_of_user(self, user_id):
         try:
-            cursor=self.db.Ticket.find({"user_id":user_id})
+            cursor=self.db.get_database().Ticket.find({"user_id":user_id})
             tickets = [ticket for ticket in cursor]
             return tickets
         except Exception as e:
             print(e)
             return {}
 
-    def get_ticket(self,ticket_id):
+    def get_ticket(self, ticket_id):
         try:
-            ticket=self.db.Ticket.find({"_id": ObjectId(ticket_id)})
+            # ticket=self.db.get_database().Ticket.find({"_id": ObjectId(ticket_id)})
+            ticket = self.db.read(self.table_name, {"_id": ObjectId(ticket_id)})
             return ticket
         except Exception as e:
             print(e)
@@ -25,15 +27,24 @@ class Ticket():
     
     def book_ticket(self, bus_id, user_id, ticket_price, date, selected_seats, day):
         try:
-            table = self.db.Ticket
-            cursor = table.insert_one({
+            # table = self.db.get_database().Ticket
+            # cursor = table.insert_one({
+            #     "bus_id": bus_id,
+            #     "user_id": user_id,
+            #     "date": date,
+            #     "ticket_price": ticket_price,
+            #     "selected_seats": selected_seats,
+            #     "status": True
+            # })
+            new_ticket = {
                 "bus_id": bus_id,
                 "user_id": user_id,
                 "date": date,
                 "ticket_price": ticket_price,
                 "selected_seats": selected_seats,
                 "status": True
-            })
+            }
+            cursor = self.db.create(self.table_name, new_ticket)
             bus_object = bus.Bus()
             bus_data = bus_object.add_selected_seats(bus_id, selected_seats, date, day)
             return {
@@ -55,10 +66,11 @@ class Ticket():
 
     def cancel_tickets(self,ticket_id,date):
         try:
-            self.db.Ticket.update_one(
-                {"_id": ObjectId(ticket_id)},
-                {"$set": { "status" : False}}
-            )
+            # self.db.get_database().Ticket.update_one(
+            #     {"_id": ObjectId(ticket_id)},
+            #     {"$set": { "status" : False}}
+            # )
+            self.db.update(self.table_name, {"_id": ObjectId(ticket_id)}, {"$set": { "status" : False}})
             bus_object = bus.Bus()
             bus_object.remove_bus_seats(ticket_id,date)
             return {"Status":"Ticket cancelled successfully"}
