@@ -8,13 +8,14 @@ import BusSeatBooking from './components/busseat'
 function App() {
   return (
     <BrowserRouter>
-    <Navbar/>
+    <NavBar/>
       <Routes>
         {/* <Route index element={<Home />} /> */}
         <Route path="/search_bus" element={<SearchPage />} />
         <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
         {/* <Route path="*" element={<NoPage />} /> */}
       </Routes>
+    <Footer/>
     </BrowserRouter>
   );
 };

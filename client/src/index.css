@@ -47,6 +47,8 @@
   text-align: center;
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
+
+}
 @-ms-keyframes bounce {
   0% {
       top: 0;
