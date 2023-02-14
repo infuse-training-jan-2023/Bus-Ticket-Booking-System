@@ -6,8 +6,10 @@ from models.user import User
 from models.bus import Bus
 from models.ticket import Ticket
 from encoder import Encoder
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 user = User()
 bus = Bus()
 ticket = Ticket()

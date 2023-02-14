@@ -1,49 +1,29 @@
 
-import './App.css';
+// import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import Login_form from './components/login_form/login_form';
 import Registration_form from './components/registeration_form/registeration_form';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home_page from './components/home_page/home_page';
+import Button from './components/button/button'
 
-
-// validate user credentials
-async function login_validation(email,password){
-      var credentials = {'email': String(email),'password':String(password)}
-      const settings = {
-        method: 'POST',
-        headers: {Accept: 'application/json','Content-Type': 'application/json'},
-        body:JSON.stringify(credentials)
-    };
-    const fetchResponse = await fetch('http://127.0.0.1:4000/login', settings);
-    const data = await fetchResponse.json()
-    if(data['Error']!==undefined){
-      console.log(data['Error'])
-    }
-    else{
-      console.log(data)
-    }
-  }
-
-  // register user
-  async function register_user(user){
-    console.log(user)
-      const settings = {
-        method: 'POST',
-        headers: {Accept: 'application/json','Content-Type': 'application/json'},
-        body:JSON.stringify(user)
-    };
-    const fetchResponse = await fetch('http://127.0.0.1:4000/register', settings);
-    const data = await fetchResponse.json()
-    console.log(data)
-  }
 
 
 
 
 function App() {
   return (
-    <div className="App">
-      <Login_form on_submit={login_validation}/>
-      <Registration_form on_submit={register_user}/>
-    </div>
+    // <div className="App">
+    //   <Login_form on_submit={login_validation}/>
+    //   <Registration_form on_submit={register_user}/>
+    // </div>
+    <BrowserRouter>
+    <Routes>
+    <Route path='/successful_login' index element={<Home_page emailid={window.localStorage.getItem('emailid')}/>}/>
+    <Route path="/login" element={[<Login_form/>,<Button/>]} />
+    <Route path='/register' index element={<Registration_form/>} />
+    </Routes>
+  </BrowserRouter>
   );
 }
 
