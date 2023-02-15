@@ -1,55 +1,66 @@
 from DB.database import Database
-import bcrypt
+# import bcrypt
 
 class User:
 	def __init__(self):
-		self.db = Database().get_database()
+		self.db = Database()
+		self.table_name = 'User'
 
-	def login(self,email,password):
+	def login(self, emailid, password):
 		try:
 			# bytes = password.encode("utf-8")
 			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
 			# hash = str(bcrypt.hashpw(bytes, salt))
 			# print(salt)
 			# print("b'$2b$12$VV7W1vaScWnMGMtaN1nd2O14qQu/TwvyUNRW.4MprjJmKXJmRaYTi'")
-			user = self.db.User.find_one({"emailid":email})
+			user = self.db.read(self.table_name, {"emailid": emailid})
+			if user == {}:
+				raise TypeError("Incorrect credentials")
 			if(user["password"]==password):
 				user.pop("password")
 				return user
-			return {}
-		except:
+			raise TypeError("Incorrect credentials")
+		except Exception as e:
+			print(e)
 			return {}
 
 	def register(self, user_data):
 		try:
-			table = self.db.User
-			password = user_data["password"]
+			# table = self.db.get_database().User
+			# table.insert_one({
+			# 	"emailid": user_data["emailid"],
+			# 	"password": password,
+			# 	"gender": user_data["gender"],
+			# 	"is_admin": False,
+			# })
+			user_data["is_admin"] = False
+			self.db.create(self.table_name, user_data)
+			# password = user_data["password"]
 			# bytes = password.encode("utf-8")
 			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
 			# hash = str(bcrypt.hashpw(bytes, salt))
 			# print(hash)
-			table.insert_one({
-				"emailid": user_data["emailid"],
-				"password": password,
-				"gender": user_data["gender"],
-				"is_admin": False,
-			})
-			return self.fetch_user(user_data["emailid"])
+			return self.db.read(self.table_name, {"emailid": user_data["emailid"]})
 		except Exception as e:
+			print(e)
 			return {}
 
 
-	def fetch_user(self,emailid):
+	def fetch_user(self, emailid):
 		try:
-			user = self.db.User.find_one({"emailid": emailid})
+			# user = self.db.get_database().User.find_one({"emailid": emailid})
+			user = self.db.read(self.table_name, {"emailid": emailid})
 			return user
 		except Exception as e:
+			print(e)
 			return {}
 	
 	def fetch_users(self):
 		try:
-			cursor = self.db.User.find({})
-			users = [user for user in cursor]
+			# cursor = self.db.read_all(self.table_name)
+			# users = [user for user in cursor]
+			users = self.db.read_all(self.table_name)
 			return users
 		except Exception as e:
+			print(e)
 			return {}

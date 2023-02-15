@@ -4,18 +4,21 @@ from bson.objectid import ObjectId
 
 class Bus:
     def __init__(self)->None:
-        self.db = Database().get_database()
+        self.db = Database()
+        self.table_name = 'Bus'
 
     def delete_bus(self, bus_id):
         try:
-            self.db.Bus.delete_one({"_id": ObjectId(bus_id)})
+            # self.db.get_database().Bus.delete_one({"_id": ObjectId(bus_id)})
+            self.db.delete(self.table_name, ObjectId(bus_id))
             return {"Success": "Bus deleted successfully"}
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_user_buses(self, bus_id, day):
         try:
-            buses = self.db.Bus.find({
+            buses = self.db.get_database().Bus.find({
                 "_id": ObjectId(bus_id),
                 "routine.day": day
             })
@@ -33,28 +36,33 @@ class Bus:
                         x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_all_buses(self):
         try:
-            cursor = self.db.Bus.find({})
-            buses = [bus for bus in cursor]
+            # cursor = self.db.get_database().Bus.find({})
+            # buses = [bus for bus in cursor]
+            buses = self.db.read_all(self.table_name)
             return buses
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def find_a_bus(self, bus_id):
         try:
-            bus = self.db.Bus.find_one({"_id": ObjectId(bus_id)})
+            # bus = self.db.get_database().Bus.find_one({"_id": ObjectId(bus_id)})
+            bus = self.db.read(self.table_name, {"_id": ObjectId(bus_id)})
             return bus
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     # call the same function for search(src, dst, day)
     def filter_search(self, filters):
         try:
-            buses = self.db.Bus.find(filters)
+            buses = self.db.get_database().Bus.find(filters)
             res = []
             for bus in buses:
                 x = {
@@ -70,27 +78,37 @@ class Bus:
                             x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
     def add_selected_seats(self, bus_id, selected_seats, date, day):
         try:
-            result = self.db.Bus.update_one(
-                {
+            # result = self.db.get_database().Bus.update_one(
+            #     {
+            #         "_id": ObjectId(bus_id),
+            #         "booked_seat.date_of_journey": date
+            #     },
+            #     {"$push": {
+            #         "booked_seat.$.seat_numbers": {"$each": selected_seats}
+            #         },
+            #     },
+            # )
+            bus_filter = {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
-                },
-                {"$push": {
+                }
+            seats_set = {"$push": {
                     "booked_seat.$.seat_numbers": {"$each": selected_seats}
                     },
-                },
-            )
+                }
+            result = self.db.update(self.table_name, bus_filter, seats_set)
             if result.modified_count == 0:
                 booked_seat = {
                     "seat_numbers": selected_seats,
                     "date_of_journey": date
                 }
-                self.db.Bus.update_one(
+                self.db.get_database().Bus.update_one(
                     {
                         "_id": ObjectId(bus_id)
                     },
@@ -111,16 +129,17 @@ class Bus:
                 "arrival_time": arrival_time,
                 "departure_time": departure_time
             }
-        except:
+        except Exception as e:
+            print(e)
             return {}
     
     def remove_bus_seats(self,ticket_id,date):
         try:
-            cursor=ticket.Ticket().get_ticket(ticket_id)
-            for item in cursor:
-                cancelled_seats=item["selected_seats"]
-                bus_id=str(item["bus_id"])
-            self.db.Bus.update_many( 
+            ticket_object = ticket.Ticket()
+            cursor = ticket_object.get_ticket(ticket_id)
+            cancelled_seats=cursor["selected_seats"]
+            bus_id=str(cursor["bus_id"])
+            self.db.get_database().Bus.update_many( 
                 {
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
@@ -131,7 +150,8 @@ class Bus:
               },
             )
             return True
-        except:
+        except Exception as e:
+            print(e)
             return {}
 
 # bus = Bus()
