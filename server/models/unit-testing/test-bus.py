@@ -49,16 +49,15 @@ class BusUnitTesting(unittest.TestCase):
         result = bus.delete_bus(self.bus['_id'])
         self.assertEqual({"Success": "Bus deleted successfully"}, result)
 
-    @patch('pymongo.collection.Collection.find')
-    def test_find_all_buses(self,mock_find):
-        mock_find.return_value =  self.bus
-        bus = Bus()
-        result= bus.find_all_buses()
+    @patch('DB.database.Database.read_all')
+    def test_find_all_buses(self,mock_read_all):
+        mock_read_all.return_value =  [self.bus]
+        result= Bus().find_all_buses()
         self.assertTrue(type(result)==list)
 
-    @patch('pymongo.collection.Collection.find_one')
-    def test_find_a_bus(self,mock_find_one):
-        mock_find_one.return_value =  self.bus
+    @patch('DB.database.Database.read')
+    def test_find_a_bus(self,mock_read):
+        mock_read.return_value =  self.bus
         bus = Bus()
         result= bus.find_a_bus(self.bus['_id'])
         self.assertEqual(self.bus,result)
