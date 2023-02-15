@@ -23,7 +23,7 @@ function App() {
     <NavBar/>
     <Routes>
     <Route path='/successful_login' index element={<Home_page emailid={window.localStorage.getItem('emailid')}/>}/>
-    <Route path="/login" element={[<Login_form/>,<Button/>]} />
+    <Route path="/login" element={[<Login_form/>]} />
     <Route path='/register' index element={<Registration_form/>} />
     <Route path='/' />
 

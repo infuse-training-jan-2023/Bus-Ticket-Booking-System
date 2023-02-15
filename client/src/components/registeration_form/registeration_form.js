@@ -57,7 +57,7 @@ function get_gender(e){
 
 function Registration_form() {
     const navigate = useNavigate();
-    const handle_register = () => navigate('/successful_login');
+    const handle_register = () => navigate('/');
     return (
         <Container>
         <div className="d-flex justify-content-center bg-light">

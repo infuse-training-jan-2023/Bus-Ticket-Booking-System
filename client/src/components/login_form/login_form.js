@@ -71,7 +71,7 @@ function Login_form() {
                 Login
             </Button>
             <Form.Label className='p-3'>
-                <Link to='/register'>Already Have An Account?</Link>
+                <Link to='/register'>Create a new Account?</Link>
             </Form.Label>
             </Form>
             </div>
