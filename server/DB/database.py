@@ -10,20 +10,19 @@ class Database:
         return self._db
     
     def create(self, table, object):
-        inserted = self._db[table].insert_one(object)
-        return inserted
+        return self._db[table].insert_one(object)
     
-    def read(self, table, filter):
-        return self._db[table].find_one(filter)
+    def read(self, table, filter_object):
+        return self._db[table].find_one(filter_object)
     
-    def read_all(self, table):
-        cursor = self._db[table].find({})
-        objects = [data for data in cursor]
-        return objects
+    def read_all(self, table, filter_object):
+        return self._db[table].find(filter_object)
     
-    def update(self, table, filter, set):
-        updated = self._db[table].update_one(filter, set)
-        return updated
+    def update(self, table, filter_object, set_object):
+        return self._db[table].update_one(filter_object, set_object)
+    
+    def update_all(self, table, filter_object, set_object):
+        return self._db[table].update_many(filter_object, set_object)
     
     def delete(self, table, object_id):
         self._db[table].delete_one({"_id": ObjectId(object_id)})
