@@ -1,7 +1,6 @@
 from DB.database import Database
 import bson.json_util as json_util
 # import bcrypt
-
 class User:
 	def __init__(self):
 		self.db = Database().get_database()
@@ -13,8 +12,11 @@ class User:
 			# hash = str(bcrypt.hashpw(bytes, salt))
 			# print(salt)
 			# print("b'$2b$12$VV7W1vaScWnMGMtaN1nd2O14qQu/TwvyUNRW.4MprjJmKXJmRaYTi'")
+
 			user = self.db.User.find_one({"emailid":email})
-			if(user["password"]==password):
+			if(user=={}):
+				return {}
+			else if(user["password"]==password):
 				user.pop("password")
 				return user
 			return {}
