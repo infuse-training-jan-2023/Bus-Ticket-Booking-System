@@ -10,7 +10,6 @@ function BusRow({user:{_id,emailid, gender} }) {
             <td className='text-center'>{_id}</td>
             <td className='text-center'>{emailid}</td>
             <td className='text-center'>{gender}</td>
-           
         </tr>
   )
 }

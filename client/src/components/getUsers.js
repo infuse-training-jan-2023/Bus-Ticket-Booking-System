@@ -31,7 +31,7 @@ export default function User_Component() {
 return (
     <div>
       {/* pass data down to the Customers component where we'll create the table*/}
-      <Container className='w-75'>
+      <Container className='w-100'>
 			<Table style={{margin: 'auto'}}>
 				<thead>
 					<tr>
