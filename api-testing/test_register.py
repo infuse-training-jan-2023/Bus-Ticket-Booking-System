@@ -12,14 +12,14 @@ class TestRegister:
     def test_status_code(self):
         user_info['emailid']="opq{}@gmail.com".format(random.randint(0,1000))
         response = requests.post('http://127.0.0.1:4000/register',json=user_info)
-        assert response.status_code==200
+        assert response.status_code==201
 
-    def test_response_for_valid_info(self):
+    def test_for_valid_info(self):
         user_info['emailid']="opq{}@gmail.com".format(random.randint(0,1000))
         response = requests.post('http://127.0.0.1:4000/register',json=user_info)
         assert response.text!="Error"
 
 
-    def test_response_for_invalid_credentials(self):
+    def test_for_invalid_info(self):
         response = requests.post('http://127.0.0.1:4000/register',json={})
-        assert response.text=='Error'
+        assert response.json()=={"Error": "Could not register user. Try again."}

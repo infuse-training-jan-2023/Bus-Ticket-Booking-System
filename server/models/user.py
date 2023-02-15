@@ -50,6 +50,7 @@ class User:
 		try:
 			# user = self.db.get_database().User.find_one({"emailid": emailid})
 			user = self.db.read(self.table_name, {"emailid": emailid})
+			print(user)
 			return user
 		except Exception as e:
 			print(e)

@@ -26,7 +26,7 @@ def register_user():
     if new_user == {}:
         return Response(json.dumps({"Error": "Could not register user. Try again."}), mimetype="application/json", status=400)
     json_data = Encoder().encode(new_user)
-    return Response(json_data, mimetype="application/json", status=501)
+    return Response(json_data, mimetype="application/json", status=201)
 
 # fetch all users
 @user_controller.route('/users', methods = ['GET'])
@@ -43,8 +43,10 @@ def fetch_user():
     # request_data = request.get_json()
     # emailid = request_data["emailid"]
     emailid = request.args.get("emailid")
+    print(emailid)
     get_user = user.fetch_user(emailid)
     if get_user == {}:
         return Response(json.dumps({"Error": "Failed to fetch user"}), mimetype="application/json", status=400)
     data_json = Encoder().encode(get_user)
+    print(data_json)
     return Response(data_json, mimetype="application/json", status=201)
