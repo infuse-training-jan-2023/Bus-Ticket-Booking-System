@@ -113,7 +113,7 @@ export default function  BusSeatBooking(){
         date: doj,
         bus_id:bus["_id"],
         user_id:"63e49ceca788d71cb4dae60c",
-        ticket_price:seatPrice,
+        ticket_price:seatPrice * selectedSeats.length,
         day:`${getweekday(day)}`,
       }
       const response = await fetch('http://127.0.0.1:4000/ticket', {

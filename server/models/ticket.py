@@ -48,6 +48,8 @@ class Ticket():
             bus_object = bus.Bus()
             bus_data = bus_object.add_selected_seats(bus_id, selected_seats, date, day)
             return {
+                # cannot mock inserted_id so in the test it raises exception since the return object of add_selected_seats
+                # is dict and not a cursor specified in the mock test
                 "ticket_id": cursor.inserted_id,
                 "bus_id": bus_id,
                 "user_id": user_id,
@@ -77,7 +79,7 @@ class Ticket():
         except Exception as e:
             print(e)
             return {}
-    
+
 
 
 # ticket= Ticket()

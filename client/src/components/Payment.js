@@ -1,10 +1,27 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState,useRef } from 'react'
 import {Card, Button, Container, Row, Col} from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import Ticket from './ticketCard'
+import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import '@progress/kendo-theme-default/dist/all.css';
 
 export default function Payment() {
 	const {ticket_id} = useParams()
+	const pdfExportComponent = useRef(null)
+
+
+	const exportPDFWithMethod = () => {
+		let element = document.querySelector('.k-grid') || document.body;
+		savePDF(element, {
+		paperSize: 'A4'
+		});
+	};
+
+	const exportPDFWithComponent = () => {
+		if (pdfExportComponent.current) {
+		pdfExportComponent.current.save();
+		}
+	};
 
 	const [ticket, setTicket] = useState({})
 	const fetchATicket = async() => {
@@ -24,6 +41,7 @@ export default function Payment() {
 	}, [])
 
 	return (
+		
 		<Container>
 			<Card border="danger" className='my-5'>
 				<Card.Header as="h5" className='text-center'>Ticket</Card.Header>
@@ -35,11 +53,16 @@ export default function Payment() {
 							<path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l7-7z"/>
 						</svg>
 					</Card.Title>
+					<PDFExport ref={pdfExportComponent} paperSize="A4">
 					<div className='my-5'>
 						{ticket &&
 							<Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} showStatus={false}/>}
 					</div>
+					</PDFExport>
 					<Row className='pb-2 d-flex justify-content-center'>
+						<Col>
+							<Button variant="danger" as={Link} onClick={exportPDFWithComponent}>Download Ticket</Button>
+						</Col>
 						<Col>
 							<Button variant="danger" as={Link} to="/user_profile">Go to profile</Button>
 						</Col>
@@ -50,5 +73,6 @@ export default function Payment() {
 				</Card.Body>
 			</Card>
 		</Container>
+		
 	  );
 }

@@ -1,4 +1,5 @@
 from DB.database import Database
+import bson.json_util as json_util
 # import bcrypt
 
 class User:
@@ -54,7 +55,7 @@ class User:
 		except Exception as e:
 			print(e)
 			return {}
-	
+
 	def fetch_users(self):
 		try:
 			# cursor = self.db.read_all(self.table_name)

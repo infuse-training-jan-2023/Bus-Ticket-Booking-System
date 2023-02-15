@@ -1,23 +1,34 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
+import Login_form from './components/login_form/login_form';
+import Registration_form from './components/registeration_form/registeration_form';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import HomePage from './components/HomePage'
+import SearchPage from './components/searchPage';
+import UserProfile from './components/userProfile'
+import BusSeatBooking from './components/busseat'
+import Payment from './components/Payment'
+import User_Component from './components/getUsers'
+import Bus_Component from './components/getBuses'
+import PageNotFound from './components/PageNotFound'
 import NavBar from './components/navbar'
 import Footer from './components/footer'
-import { BrowserRouter, Routes, Route } from "react-router-dom"
-import SearchPage from './components/searchPage'
-import HomePage from './components/HomePage'
-import PageNotFound from './components/PageNotFound'
-import BusSeatBooking from './components/busseat'
-import UserProfile from './components/userProfile'
-import Payment from './components/Payment'
-import Bus_Component from './components/getBuses'
-import User_Component from './components/getUsers'
 
 
 function App() {
   return (
-    <BrowserRouter>
+
+    
+    // <div className="App">
+    //   <Login_form on_submit={login_validation}/>
+    //   <Registration_form on_submit={register_user}/>
+    // </div>
+  <BrowserRouter>
     <NavBar/>
       <Routes>
         <Route index element={<HomePage />} />
+        {/* <Route path='/' index element={<Home_page emailid={window.localStorage.getItem('emailid')}/>}/> */}
+        <Route path="/login" element={<Login_form/>} />
+        <Route path='/register' element={<Registration_form/>} />
         <Route path="/search_bus" element={<SearchPage />} />
         <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
         <Route path="/user_profile" element={<UserProfile />} />

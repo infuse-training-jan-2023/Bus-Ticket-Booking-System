@@ -71,11 +71,11 @@ class Bus:
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
-                if "routine.day" in filters:
-                    for routine in bus["routine"]:
-                        if routine["day"] == filters["routine.day"]:
-                            x["arrival_time"] = routine["arrival_time"]
-                            x["departure_time"] = routine["departure_time"]
+                print(x)
+                for routine in bus["routine"]:
+                    if routine["day"] == filters["routine.day"]:
+                        x["arrival_time"] = routine["arrival_time"]
+                        x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
         except Exception as e:
@@ -132,7 +132,7 @@ class Bus:
         except Exception as e:
             print(e)
             return {}
-    
+
     def remove_bus_seats(self,ticket_id,date):
         try:
             ticket_object = ticket.Ticket()
@@ -145,9 +145,9 @@ class Bus:
                     "booked_seat.date_of_journey": date
                 },
                 {"$pull":{
-                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats} 
+                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
                 },
-              },
+              }
             )
             return True
         except Exception as e:
