@@ -24,7 +24,7 @@ export default function SearchPage() {
   const [doj, setDOJ] = useState('')
 
   const handleSearch = () => {
-    if(!Object.keys(filters).length) {
+    if(Object.keys(filters).length !== 3) {
       alert('Please fill up the fields')
       return
     }
@@ -32,6 +32,7 @@ export default function SearchPage() {
       alert('Start and destination city can\'t be same')
       return
     }
+
     else {
       const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
       let inputDate = new Date(filters["routine.day"]), currentDate = new Date()

@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { Button,Container,Row ,Col} from 'react-bootstrap';
-import { useParams, Link } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import BusCard from '../components/busCard'
 
 export default function  BusSeatBooking(){
@@ -63,20 +63,6 @@ export default function  BusSeatBooking(){
       setSelectedSeats(selectedSeats.filter(s => s !== seat));
     }
   };
-  const handleGender = (e, seatNo) => {
-    const { value } = e.target
-    setGender(gender.concat(value))
-  }
-
-  const handlePassengerName = (e, seatNo) => {
-    e.preventDefault()
-    let value = e.target.value
-    if (!value) {
-        return (setName("name is required"))
-    } else {
-        setName(name.concat(value))
-    }
-  }
 
 
   const hanledisable=(seat)=>{
@@ -99,36 +85,9 @@ export default function  BusSeatBooking(){
     return selectedSeats.includes(seat)? 'success' : 'secondary';
   }
 
-  const checkmiddleline=(seat)=>{
-    if(ignore.includes(seat)){
-      return false
-    }
-    else{
-      return true
-    }
-  }
-
-  const renderPassengerData = (seatArray) => {
-    return seatArray.map((seat, idx) => {
-        return (
-            <form key={idx} className="form seatfrm">
-              <span class="border-top"></span>
-                <p class="text-capitalize text-center text-weight-bold">Seat No:{seat}</p>
-                <input className="form-control seatInp" onBlur={e => handlePassengerName(e, seat)} type="text" name="passenger-name" placeholder="Enter Name" />
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="male" value="Male" onClick={e => handleGender(e, seat)} />
-                    <label class="form-check-label" for="male">Male</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" name="gender" id="female" value="Female" onClick={e => handleGender(e, seat)} />
-                    <label class="form-check-label" htmlFor="female">Female</label>
-                </div>
-            </form>)
-
-    })
-  }
 
   const [ticket, setTicket] = useState('')
+  const navigate = useNavigate()
   const handleBookNowClick =async()=>{
     try{
       console.log(getweekday(day));
@@ -144,7 +103,7 @@ export default function  BusSeatBooking(){
         selected_seats:selectedSeats ,
         date: doj,
         bus_id:bus["_id"],
-        user_id:"4",
+        user_id:"63e49ceca788d71cb4dae60c",
         ticket_price:seatPrice,
         day:`${getweekday(day)}`,
       }
@@ -159,6 +118,7 @@ export default function  BusSeatBooking(){
       const data = await response.json();
       setTicket(data.ticket_id)
       console.log(ticket)
+      navigate(`/payment/${data.ticket_id}`)
       }catch(error) {
          console.log(error)
       } 
@@ -281,8 +241,7 @@ useEffect(() => {
                  className="m-1 btn-md"
                  variant={selectedSeats.length==0?'outline-light':'danger'}
                  disabled={selectedSeats.length==0?true:false}
-                 onClick={() => handleBookNowClick()}
-                 as={Link} to={ticket && `/payment/${ticket}`}
+                 onClick={handleBookNowClick}
                  >BOOK-NOW</Button>
               </div>
           </Col>

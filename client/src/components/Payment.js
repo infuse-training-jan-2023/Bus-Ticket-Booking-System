@@ -26,7 +26,7 @@ export default function Payment() {
 	return (
 		<Container>
 			<Card border="danger" className='my-5'>
-				<Card.Header as="h5" className='text-center'>Booking</Card.Header>
+				<Card.Header as="h5" className='text-center'>Ticket</Card.Header>
 				<Card.Body className='text-center'>
 					<Card.Title>
 						<span>Booking Successful</span>

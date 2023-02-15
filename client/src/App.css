@@ -8,6 +8,24 @@
 	background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
 }
 
+.ticket-span {
+	display: none;
+	font-weight: 500;
+}
+
+@media screen and (max-width: 600px) {
+	.ticket-span, .duration, .text-muted {
+		display: inline;
+		font-style: normal !important;
+		font-size: 1rem !important;
+	}
+
+	.ticket-span-arrow {
+		display: none;
+	}
+}
+
+
 @media screen and (max-width: 1280px) {
 	.homeHeading {
 		font-size: 1em;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Container } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
 import Ticket from './ticketCard'
 
@@ -31,11 +31,6 @@ export default function UserProfile() {
     }
 
     const navigate = useNavigate();
-    const logout = () => {
-        localStorage.clear()
-        navigate('/')
-    }
-
     useEffect(() => {
         if(!userId)
             navigate('/')
@@ -45,10 +40,6 @@ export default function UserProfile() {
 
     return (
         <Container>
-            <div className='mt-3 d-flex justify-content-between'>
-                <div>Email id: {userEmail}</div>
-                <div><Button variant='danger' onClick={logout}>Logout</Button></div>
-            </div>
             <div className='mt-5'>
                 <h3>{tickets.length} Tickets booked</h3>
                 {tickets.length > 0 && tickets.map(ticket => {
