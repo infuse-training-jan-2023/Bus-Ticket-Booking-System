@@ -56,4 +56,3 @@ class User:
 			return users
 		except Exception as e:
 			return {}
->>>>>>>>> Temporary merge branch 2
