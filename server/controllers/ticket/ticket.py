@@ -6,6 +6,15 @@ part_ticket = Blueprint('part_ticket', __name__)
 
 ticket = Ticket()
 
+#view a ticket
+@part_ticket.route('/payment_success/<string:ticket_id>', methods = ['GET'])
+def view_ticket(ticket_id):
+    tickets = ticket.get_ticket(ticket_id)
+    if tickets == {}:
+        return Response({"Error": "No tickets available"}, mimetype="application/json", status=400)
+    json_data = Encoder().encode(tickets)
+    return Response(json_data, mimetype="application/json", status=201)
+
 #book ticket
 @part_ticket.route('/ticket', methods = ['POST'])
 def book_ticket():

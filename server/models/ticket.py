@@ -16,7 +16,7 @@ class Ticket():
 
     def get_ticket(self,ticket_id):
         try:
-            ticket=self.db.Ticket.find({"_id": ObjectId(ticket_id)})
+            ticket=self.db.Ticket.find_one({"_id": ObjectId(ticket_id)})
             return ticket
         except:
             return {}
