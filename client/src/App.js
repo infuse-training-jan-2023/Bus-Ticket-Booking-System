@@ -8,6 +8,10 @@ import PageNotFound from './components/PageNotFound';
 import BusSeatBooking from './components/busseat';
 import UserProfile from './components/userProfile';
 import Payment from './components/Payment';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import Bus_Component from './components/getBuses'
+import User_Component from './components/getUsers'
+
 
 function App() {
   return (
