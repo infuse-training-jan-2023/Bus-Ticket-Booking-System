@@ -9,7 +9,9 @@ class Ticket():
 
     def view_tickets_of_user(self, user_id):
         try:
-            cursor=self.db.get_database().Ticket.find({"user_id":user_id})
+            # cursor = self.db.get_database().Ticket.find({"user_id":user_id})
+            user_filter = {"user_id":user_id}
+            cursor = self.db.read_all(self.table_name, user_filter)
             tickets = [ticket for ticket in cursor]
             return tickets
         except Exception as e:
@@ -64,7 +66,7 @@ class Ticket():
             print(e)
             return {}
 
-    def cancel_tickets(self,ticket_id,date):
+    def cancel_tickets(self, ticket_id, date):
         try:
             # self.db.get_database().Ticket.update_one(
             #     {"_id": ObjectId(ticket_id)},
@@ -72,26 +74,8 @@ class Ticket():
             # )
             self.db.update(self.table_name, {"_id": ObjectId(ticket_id)}, {"$set": { "status" : False}})
             bus_object = bus.Bus()
-            bus_object.remove_bus_seats(ticket_id,date)
+            bus_object.remove_bus_seats(ticket_id, date)
             return {"Status":"Ticket cancelled successfully"}
         except Exception as e:
             print(e)
             return {}
-    
-
-
-# ticket= Ticket()
-# cursor=ticket.view_ticket_of_user("63e49ceca788d71cb4dae60c")
-# for item in cursor:
-#     print(item["date"])
-#ticket.view_all_tickets()
-
-# bus_id = "63e4af4b219ec66d45de9b2d"
-# user_id = "63e49ceca788d71cb4dae60c"
-# date = "2023-02-18"
-# ticket_price = 2600
-# selected_seats = ["5A", "5B"]
-# ticket.cancel_tickets("63e4c194219ec66d45de9b4e","2023-02-11")
-
-# newticket = ticket.book_ticket(bus_id, user_id, date, ticket_price, selected_seats)
-# print(newticket)

@@ -26,7 +26,7 @@ def register_user():
     if new_user == {}:
         return Response(json.dumps({"Error": "Could not register user. Try again."}), mimetype="application/json", status=400)
     json_data = Encoder().encode(new_user)
-    return Response(json_data, mimetype="application/json", status=501)
+    return Response(json_data, mimetype="application/json", status=201)
 
 # fetch all users
 @user_controller.route('/users', methods = ['GET'])
