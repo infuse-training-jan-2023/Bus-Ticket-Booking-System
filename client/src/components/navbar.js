@@ -71,24 +71,18 @@
 
 
 
-
 import { Container, Button, Navbar } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 
 
-export default function NavBar(status) {
+export default function NavBar() {
   const navigate = useNavigate();
-  // const [isloggedIn, setLog] = useState(false);
+  const uid = window.localStorage.getItem("user_id")
+  const isadmin = window.localStorage.getItem('is_admin')
 
-  // useEffect(() => {
-  //   checkLogin();
-  //   window.addEventListener("storage", checkLogin);
-  //   return () => window.removeEventListener("storage", checkLogin());
-  // }, [isloggedIn]);
-
-
+  console.log(isadmin)
 
   function handleLogout() {
     console.log("in logout");
@@ -96,40 +90,37 @@ export default function NavBar(status) {
     navigate('/')
   }
 
-  // function checkLogin() {
-  //   console.log("user_id");
-  //   console.log(window.localStorage.getItem("user_id"));
-  //   if (window.localStorage.getItem("user_id") == null) {
-  //     console.log("if");
-  //     setLog(false);
-  //   } else {
-  //     console.log("else");
-  //     setLog(true);
-  //   }
-  // }
-
-   console.log("status :",status);
-
   return (
     <Navbar bg="light" expand="lg">
       <Container fluid>
         <Navbar.Brand href="#">Infuse Bus Travels</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll" className="justify-content-end">
-          {status ? (
-            <Button
-            variant="outline-success"
-            onClick={() => navigate("/login")}
-          >
-            LOG OUT
-          </Button>
-           
+          {isadmin=='true' && 
+             <Button variant="outline-success" onClick={()=>navigate('/users')}>
+             USERS
+           </Button>
+          }
+  
+          {isadmin=='true' &&
+             <Button variant="outline-success" onClick={() => navigate('/buses')}>
+             BUSES
+           </Button>
+          }
+
+          {uid ? (
+            <Button variant="outline-success" onClick={() => handleLogout()}>
+              LOG OUT
+            </Button>
           ) : (
-             <Button variant="outline-success" onClick={() => handleLogout()}>
+            <Button
+              variant="outline-success"
+              onClick={() => navigate("/login")}
+            >
               LOG IN
             </Button>
-            
           )}
+
         </Navbar.Collapse>
       </Container>
     </Navbar>

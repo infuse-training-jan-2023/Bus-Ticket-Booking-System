@@ -12,25 +12,6 @@ import { useState,useEffect } from 'react';
 
 
 function App() {
-  const [isloggedIn, setLog] = useState(false);
-
-  useEffect(() => {
-    checkLogin();
-    window.addEventListener("storage", checkLogin);
-    return () => window.removeEventListener("storage", checkLogin());
-  }, [isloggedIn]);
-
-  function checkLogin() {
-    console.log("user_id");
-    console.log(window.localStorage.getItem("user_id"));
-    if (window.localStorage.getItem("user_id") == null) {
-      console.log("if");
-      setLog(false);
-    } else {
-      console.log("else");
-      setLog(true);
-    }
-  }
   return (
 
     
@@ -39,7 +20,7 @@ function App() {
     //   <Registration_form on_submit={register_user}/>
     // </div>
     <BrowserRouter>
-    <NavBar status={isloggedIn}/>
+    <NavBar/>
     <Routes>
     <Route path='/successful_login' index element={<Home_page emailid={window.localStorage.getItem('emailid')}/>}/>
     <Route path="/login" element={[<Login_form/>,<Button/>]} />
