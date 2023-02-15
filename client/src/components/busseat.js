@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { Button,Container,Row ,Col} from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import BusCard from '../components/busCard'
 
 export default function  BusSeatBooking(){
@@ -128,6 +128,7 @@ export default function  BusSeatBooking(){
     })
   }
 
+  const [ticket, setTicket] = useState('')
   const handleBookNowClick =async()=>{
     try{
       console.log(getweekday(day));
@@ -156,7 +157,8 @@ export default function  BusSeatBooking(){
         body: JSON.stringify(post_data)
       });
       const data = await response.json();
-      console.log(data)
+      setTicket(data.ticket_id)
+      console.log(ticket)
       }catch(error) {
          console.log(error)
       } 
@@ -197,20 +199,6 @@ export default function  BusSeatBooking(){
 
 useEffect(() => {
   fetchBus()
-import React from 'react'
-import { useParams } from 'react-router-dom'
-
-export default function BusSeatBooking() {
-    const { bus_id, doj } = useParams()
-    return (
-        <>
-            <div>{bus_id}</div>
-            <div>{doj}</div>
-        </>
-    )
-}
-  
-
 }, []);
 
   const seats = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5'];
@@ -218,7 +206,7 @@ export default function BusSeatBooking() {
   return (
     <div className='mt-5 text-nowrap'>
       <Container>
-       <BusCard id={`${id}`} startCity={`${bus['start_city']}`} destinationCity={`${bus['destination_city']}`} seatPrice={seatPrice} arrivalTime={arrivalTime} departureTime={departureTime} buttonType="" dateOfJourney={`${doj}`}/>
+       <BusCard id={`${id}`} startCity={`${bus['start_city']}`} destinationCity={`${bus['destination_city']}`} seatPrice={seatPrice} arrivalTime={arrivalTime} departureTime={departureTime} dateOfJourney={`${doj}`} showDate={true}/>
         <Row className='mt-5'>
           <Col className="overflow-auto" md={6}>
             <div>
@@ -291,9 +279,10 @@ export default function BusSeatBooking() {
                 <div style={{color:"red"}}><p className='fs-4'>Total Price:{seatPrice*selectedSeats.length}</p></div>
                 <Button
                  className="m-1 btn-md"
-                 variant={selectedSeats.length==0?'outline-light':'primary'}
+                 variant={selectedSeats.length==0?'outline-light':'danger'}
                  disabled={selectedSeats.length==0?true:false}
                  onClick={() => handleBookNowClick()}
+                 as={Link} to={ticket && `/payment/${ticket}`}
                  >BOOK-NOW</Button>
               </div>
           </Col>

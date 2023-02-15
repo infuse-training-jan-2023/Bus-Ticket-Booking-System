@@ -3,7 +3,7 @@ import {Card, Col, Row, Button} from 'react-bootstrap'
 import moment from 'moment'
 
 export default function Ticket(props) {
-  const {id, bus_id, doj, ticketPrice, selectedSeats, status, set_cancel} = props
+  const {id, bus_id, doj, ticketPrice, selectedSeats, status, set_cancel, showStatus} = props
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
   const day = days[new Date(doj).getDay()]
   const [bus, setBus] = useState([])
@@ -82,15 +82,15 @@ export default function Ticket(props) {
           </Row>
           <Row>
             <div className='text-muted'>
-              Seats booked: {selectedSeats.map(s => <span>{s} </span>)}
+              Seats booked: {selectedSeats && selectedSeats.map(s => <span>{s} </span>)}
             </div>
           </Row>
       </Col>
       <Col className='m-2'>
           <div>Rs.{ticketPrice}</div>
           <div>
-            {status && <Button variant="danger" style={{width: '100%'}} onClick={cancelTicket}>Cancel</Button>}
-            {!status && <p className='text-danger'>Ticket is cancelled</p>}
+            {status && showStatus && <Button variant="danger" style={{width: '100%'}} onClick={cancelTicket}>Cancel</Button>}
+            {!status && showStatus && <p className='text-danger'>Ticket is cancelled</p>}
           </div>
       </Col>
     </Row>

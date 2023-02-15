@@ -52,7 +52,7 @@ export default function UserProfile() {
             <div className='mt-5'>
                 <h3>{tickets.length} Tickets booked</h3>
                 {tickets.length > 0 && tickets.map(ticket => {
-                    return <Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} status={ticket.status} set_cancel={set_cancel}/>
+                    return <Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} status={ticket.status} set_cancel={set_cancel} showStatus={true}/>
                 })
                 }
             </div>

@@ -7,6 +7,7 @@ import HomePage from './components/HomePage';
 import PageNotFound from './components/PageNotFound';
 import BusSeatBooking from './components/busseat';
 import UserProfile from './components/userProfile';
+import Payment from './components/Payment';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/search_bus" element={<SearchPage />} />
         <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
         <Route path="/user_profile" element={<UserProfile />} />
+        <Route path="/payment/:ticket_id" element={<Payment />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     <Footer/>

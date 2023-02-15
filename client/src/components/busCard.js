@@ -1,6 +1,7 @@
 import React from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
 
 export default function BusCard(props) {
   const {id, startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney, showDate} = props
@@ -15,7 +16,7 @@ export default function BusCard(props) {
           style={{textAlign: 'center'}}
         >
           <Row className='justify-content-md-center align-items-center'>
-            {showDate && <p style={{fontWeight: 'bold'}}>{dateOfJourney}</p>}
+            {showDate && <p style={{fontWeight: 'bold'}}>{moment(dateOfJourney).format('MMM Do YYYY')}</p>}
             <Col xs={8}>
                 <Row>
                     <Col sm>
