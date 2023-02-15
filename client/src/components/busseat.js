@@ -2,6 +2,8 @@ import { React, useEffect, useState } from 'react'
 import { Button,Container,Row ,Col} from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import BusCard from '../components/busCard'
+// import booked from "../../public/images/booked.png";
+// import selected from "../../public/images/available.png";
 
 export default function  BusSeatBooking(){
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -13,6 +15,7 @@ export default function  BusSeatBooking(){
   const [name, setName] = useState([])
   const [gender, setGender] = useState([])
   const [booked,setBookedSeats]=useState([])
+  const [image,setImage]=useState(['../../images/available.png'])
 
   const {id,doj}=useParams()
   console.log(id)
@@ -89,14 +92,20 @@ export default function  BusSeatBooking(){
 
   }
 
+  const handleStyle=(seat)=>{
+    if(ignore.includes(seat)){
+      return {width: "80px",height:"80px",visibility:'hidden'}
+    }
+  }
+
   const handlevariant=(seat)=>{
     if(ignore.includes(seat)){
       return 'outline-light'
     }
     if(booked.includes(seat)){
-      return 'danger'
+      return 'outline-light'
     }
-    return selectedSeats.includes(seat)? 'success' : 'secondary';
+    return selectedSeats.includes(seat)? 'outline-green' : 'outline-light';
   }
 
   const checkmiddleline=(seat)=>{
@@ -195,13 +204,15 @@ export default function  BusSeatBooking(){
     }
 }
 
+
+
 useEffect(() => {
   fetchBus()
   
 }, []);
 
-  const seats = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5'];
-  const ignore=['b3','d3','c3']
+  const seats = ['a1', 'a2', 'a3', 'a4', 'a5', 'b1', 'b2', 'b3', 'b4', 'b5', 'c1', 'c2', 'c3', 'c4', 'c5', 'd1', 'd2', 'd3', 'd4', 'd5','e1','e2','e3','e4','e5'];
+  const ignore=['b3','d3','c3','e3']
   return (
     <div className='mt-5 text-nowrap'>
       <Container>
@@ -217,15 +228,19 @@ useEffect(() => {
                       //checkmiddleline(innerSeat)&&
                       <Button
                         key={innerSeat}
+                        
                         //variant={selectedSeats.includes(innerSeat)? 'success' : 'primary'}
                         variant={handlevariant(innerSeat)}
                         // disabled={booked.includes(innerSeat)}
                         disabled={hanledisable(innerSeat)}
                         onClick={() => handleSeatSelection(innerSeat)}
                         className="m-1 btn-lg"
-                        style={{width: "80px",height:"80px"}}
+                        style={handleStyle(innerSeat)}
                       >
-                        {innerSeat}
+                        {/* {innerSeat} */}
+                        {/* {displaySeats} */}
+                        <img src={booked.includes(innerSeat)? '../../images/booked.png': (selectedSeats.includes(innerSeat)? '../../images/selected.png' : '../../images/available.png')} alt="add item" width="48" height="48" />
+                        {/* {seats.includes(innerSeat)&&<img src='../../images/booked.png' alt="add item" width="48" height="48" />} */}
                       </Button>
                     ))}
                   </div>
@@ -242,8 +257,9 @@ useEffect(() => {
                 <p>
                   <Button
                     className="m-1 btn-lg"
-                    variant='secondary'
-                    style={{width: "40px",height:"40px"}}>
+                    variant='outline-green'
+                    style={{width: "80px",height:"80px"}}>
+                       <img src='../../images/available.png' alt="add item" width="36" height="36"/>
                   </Button>
                 </p>
                 <p>Available Seats</p>
@@ -253,19 +269,21 @@ useEffect(() => {
                 <p>
                   <Button
                     className="m-1 btn-lg"
-                    variant='danger'
-                    style={{width: "40px",height:"40px"}}>
+                    variant='outline-red'
+                    style={{width: "50px",height:"50px"}}>
+                    <img src='../../images/booked.png' alt="add item" width="36" height="36"/>
                   </Button>
                 </p>
-                <p style={{marginLeft: '6px'}}>Booked Seats</p>
+                <p style={{marginLeft: '20px'}}>Booked Seats</p>
               </div>
 
               <div className='d-flex justify-content-center align-items-center gap-2'>
                 <p>
                   <Button
                     className="m-1 btn-lg"
-                    variant='success'
-                    style={{width: "40px",height:"40px"}}>
+                    variant='outline-red'
+                    style={{width: "80px",height:"80px"}}>
+                    <img src='../../images/selected.png' alt="add item" width="36" height="36"/>
                   </Button>
                 </p>
                 <p>Selected Seats</p>
