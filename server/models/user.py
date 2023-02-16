@@ -1,6 +1,5 @@
 from DB.database import Database
-import bson.json_util as json_util
-# import bcrypt
+import hashlib
 
 class User:
 	def __init__(self):
@@ -9,15 +8,11 @@ class User:
 
 	def login(self, emailid, password):
 		try:
-			# bytes = password.encode("utf-8")
-			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
-			# hash = str(bcrypt.hashpw(bytes, salt))
-			# print(salt)
-			# print("b'$2b$12$VV7W1vaScWnMGMtaN1nd2O14qQu/TwvyUNRW.4MprjJmKXJmRaYTi'")
+			res = hashlib.md5(password.encode()).hexdigest()
 			user = self.db.read(self.table_name, {"emailid": emailid})
 			if user == {}:
 				raise TypeError("Incorrect credentials")
-			if(user["password"]==password):
+			if(user["password"]==res):
 				user.pop("password")
 				return user
 			raise TypeError("Incorrect credentials")
@@ -27,20 +22,10 @@ class User:
 
 	def register(self, user_data):
 		try:
-			# table = self.db.get_database().User
-			# table.insert_one({
-			# 	"emailid": user_data["emailid"],
-			# 	"password": password,
-			# 	"gender": user_data["gender"],
-			# 	"is_admin": False,
-			# })
+			res = hashlib.md5(user_data['password'].encode()).hexdigest()
+			user_data["password"] = res
 			user_data["is_admin"] = False
 			self.db.create(self.table_name, user_data)
-			# password = user_data["password"]
-			# bytes = password.encode("utf-8")
-			# salt = "b'$2b$12$lyTSirFB5Qeqv0VGl9GmNe'"
-			# hash = str(bcrypt.hashpw(bytes, salt))
-			# print(hash)
 			return self.db.read(self.table_name, {"emailid": user_data["emailid"]})
 		except Exception as e:
 			print(e)
@@ -49,8 +34,8 @@ class User:
 
 	def fetch_user(self, emailid):
 		try:
-			# user = self.db.get_database().User.find_one({"emailid": emailid})
 			user = self.db.read(self.table_name, {"emailid": emailid})
+			print(user)
 			return user
 		except Exception as e:
 			print(e)
@@ -58,9 +43,8 @@ class User:
 
 	def fetch_users(self):
 		try:
-			# cursor = self.db.read_all(self.table_name)
-			# users = [user for user in cursor]
-			users = self.db.read_all(self.table_name)
+			cursor = self.db.read_all(self.table_name, {})
+			users = [user for user in cursor]
 			return users
 		except Exception as e:
 			print(e)

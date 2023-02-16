@@ -18,10 +18,15 @@ class Bus:
 
     def find_user_buses(self, bus_id, day):
         try:
-            buses = self.db.get_database().Bus.find({
+            # buses = self.db.get_database().Bus.find({
+            #     "_id": ObjectId(bus_id),
+            #     "routine.day": day
+            # })
+            bus_filter = {
                 "_id": ObjectId(bus_id),
                 "routine.day": day
-            })
+            }
+            buses = self.db.read_all(self.table_name, bus_filter)
             res = []
             for bus in buses:
                 x = {
@@ -43,8 +48,8 @@ class Bus:
     def find_all_buses(self):
         try:
             # cursor = self.db.get_database().Bus.find({})
-            # buses = [bus for bus in cursor]
-            buses = self.db.read_all(self.table_name)
+            cursor = self.db.read_all(self.table_name, {})
+            buses = [bus for bus in cursor]
             return buses
         except Exception as e:
             print(e)
@@ -62,7 +67,8 @@ class Bus:
     # call the same function for search(src, dst, day)
     def filter_search(self, filters):
         try:
-            buses = self.db.get_database().Bus.find(filters)
+            # buses = self.db.get_database().Bus.find(filters)
+            buses = self.db.read_all(self.table_name, filters)
             res = []
             for bus in buses:
                 x = {
@@ -71,11 +77,11 @@ class Bus:
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
-                print(x)
-                for routine in bus["routine"]:
-                    if routine["day"] == filters["routine.day"]:
-                        x["arrival_time"] = routine["arrival_time"]
-                        x["departure_time"] = routine["departure_time"]
+                if "routine.day" in filters:
+                    for routine in bus["routine"]:
+                        if routine["day"] == filters["routine.day"]:
+                            x["arrival_time"] = routine["arrival_time"]
+                            x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
         except Exception as e:
@@ -98,26 +104,31 @@ class Bus:
                     "_id": ObjectId(bus_id),
                     "booked_seat.date_of_journey": date
                 }
-            seats_set = {"$push": {
+            bus_set = {"$push": {
                     "booked_seat.$.seat_numbers": {"$each": selected_seats}
                     },
                 }
-            result = self.db.update(self.table_name, bus_filter, seats_set)
+            result = self.db.update(self.table_name, bus_filter, bus_set)
+            print(result)
             if result.modified_count == 0:
                 booked_seat = {
                     "seat_numbers": selected_seats,
                     "date_of_journey": date
                 }
-                self.db.get_database().Bus.update_one(
-                    {
-                        "_id": ObjectId(bus_id)
-                    },
-                    {"$push": {
-                        "booked_seat": booked_seat
-                        },
-                    },
-                )
+                # self.db.get_database().Bus.update_one(
+                #     {
+                #         "_id": ObjectId(bus_id)
+                #     },
+                #     {"$push": {
+                #         "booked_seat": booked_seat
+                #         },
+                #     },
+                # )
+                bus_filter = {"_id": ObjectId(bus_id)}
+                bus_set = {"$push": {"booked_seat": booked_seat},}
+                self.db.update(self.table_name, bus_filter, bus_set)
             bus_cursor = self.find_a_bus(bus_id)
+            print(bus_cursor)
             routines = bus_cursor["routine"]
             for routine in routines:
                 if routine["day"] == day:
@@ -133,45 +144,38 @@ class Bus:
             print(e)
             return {}
 
-    def remove_bus_seats(self,ticket_id,date):
+    def remove_bus_seats(self, ticket_id, date):
         try:
             ticket_object = ticket.Ticket()
             cursor = ticket_object.get_ticket(ticket_id)
             cancelled_seats=cursor["selected_seats"]
             bus_id=str(cursor["bus_id"])
-            self.db.get_database().Bus.update_many( 
-                {
-                    "_id": ObjectId(bus_id),
-                    "booked_seat.date_of_journey": date
-                },
-                {"$pull":{
-                    "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
-                },
-              }
-            )
-            return True
+            bus_filter = {"_id": ObjectId(bus_id), "booked_seat.date_of_journey": date}
+            bus_set = {"$pull":{"booked_seat.$.seat_numbers": {"$in": cancelled_seats}},}
+            self.db.update_all(self.table_name, bus_filter, bus_set)
+            # self.db.get_database().Bus.update_many(
+            #     {
+            #         "_id": ObjectId(bus_id),
+            #         "booked_seat.date_of_journey": date
+            #     },
+            #     {"$pull":{
+            #         "booked_seat.$.seat_numbers": {"$in": cancelled_seats}
+            #         },
+            #     },
+            # )
+            return {"Status": "True"}
         except Exception as e:
             print(e)
             return {}
 
-# bus = Bus()
-# bus.add_selected_seats("63e4b5ac219ec66d45de9b35", ['a2', 'a3'], "2023-02-12")
-
-
-# if __name__ == "__main__":
-    # x = Bus()
-    # print(list(x.find_all_buses()))
-    # print(x.find_a_bus("63e4af4b219ec66d45d9b2d"))
-    # print(x.search_bus("goa", "delhi", "sunday"))
-    # filter = {
-    #     "start_city": "goa",
-    #     "destination_city": "delhi",
-    #     "routine.day": "sunday",
-    #     "seat_price": {
-    #         "$lte": 1500
-    #     },
-    #     "routine.arrival_time": {
-    #         "$gte": 1800
-    #     }
-    # }
-    # print(x.filter_search(filter))
+# filter = {
+#     "start_city": "goa",
+#     "destination_city": "delhi",
+#     "routine.day": "sunday",
+#     "seat_price": {
+#         "$lte": 1500
+#     },
+#     "routine.arrival_time": {
+#         "$gte": 1800
+#     }
+# }

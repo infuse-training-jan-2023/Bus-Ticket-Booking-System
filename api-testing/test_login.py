@@ -1,8 +1,9 @@
 
 import requests
 valid_credentials = {
-    "emailid":"abc@gmail.com",
-    "password":"$2b$12$5Z3oUqb9mwdbPdQ7kceJQ.5FBFuTWjXvQyl2accH83J7VpXItJ4WK"}
+            "emailid": "omkarsavoikar@gmail.com",
+            "password": "password"
+        }
 invalid_credentials={
     "emailid":"anything@gmail.com",
     "password":"anything"
@@ -19,4 +20,4 @@ class TestLogin:
 
     def test_response_for_invalid_credentials(self):
         response = requests.post('http://127.0.0.1:4000/login',json=invalid_credentials)
-        assert response.text=='Error'
+        assert response.json()=={'Error': 'Incorrect credentials'}

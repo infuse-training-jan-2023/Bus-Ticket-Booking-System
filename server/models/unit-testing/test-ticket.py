@@ -35,17 +35,8 @@ class TicketUnitTesting(unittest.TestCase):
                 "status": True
         }
 
-    @patch("pymongo.collection.Collection.insert_one")
-    @patch("models.bus.Bus.add_selected_seats")
     @patch("models.ticket.Ticket.book_ticket")
-    def test_book_ticket(self,mock_book_ticket, mock_add_selected_seats,mock_insert_one):
-        mock_insert_one.return_value = self.ticket
-        # mock_inserted_id.return_value = self.ticket['_id']
-        mock_add_selected_seats.return_value= {
-                "start_city": 'goa',
-                "destination_city": 'delhi',
-                "arrival_time": 1600,
-                "departure_time": 1800}
+    def test_book_ticket(self,mock_book_ticket):
         mock_book_ticket.return_value = self.ticket_booked
         api = Ticket()
         bus_id = self.ticket['bus_id']
@@ -53,49 +44,64 @@ class TicketUnitTesting(unittest.TestCase):
         date = self.ticket['date']
         ticket_price = self.ticket['ticket_price']
         selected_seats = self.ticket['selected_seats']
-        result = api.book_ticket(bus_id,user_id,date,ticket_price,selected_seats,'sunday')
+        result = api.book_ticket(bus_id,user_id,ticket_price,date,selected_seats,'sunday')
+        print(result)
         self.assertEqual(self.ticket_booked, result)
 
-    @patch("pymongo.collection.Collection.find")
-    def test_view_tickets_of_user(self,mock_find):
-        mock_find.return_value = self.ticket
+    @patch("models.ticket.Ticket.book_ticket")
+    def test_book_ticket_negative(self,mock_book_ticket):
+        mock_book_ticket.return_value = {}
+        api = Ticket()
+        bus_id = self.ticket['bus_id']
+        user_id = self.ticket['user_id']
+        date = self.ticket['date']
+        ticket_price = self.ticket['ticket_price']
+        selected_seats = self.ticket['selected_seats']
+        result = api.book_ticket(bus_id,user_id,ticket_price,date,selected_seats,'sunday')
+        print(result)
+        self.assertEqual({}, result)
+
+    @patch("DB.database.Database.read")
+    def test_view_tickets_of_user(self,mock_read):
+        mock_read.return_value = self.ticket
         user_id = self.ticket['user_id']
         ticket = Ticket()
         result = ticket.view_tickets_of_user(user_id)
         self.assertTrue(type(result)==list)
 
-    @patch("pymongo.collection.Collection.find")
-    def test_get_ticket(self,mock_find):
-        mock_find.return_value = [self.ticket]
+    @patch("DB.database.Database.read")
+    def test_get_ticket(self,mock_read):
+        mock_read.return_value = self.ticket
         user_id = self.ticket['_id']
         ticket = Ticket()
         result = ticket.get_ticket(user_id)
-        self.assertEqual([self.ticket],result)
+        self.assertEqual(self.ticket,result)
 
-    @patch("pymongo.collection.Collection.find")
-    def test_get_ticket_invalid_id(self,mock_find):
-        mock_find.return_value = []
+    @patch("DB.database.Database.read_all")
+    def test_get_ticket_invalid_id(self,mock_read):
+        mock_read.return_value = []
         user_id = self.ticket['user_id']
         ticket = Ticket()
         result = ticket.view_tickets_of_user(user_id)
+        print(result)
         self.assertEqual([],result)
 
-    @patch("pymongo.collection.Collection.update_one")
+    @patch("DB.database.Database.update")
     @patch("models.bus.Bus.remove_bus_seats")
-    def test_cancel_tickets(self,mock_remove_seats,mock_update_one):
-        mock_update_one.return_value = True
+    def test_cancel_tickets(self,mock_remove_seats,mock_update):
+        mock_update.return_value = True
         mock_remove_seats.return_value = True
         ticket_id = self.ticket['_id']
         ticket = Ticket()
         result = ticket.cancel_tickets(ticket_id,self.ticket['date'])
-        self.assertEqual({"status":"cancel success"},result)
+        self.assertEqual({'Status': 'Ticket cancelled successfully'},result)
 
-    @patch("pymongo.collection.Collection.update_one")
+    @patch("DB.database.Database.update")
     @patch("models.bus.Bus.remove_bus_seats")
-    def test_cancel_tickets_invalid_ticket_id(self,mock_remove_seats,mock_update_one):
+    def test_cancel_tickets_invalid_id(self,mock_remove_seats,mock_update_one):
         mock_update_one.return_value = False
         mock_remove_seats.return_value = {}
-        ticket_id = self.ticket['_id']
+        ticket_id = {self.ticket['_id']}
         ticket = Ticket()
         result = ticket.cancel_tickets(ticket_id,self.ticket['date'])
         self.assertEqual({},result)
