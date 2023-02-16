@@ -48,7 +48,7 @@ class Bus:
     def find_all_buses(self):
         try:
             # cursor = self.db.get_database().Bus.find({})
-            cursor = self.db.read_all(self.table_name)
+            cursor = self.db.read_all(self.table_name, {})
             buses = [bus for bus in cursor]
             return buses
         except Exception as e:
