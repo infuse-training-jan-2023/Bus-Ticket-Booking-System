@@ -1,5 +1,5 @@
-from DB.database import Database
-from models import ticket
+from server.DB.database import Database
+from server.models import ticket
 from bson.objectid import ObjectId
 
 class Bus:
@@ -43,8 +43,8 @@ class Bus:
     def find_all_buses(self):
         try:
             # cursor = self.db.get_database().Bus.find({})
-            # buses = [bus for bus in cursor]
-            buses = self.db.read_all(self.table_name)
+            cursor = self.db.read_all(self.table_name, {})
+            buses = [bus for bus in cursor]
             return buses
         except Exception as e:
             print(e)
@@ -71,11 +71,11 @@ class Bus:
                     "destination_city": bus["destination_city"],
                     "seat_price": bus["seat_price"]
                 }
-                print(x)
-                for routine in bus["routine"]:
-                    if routine["day"] == filters["routine.day"]:
-                        x["arrival_time"] = routine["arrival_time"]
-                        x["departure_time"] = routine["departure_time"]
+                if "routine.day" in filters:
+                    for routine in bus["routine"]:
+                        if routine["day"] == filters["routine.day"]:
+                            x["arrival_time"] = routine["arrival_time"]
+                            x["departure_time"] = routine["departure_time"]
                 res.append(x)
             return res
         except Exception as e:
@@ -109,6 +109,7 @@ class Bus:
                     },
                 )
             bus_cursor = self.find_a_bus(bus_id)
+            print(bus_cursor)
             routines = bus_cursor["routine"]
             for routine in routines:
                 if routine["day"] == day:

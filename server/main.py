@@ -1,11 +1,4 @@
-from flask import Flask, Response, request
-from DB.database import Database
-from pymongo import MongoClient
-import json
-from models.user import User
-from models.bus import Bus
-from models.ticket import Ticket
-from encoder import Encoder
+from flask import Flask
 from flask_cors import CORS
 from controllers.user.user_controller import user_controller
 from controllers.ticket.ticket_controller import ticket_controller
@@ -13,9 +6,6 @@ from controllers.bus.bus_controller import bus_controller
 
 app = Flask(__name__)
 CORS(app)
-user = User()
-bus = Bus()
-ticket = Ticket()
 
 @app.route('/', methods = ['GET'])
 def welcome():

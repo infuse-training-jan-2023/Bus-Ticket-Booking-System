@@ -1,6 +1,6 @@
 from bson.objectid import ObjectId
-from DB.database import Database
-from models import bus
+from server.DB.database import Database
+from server.models import bus
 
 class Ticket():
     def __init__(self):
@@ -24,7 +24,7 @@ class Ticket():
         except Exception as e:
             print(e)
             return {}
-    
+
     def book_ticket(self, bus_id, user_id, ticket_price, date, selected_seats, day):
         try:
             new_ticket = {

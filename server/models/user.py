@@ -36,6 +36,7 @@ class User:
 	def fetch_user(self, emailid):
 		try:
 			user = self.db.read(self.table_name, {"emailid": emailid})
+			print(user)
 			return user
 		except Exception as e:
 			print(e)
@@ -43,7 +44,7 @@ class User:
 
 	def fetch_users(self):
 		try:
-			cursor = self.db.read_all(self.table_name)
+			cursor = self.db.read_all(self.table_name, {})
 			users = [user for user in cursor]
 			return users
 		except Exception as e:

@@ -9,15 +9,15 @@ bus_id={
 class TestFindBus:
     def test_status_code(self):
         response = requests.get('http://127.0.0.1:4000/bus',json=bus_id)
-        assert response.status_code==200
+        assert response.status_code==201
 
 
-    def test_get_bus_valid_id(self):
+    def test_find_a_bus(self):
         response = requests.get('http://127.0.0.1:4000/bus',json=bus_id)
         assert response.text!="Error"
 
-    def test_get_bus_invalid_id(self):
+    def test_find_a_bus_invalid_id(self):
         bus_id['bus_id']='invalid'
         response = requests.get('http://127.0.0.1:4000/bus',json=bus_id)
-        assert response.text=='Error'
+        assert response.json()==[]
 
