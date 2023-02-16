@@ -112,7 +112,7 @@ export default function  BusSeatBooking(){
         selected_seats:selectedSeats ,
         date: doj,
         bus_id:bus["_id"],
-        user_id:"63e49ceca788d71cb4dae60c",
+        user_id:localStorage.getItem('user_id'),
         ticket_price:seatPrice * selectedSeats.length,
         day:`${getweekday(day)}`,
       }
@@ -166,9 +166,10 @@ export default function  BusSeatBooking(){
     }
 }
 
-
-
+const userId = localStorage.getItem('user_id')
 useEffect(() => {
+  if(!userId)
+    navigate('/login')
   fetchBus()
 }, []);
 

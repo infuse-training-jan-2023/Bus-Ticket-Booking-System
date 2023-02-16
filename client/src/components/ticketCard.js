@@ -47,7 +47,11 @@ export default function Ticket(props) {
     className="mb-2 p-4 bg-light text-center"
   >
     <Row className='justify-content-md-center align-items-center'>
-      <p style={{fontWeight: 'bold'}}>Date of Journey: {moment(doj).format('MMM Do YYYY')}</p>
+      <div className='d-flex gap-3 justify-content-md-center'>
+        <p style={{fontWeight: 'bold'}}>Ticket Id: {id}</p>
+        <p style={{fontWeight: 'bold'}}>Bus Id: {bus_id}</p>
+        <p style={{fontWeight: 'bold'}}>Date of Journey: {moment(doj).format('MMM Do YYYY')}</p>
+      </div>
       <Col xs={12} md={8}>
           <Row>
               <Col sm>
