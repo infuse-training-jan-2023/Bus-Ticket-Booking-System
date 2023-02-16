@@ -32,10 +32,11 @@ return (
     <div>
       {/* pass data down to the Customers component where we'll create the table*/}
       <Container className='w-75'>
-            <p>{buses.length} buses</p>
+            <h3 className="my-2">{buses.length} buses</h3>
 			<Table style={{margin: 'auto'}}>
 				<thead>
 					<tr>
+						<th className='text-center'>Sr. No.</th>
 						<th className='text-center'>Bus Id</th>
 						<th className='text-center'>Bus Type</th>
 						<th className='text-center'>Start City</th>
@@ -45,7 +46,7 @@ return (
 					</tr>
 				</thead>
 				<tbody>
-					{ buses.length > 0 && buses.map(bus => <Bus key={bus._id} bus={bus}/>) }
+					{ buses.length > 0 && buses.map((bus, idx) => <Bus key={bus._id} bus={bus} idx={idx}/>) }
 				</tbody>
 			</Table>
 		</Container>

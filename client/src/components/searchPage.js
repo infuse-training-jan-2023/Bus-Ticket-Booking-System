@@ -182,7 +182,7 @@ export default function SearchPage() {
                     <Form.Check type="checkbox" label="AC" onClick={(e) => {e.target.checked?setACBusType({"bus_type": "ac"}):setACBusType('')}}/>
                     <Form.Check type="checkbox" label="NON-AC" onClick={(e) => {e.target.checked?setNACBusType({"bus_type": "non-ac"}):setNACBusType('')}}/>
                   </div>
-                  <Button variant='danger' style={{width: '100%'}} onClick={applyFilters}>Apply Filters</Button>
+                  <Button variant='danger' style={{width: '100%', marginBottom: '2rem'}} onClick={applyFilters}>Apply Filters</Button>
                 </Form>
               </div>
             </Col>

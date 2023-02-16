@@ -10,6 +10,7 @@ import UserProfile from './components/userProfile'
 import Payment from './components/Payment'
 import Bus_Component from './components/getBuses'
 import User_Component from './components/getUsers'
+import Sample from './components/sample'
 
 
 function App() {
@@ -17,7 +18,8 @@ function App() {
     <BrowserRouter>
     <NavBar/>
       <Routes>
-        <Route index element={<HomePage />} />
+        {/* <Route index element={<HomePage />} /> */}
+        <Route index element={<Sample />} />
         <Route path="/search_bus" element={<SearchPage />} />
         <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
         <Route path="/user_profile" element={<UserProfile />} />

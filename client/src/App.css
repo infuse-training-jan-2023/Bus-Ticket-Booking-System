@@ -13,7 +13,7 @@
 	font-weight: 500;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 992px) {
 	.ticket-span, .duration, .text-muted {
 		display: inline;
 		font-style: normal !important;
@@ -24,6 +24,7 @@
 		display: none;
 	}
 }
+
 
 
 @media screen and (max-width: 1280px) {

@@ -3,7 +3,7 @@ import {Row, Col, Button,Modal} from 'react-bootstrap'
 import React from 'react'
 
 // deconstructed props
-function BusRow({bus:{_id, bus_type, start_city, destination_city,seat_price,routine} }) {
+function BusRow({bus:{_id, bus_type, start_city, destination_city,seat_price,routine}, idx}) {
 
   const [isShow, invokeModal] = React.useState(false)
   const initModal = () => {
@@ -30,20 +30,15 @@ const handleView=()=>{
   }
 }
 
-function displayroutine(){
-   routine.map((item) => {
-    return (<p>{item.arrival_time}</p>)
-  }) 
-}
-
   return (
     <>
         <tr key={_id}>
+            <td className='text-center'>{idx + 1}</td>
             <td className='text-center'>{_id}</td>
             <td className='text-center'>{bus_type}</td>
-            <td className='text-center'>{start_city}</td>
-            <td className='text-center'>{destination_city}</td>
-            <td className='text-center'>{seat_price}</td>
+            <td className='text-center'>{start_city.charAt(0).toUpperCase() + start_city.slice(1)}</td>
+            <td className='text-center'>{destination_city.charAt(0).toUpperCase() + destination_city.slice(1)}</td>
+            <td className='text-center'>Rs.{seat_price}</td>
             <td as={Row} className='text-center'>
 							<Col as={Button} variant="danger" data-toggle="modal" onClick={()=>initModal()}>View</Col>
 							<Col as={Button} variant="danger" className='mx-2' onClick={()=>handledeletebus()}>Delete</Col>
@@ -59,10 +54,10 @@ function displayroutine(){
             return (
             <>
             <ul>
-            <li>Day :{item.day}</li>
+            <li>Day: {item.day.charAt(0).toUpperCase() + item.day.slice(1)}</li>
             <ul>
-            <li>Arrival Time : {item.arrival_time}</li>
-            <li>Departure Time :{item.departure_time}</li>
+            <li>Arrival Time: {((item.arrival_time.toString().length === 3) ? '0' + item.arrival_time.toString().substring(0, 1) : item.arrival_time.toString().substring(0, 2)) + ':' + item.arrival_time.toString().slice(-2)}</li>
+            <li>Departure Time: {((item.departure_time.toString().length === 3) ? '0' + item.departure_time.toString().substring(0, 1) : item.departure_time.toString().substring(0, 2)) + ':' + item.departure_time.toString().slice(-2)}</li>
             </ul>
             </ul>
             </>)

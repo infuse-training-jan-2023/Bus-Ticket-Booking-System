@@ -35,13 +35,14 @@ return (
 			<Table style={{margin: 'auto'}}>
 				<thead>
 					<tr>
+            <th className='text-center'>Sr. No.</th>
 						<th className='text-center'>User Id</th>
 						<th className='text-center'>Email Id</th>
 						<th className='text-center'>Gender</th>
 					</tr>
 				</thead>
 				<tbody>
-					{ users.length > 0 && users.map(user => <User key={user._id} user={user} />) }
+					{ users.length > 0 && users.map((user, idx) => <User key={user._id} user={user} idx={idx}/>) }
 				</tbody>
 			</Table>
 		</Container>

@@ -41,6 +41,9 @@ export default function Payment() {
 					</div>
 					<Row className='pb-2 d-flex justify-content-center'>
 						<Col>
+							<Button variant="danger">Download Ticket</Button>
+						</Col>
+						<Col>
 							<Button variant="danger" as={Link} to="/user_profile">Go to profile</Button>
 						</Col>
 						<Col>
