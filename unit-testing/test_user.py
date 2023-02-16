@@ -11,8 +11,8 @@ class UserUnitTesting(unittest.TestCase):
             "is_admin": False,
         }
         self.mock_error = {}
-    @patch("DB.database.Database.read")
-    @patch("DB.database.Database.create")
+    @patch("server.DB.database.Database.read")
+    @patch("server.DB.database.Database.create")
     def test_register_existing_user(self,mock_create, mock_read):
         # Test case when the user already exists in the database
         mock_read.return_value = self.mock_error
@@ -21,8 +21,8 @@ class UserUnitTesting(unittest.TestCase):
         result = user.register(self.mock_user_data)
         self.assertEqual({}, result)
 
-    @patch("DB.database.Database.read")
-    @patch("DB.database.Database.create")
+    @patch("server.DB.database.Database.read")
+    @patch("server.DB.database.Database.create")
     def test_register_new_user(self,mock_read,mock_create):
         mock_read.return_value = True
         mock_create.return_value = self.mock_user_data
@@ -30,8 +30,8 @@ class UserUnitTesting(unittest.TestCase):
         result = user.register(self.mock_user_data)
         self.assertEqual(self.mock_user_data, result)
 
-    @patch("DB.database.Database.read")
-    @patch("DB.database.Database.create")
+    @patch("server.DB.database.Database.read")
+    @patch("server.DB.database.Database.create")
     def test_register_new_user_invalid_data(self,mock_create,mock_read):
         mock_read.return_value = {}
         mock_create.return_value = False
@@ -40,7 +40,7 @@ class UserUnitTesting(unittest.TestCase):
         self.assertEqual({},result)
 
 
-    @patch("DB.database.Database.read")
+    @patch("server.DB.database.Database.read")
     def test_login_valid_credentials(self,mock_read):
         hashed_user = {
             "emailid": "omkarsavoikar@gmail.com",
@@ -51,11 +51,11 @@ class UserUnitTesting(unittest.TestCase):
         mock_read.return_value = hashed_user
         user = User()
         result = user.login(self.mock_user_data['emailid'],self.mock_user_data['password'])
-        print(result)
-        print(hashed_user)
+        # print(result)
+        # print(hashed_user)
         self.assertEqual(hashed_user,result)
 
-    @patch("DB.database.Database.read")
+    @patch("server.DB.database.Database.read")
     def test_login_invalid_credentials(self,mock_read):
         mock_read.return_value = {}
         user = User()
@@ -63,14 +63,14 @@ class UserUnitTesting(unittest.TestCase):
         self.assertEqual({},result)
 
 
-    @patch("DB.database.Database.read")
+    @patch("server.DB.database.Database.read")
     def test_fetching_a_user(self,mock_read):
         mock_read.return_value = self.mock_user_data
         user = User()
         result = user.fetch_user(self.mock_user_data['emailid'])
         self.assertEqual(self.mock_user_data,result)
 
-    @patch("DB.database.Database.read_all")
+    @patch("server.DB.database.Database.read_all")
     def test_fetching_users(self,mock_read_all):
         mock_read_all.return_value = self.mock_user_data
         user = User()

@@ -1,4 +1,4 @@
-from DB.database import Database
+from server.DB.database import Database
 import hashlib
 
 class User:

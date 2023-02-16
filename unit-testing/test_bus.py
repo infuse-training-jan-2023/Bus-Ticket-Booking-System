@@ -39,42 +39,42 @@ class BusUnitTesting(unittest.TestCase):
 
         }
         self.error = {}
-    @patch('DB.database.Database.delete')
+    @patch('server.DB.database.Database.delete')
     def test_delete_bus(self,mock_delete_one):
         mock_delete_one.return_value = True
         bus = Bus()
         result = bus.delete_bus(self.bus['_id'])
         self.assertEqual({"Success": "Bus deleted successfully"}, result)
 
-    @patch('DB.database.Database.read_all')
+    @patch('server.DB.database.Database.read_all')
     def test_find_all_buses(self,mock_read_all):
         mock_read_all.return_value =  [self.bus]
         result= Bus().find_all_buses()
         self.assertTrue(type(result)==list)
 
-    @patch('DB.database.Database.read')
+    @patch('server.DB.database.Database.read')
     def test_find_a_bus(self,mock_read):
         mock_read.return_value =  self.bus
         bus = Bus()
         result= bus.find_a_bus(self.bus['_id'])
         self.assertEqual(self.bus,result)
 
-    @patch('DB.database.Database.read_all')
+    @patch('server.DB.database.Database.read_all')
     def test_filter_search(self,mock_find):
         mock_find.return_value = [self.bus]
         bus = Bus()
         result = bus.filter_search(self.filters)
-        print(result)
+        # print(result)
         self.assertEqual([self.result],result)
 
-    @patch('DB.database.Database.read_all')
+    @patch('server.DB.database.Database.read_all')
     def test_filter_negative(self,mock_read_all):
         mock_read_all.return_value = []
         bus = Bus()
         result = bus.filter_search(self.filters)
         self.assertEqual([],result)
 
-    @patch('models.bus.Bus.add_selected_seats')
+    @patch('server.models.bus.Bus.add_selected_seats')
     def test_add_selected_seats(self,mock_selected_seats):
         received_bus = {
                 "start_city": self.bus["start_city"],
@@ -91,8 +91,8 @@ class BusUnitTesting(unittest.TestCase):
         result = bus.add_selected_seats(bus_id,selected_seats,date,day)
         self.assertEqual(received_bus,result)
 
-    @patch('DB.database.Database.update')
-    @patch('models.bus.Bus.find_a_bus')
+    @patch('server.DB.database.Database.update')
+    @patch('server.models.bus.Bus.find_a_bus')
     def test_add_selected_seats_invalid_id(self,mock_find_a_bus,mock_update_one):
         mock_update_one.return_value = False
         mock_find_a_bus.return_value = []
@@ -103,8 +103,8 @@ class BusUnitTesting(unittest.TestCase):
         day = 'sunday'
         result = bus.add_selected_seats(bus_id,selected_seats,date,day)
         self.assertEqual({},result)
-    @patch('DB.database.Database.update_all')
-    @patch('models.ticket.Ticket.get_ticket')
+    @patch('server.DB.database.Database.update_all')
+    @patch('server.models.ticket.Ticket.get_ticket')
     def test_remove_bus_seats(self,mock_get_ticket,mock_update_all):
         ticket = {
             '_id':'63e4bf8a219ec66d45de9b48',
@@ -121,8 +121,8 @@ class BusUnitTesting(unittest.TestCase):
         result = bus.remove_bus_seats(ticket['_id'],ticket['date'])
         self.assertEqual({"Status":"True"},result)
 
-    @patch('DB.database.Database.update_all')
-    @patch('models.ticket.Ticket.get_ticket')
+    @patch('server.DB.database.Database.update_all')
+    @patch('server.models.ticket.Ticket.get_ticket')
     def test_remove_bus_seats_negative(self,mock_get_ticket,mock_update_many):
         ticket = {
             '_id':'63e4bf8a219ec66d45de9b48',

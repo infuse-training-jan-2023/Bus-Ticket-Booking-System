@@ -33,7 +33,7 @@ class TicketUnitTesting(unittest.TestCase):
                 "status": True
         }
 
-    @patch("models.ticket.Ticket.book_ticket")
+    @patch("server.models.ticket.Ticket.book_ticket")
     def test_book_ticket(self,mock_book_ticket):
         mock_book_ticket.return_value = self.ticket_booked
         api = Ticket()
@@ -43,10 +43,10 @@ class TicketUnitTesting(unittest.TestCase):
         ticket_price = self.ticket['ticket_price']
         selected_seats = self.ticket['selected_seats']
         result = api.book_ticket(bus_id,user_id,ticket_price,date,selected_seats,'sunday')
-        print(result)
+        # print(result)
         self.assertEqual(self.ticket_booked, result)
 
-    @patch("models.ticket.Ticket.book_ticket")
+    @patch("server.models.ticket.Ticket.book_ticket")
     def test_book_ticket_negative(self,mock_book_ticket):
         mock_book_ticket.return_value = {}
         api = Ticket()
@@ -56,10 +56,10 @@ class TicketUnitTesting(unittest.TestCase):
         ticket_price = self.ticket['ticket_price']
         selected_seats = self.ticket['selected_seats']
         result = api.book_ticket(bus_id,user_id,ticket_price,date,selected_seats,'sunday')
-        print(result)
+        # print(result)
         self.assertEqual({}, result)
 
-    @patch("DB.database.Database.read")
+    @patch("server.DB.database.Database.read")
     def test_view_tickets_of_user(self,mock_read):
         mock_read.return_value = self.ticket
         user_id = self.ticket['user_id']
@@ -67,7 +67,7 @@ class TicketUnitTesting(unittest.TestCase):
         result = ticket.view_tickets_of_user(user_id)
         self.assertTrue(type(result)==list)
 
-    @patch("DB.database.Database.read")
+    @patch("server.DB.database.Database.read")
     def test_get_ticket(self,mock_read):
         mock_read.return_value = self.ticket
         user_id = self.ticket['_id']
@@ -75,17 +75,17 @@ class TicketUnitTesting(unittest.TestCase):
         result = ticket.get_ticket(user_id)
         self.assertEqual(self.ticket,result)
 
-    @patch("DB.database.Database.read_all")
+    @patch("server.DB.database.Database.read_all")
     def test_get_ticket_invalid_id(self,mock_read):
         mock_read.return_value = []
         user_id = self.ticket['user_id']
         ticket = Ticket()
         result = ticket.view_tickets_of_user(user_id)
-        print(result)
+        # print(result)
         self.assertEqual([],result)
 
-    @patch("DB.database.Database.update")
-    @patch("models.bus.Bus.remove_bus_seats")
+    @patch("server.DB.database.Database.update")
+    @patch("server.models.bus.Bus.remove_bus_seats")
     def test_cancel_tickets(self,mock_remove_seats,mock_update):
         mock_update.return_value = True
         mock_remove_seats.return_value = True
@@ -94,8 +94,8 @@ class TicketUnitTesting(unittest.TestCase):
         result = ticket.cancel_tickets(ticket_id,self.ticket['date'])
         self.assertEqual({'Status': 'Ticket cancelled successfully'},result)
 
-    @patch("DB.database.Database.update")
-    @patch("models.bus.Bus.remove_bus_seats")
+    @patch("server.DB.database.Database.update")
+    @patch("server.models.bus.Bus.remove_bus_seats")
     def test_cancel_tickets_invalid_id(self,mock_remove_seats,mock_update_one):
         mock_update_one.return_value = False
         mock_remove_seats.return_value = {}
