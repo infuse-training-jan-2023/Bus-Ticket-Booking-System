@@ -1,11 +1,6 @@
 import unittest
-import sys
-sys.path.append('../../')
 from unittest.mock import patch
-from models.ticket import Ticket
-from models.bus import Bus
-import json
-
+from server.models.bus import Bus
 
 class BusUnitTesting(unittest.TestCase):
     def setUp(self):

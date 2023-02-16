@@ -1,7 +1,5 @@
 import unittest
-import sys
-sys.path.append('../../')
-from models.user import User
+from server.models.user import User
 from unittest.mock import patch
 
 class UserUnitTesting(unittest.TestCase):
@@ -78,8 +76,3 @@ class UserUnitTesting(unittest.TestCase):
         user = User()
         result = user.fetch_users()
         self.assertTrue(type(result)==list)
-
-
-
-
-

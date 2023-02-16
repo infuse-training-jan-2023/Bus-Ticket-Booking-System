@@ -1,8 +1,6 @@
 import unittest
-import sys
-sys.path.append('../../')
 from unittest.mock import patch
-from models.ticket import Ticket
+from server.models.ticket import Ticket
 
 class TicketUnitTesting(unittest.TestCase):
     def setUp(self):
