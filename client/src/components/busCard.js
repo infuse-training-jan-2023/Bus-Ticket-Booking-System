@@ -1,6 +1,8 @@
 import React from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 import { Link } from 'react-router-dom'
+import moment from 'moment'
+import '../App.css' 
 
 export default function BusCard(props) {
   const {id, startCity, destinationCity, seatPrice, arrivalTime, departureTime, buttonType, dateOfJourney, showDate} = props
@@ -15,29 +17,28 @@ export default function BusCard(props) {
           style={{textAlign: 'center'}}
         >
           <Row className='justify-content-md-center align-items-center'>
-            {showDate && <p style={{fontWeight: 'bold'}}>{dateOfJourney}</p>}
-            <Col xs={8}>
+            {showDate && <p style={{fontWeight: 'bold'}}>{moment(dateOfJourney).format('MMM Do YYYY')}</p>}
+            <Col md={8}>
                 <Row>
                     <Col sm>
-                        <div>{aTime}</div>
-                        <div>{startCity.charAt(0).toUpperCase() + startCity.slice(1)}</div>
+                        <div><span className='ticket-span'>Arr Time: </span>{aTime}</div>
+                        <div><span className='ticket-span'>To: </span>{startCity.charAt(0).toUpperCase() + startCity.slice(1)}</div>
                     </Col>
                     <Col sm>
-                        <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}}>{`${hrs}hrs ${mins}mins`}</div>
-                        <div><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
+                        <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}}><span className='ticket-span'>Duration: </span>{`${hrs}hrs ${mins}mins`}</div>
+                        <div className='ticket-span-arrow'><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
                     </Col>           
                     <Col sm>                
-                        <div>{dTime}</div>
-                        <div>{destinationCity.charAt(0).toUpperCase() + destinationCity.slice(1)}</div>
+                        <div><span className='ticket-span'>Depart Time: </span>{dTime}</div>
+                        <div><span className='ticket-span'>To: </span>{destinationCity.charAt(0).toUpperCase() + destinationCity.slice(1)}</div>
                     </Col>
                 </Row>
             </Col>
             <Col className='m-2'>
-                <div>Rs.{seatPrice}</div>
+                <div><span className='ticket-span'>Price: </span>Rs.{seatPrice}</div>
                 <div>
                     {
-                      buttonType === 'Book' ? <Button variant="danger" as={Link} to={`/book_ticket/${id}/${dateOfJourney}`} style={{width: '100%'}}>Book</Button>:
-                      buttonType === 'Cancel' ? <Button variant="danger" style={{width: '100%'}}>Cancelk</Button>:''
+                      buttonType === 'Book' && <Button variant="danger" as={Link} to={`/book_ticket/${id}/${dateOfJourney}`} style={{width: '100%'}}>Book</Button>
                     }
                 </div>
             </Col>

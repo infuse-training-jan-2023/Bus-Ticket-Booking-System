@@ -7,7 +7,7 @@ user_controller = Blueprint('user_controller', __name__)
 user = User()
 
 # user login
-@user_controller.route('/login', methods = ['GET'])
+@user_controller.route('/login', methods = ['POST'])
 def login():
     request_data = request.get_json()
     email = request_data['emailid']
