@@ -17,7 +17,7 @@ async function login_validation(email,password,handle_login){
   };
   console.log(email,password)
   const fetchResponse = await fetch('http://127.0.0.1:4000/login', settings);
-  if(fetchResponse.status==400){
+  if(fetchResponse.status==401){
     document.getElementsByClassName('login-message')[0].style.display='block'
     console.log('invalid credentials')
   }
