@@ -10,6 +10,5 @@ class TestFindBuses:
 
     def test_get_all_buses(self):
         response = requests.get('http://127.0.0.1:4000/buses')
-        print(response.json())
         assert response.text!="Error"
 

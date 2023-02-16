@@ -14,7 +14,6 @@ class TestFindBus:
 
     def test_get_bus_valid_id(self):
         response = requests.get('http://127.0.0.1:4000/bus',json=bus_id)
-        print(response.json())
         assert response.text!="Error"
 
     def test_get_bus_invalid_id(self):
