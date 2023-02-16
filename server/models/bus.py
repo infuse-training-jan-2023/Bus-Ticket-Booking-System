@@ -109,6 +109,7 @@ class Bus:
                     },
                 }
             result = self.db.update(self.table_name, bus_filter, bus_set)
+            print(result)
             if result.modified_count == 0:
                 booked_seat = {
                     "seat_numbers": selected_seats,
@@ -127,6 +128,7 @@ class Bus:
                 bus_set = {"$push": {"booked_seat": booked_seat},}
                 self.db.update(self.table_name, bus_filter, bus_set)
             bus_cursor = self.find_a_bus(bus_id)
+            print(bus_cursor)
             routines = bus_cursor["routine"]
             for routine in routines:
                 if routine["day"] == day:

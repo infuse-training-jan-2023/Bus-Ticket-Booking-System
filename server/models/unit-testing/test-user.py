@@ -7,8 +7,8 @@ from unittest.mock import patch
 class UserUnitTesting(unittest.TestCase):
     def setUp(self):
         self.mock_user_data = {
-            "emailid": "testuser@email.com",
-            "password": "testpassword",
+            "emailid": "omkarsavoikar@gmail.com",
+            "password": "password",
             "gender": "male",
             "is_admin": False,
         }
@@ -44,10 +44,18 @@ class UserUnitTesting(unittest.TestCase):
 
     @patch("DB.database.Database.read")
     def test_login_valid_credentials(self,mock_read):
-        mock_read.return_value = self.mock_user_data
+        hashed_user = {
+            "emailid": "omkarsavoikar@gmail.com",
+            "password": "5f4dcc3b5aa765d61d8327deb882cf99",
+            "gender": "male",
+            "is_admin": False,
+        }
+        mock_read.return_value = hashed_user
         user = User()
         result = user.login(self.mock_user_data['emailid'],self.mock_user_data['password'])
-        self.assertEqual(self.mock_user_data,result)
+        print(result)
+        print(hashed_user)
+        self.assertEqual(hashed_user,result)
 
     @patch("DB.database.Database.read")
     def test_login_invalid_credentials(self,mock_read):

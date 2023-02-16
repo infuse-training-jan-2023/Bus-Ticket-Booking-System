@@ -1,8 +1,9 @@
 
 import requests
 valid_credentials = {
-    "emailid":"abc@gmail.com",
-    "password":"$2b$12$5Z3oUqb9mwdbPdQ7kceJQ.5FBFuTWjXvQyl2accH83J7VpXItJ4WK"}
+            "emailid": "omkarsavoikar@gmail.com",
+            "password": "password"
+}
 invalid_credentials={
     "emailid":"anything@gmail.com",
     "password":"anything"
