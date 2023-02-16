@@ -1,12 +1,15 @@
 // App.js
 import React, { useEffect, useState } from "react";
-import { Container, Table, Row, Col, Button } from 'react-bootstrap'
+import { Container, Table} from 'react-bootstrap'
+import { useNavigate } from "react-router";
 import User from './User'
 
 
 export default function User_Component() {
 // set state
   const [users, setusers] = useState([]);
+  const userId = localStorage.getItem('user_id')
+  const navigate=useNavigate()
 
     const fetchUsers = async()=>{
         try{
@@ -15,15 +18,14 @@ export default function User_Component() {
               })
               const users = await response.json()
               setusers(users)
-
         }
         catch(error){
             return error;
-
         }
     }
 
   useEffect(() => {
+    if (!userId) navigate("/login");
     fetchUsers()
     
   }, []);

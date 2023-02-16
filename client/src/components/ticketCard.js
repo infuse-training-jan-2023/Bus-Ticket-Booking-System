@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 import moment from 'moment'
 import '../App.css'
+import { useNavigate } from 'react-router'
 
 export default function Ticket(props) {
   const {id, bus_id, doj, ticketPrice, selectedSeats, status, set_cancel, showStatus} = props
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
   const day = days[new Date(doj).getDay()]
   const [bus, setBus] = useState([])
+  const userId = localStorage.getItem('user_id')
+
+  const navigate=useNavigate()
   
   const fetchBus = async() => {
     try {
@@ -30,7 +34,6 @@ export default function Ticket(props) {
           },
           body: JSON.stringify({"ticket_id": id, "date": doj}),})
         const data = await response.json()
-        // setCancelStatus(data)
         set_cancel(data)
     }  
     catch (error) {
@@ -39,6 +42,7 @@ export default function Ticket(props) {
   }
 
   useEffect(() => {
+    if (!userId) navigate("/login");
     fetchBus()
   }, [bus_id])
 

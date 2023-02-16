@@ -4,12 +4,8 @@ import { useNavigate } from "react-router-dom"
 import Ticket from './ticketCard'
 
 export default function UserProfile() {
-    // localStorage.setItem('userEmail', 'abc@gmail.com')
     const userEmail = localStorage.getItem('emailid')
-    // localStorage.setItem('userId', '63e49ceca788d71cb4dae60c')
     const userId = localStorage.getItem('user_id')
-    // localStorage.setItem('isAdmin', true)
-    // const isAdmin = localStorage.getItem('isAdmin')
 
     const [tickets, setTickets] = useState([])
     const fetchTickets = async() => {
@@ -34,7 +30,6 @@ export default function UserProfile() {
     useEffect(() => {
         if(!userId)
             navigate('/login')
-
         fetchTickets()
     }, [userId, cancel])
 

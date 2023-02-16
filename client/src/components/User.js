@@ -1,8 +1,5 @@
-// Customer.js
-import {Row, Col, Button} from 'react-bootstrap'
 import React from 'react'
 
-// deconstructed props
 function BusRow({user:{_id,emailid, gender}, idx}) {
 
   return (

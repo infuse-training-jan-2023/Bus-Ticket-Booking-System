@@ -124,11 +124,7 @@ export default function SearchPage() {
     }
 
 
-    filters["$and"] = x
-
-    // if(filterArr.length > 0)
-    //   filters["$and"] = filterArr
-    console.log(JSON.stringify(filters)) 
+    filters["$and"] = x 
     setAddFilter(Math.floor((Math.random() * 1000) + 1))
   }
   
@@ -174,15 +170,12 @@ export default function SearchPage() {
   }
 
   const sortBuses = (order) => {
-    console.log(order)
-    console.log(sortValue)
     let sortedBuses = []
     if(order === 'asc')
       sortedBuses = [...buses].sort((a,b) => a[sortValue] - b[sortValue])
     else
       sortedBuses = [...buses].sort((a,b) => b[sortValue] - a[sortValue])
     setBuses(sortedBuses)
-    // console.log(buses)
   }
 
   const handleCheckBoxes = (e) => {
