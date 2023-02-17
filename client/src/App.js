@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Login_form from './components/login_form/login_form';
-import Registration_form from './components/registeration_form/registeration_form';
+import Login_form from './components/login_form';
+import Registration_form from './components/registeration_form';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from './components/HomePage'
 import SearchPage from './components/searchPage';
@@ -17,7 +17,7 @@ import Footer from './components/footer'
 function App() {
   return (
 
-    
+
     // <div className="App">
     //   <Login_form on_submit={login_validation}/>
     //   <Registration_form on_submit={register_user}/>

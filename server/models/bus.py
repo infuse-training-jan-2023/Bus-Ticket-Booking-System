@@ -1,5 +1,5 @@
-from server.DB.database import Database
-from server.models import ticket
+from DB.database import Database
+from models import ticket
 from bson.objectid import ObjectId
 
 class Bus:

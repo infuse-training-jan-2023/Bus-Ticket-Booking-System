@@ -1,6 +1,6 @@
 from bson.objectid import ObjectId
-from server.DB.database import Database
-from server.models import bus
+from DB.database import Database
+from models import bus
 
 class Ticket():
     def __init__(self):

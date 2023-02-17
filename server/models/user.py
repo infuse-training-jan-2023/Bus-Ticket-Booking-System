@@ -1,4 +1,4 @@
-from server.DB.database import Database
+from DB.database import Database
 import hashlib
 
 class User:
@@ -22,11 +22,15 @@ class User:
 
 	def register(self, user_data):
 		try:
-			res = hashlib.md5(user_data['password'].encode()).hexdigest()
-			user_data["password"] = res
-			user_data["is_admin"] = False
-			self.db.create(self.table_name, user_data)
-			return self.db.read(self.table_name, {"emailid": user_data["emailid"]})
+			user = self.db.read(self.table_name, {"emailid": user_data["emailid"]})
+			if(user==None):
+				user_data.pop('confirm_password')
+				res = hashlib.md5(user_data['password'].encode()).hexdigest()
+				user_data["password"] = res
+				user_data["is_admin"] = False
+				self.db.create(self.table_name, user_data)
+				return self.db.read(self.table_name, {"emailid": user_data["emailid"]})
+			return {}
 		except Exception as e:
 			print(e)
 			return {}

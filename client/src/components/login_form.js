@@ -1,6 +1,5 @@
 import { useNavigate,Link } from 'react-router-dom';
 import {Button,Container,Form } from "react-bootstrap";
-import './login_form.css'
 
 
 
@@ -15,22 +14,16 @@ async function login_validation(email,password,handle_login){
       headers: {Accept: 'application/json','Content-Type': 'application/json'},
       body:JSON.stringify(credentials)
   };
-  console.log(email,password)
   const fetchResponse = await fetch('http://127.0.0.1:4000/login', settings);
   if(fetchResponse.status==401){
     document.getElementsByClassName('login-message')[0].style.display='block'
-    console.log('invalid credentials')
   }
   else{
     document.getElementsByClassName('login-message')[0].style.display='none'
     const data = await fetchResponse.json()
-    console.log(data)
     window.localStorage.setItem("user_id", data._id);
     window.localStorage.setItem("is_admin",data.is_admin);
     window.localStorage.setItem("emailid",data.emailid);
-    console.log(window.localStorage.getItem('user_id'))
-    console.log(window.localStorage.getItem('is_admin'))
-    console.log(window.localStorage.getItem('emailid'))
     handle_login()
   }
 }
@@ -38,7 +31,6 @@ async function login_validation(email,password,handle_login){
 
 function get_email(e){
     email = e.target.value
-    console.log(email)
     document.getElementsByClassName('login-message')[0].style.display='none'
 }
 function get_password(e){
@@ -53,7 +45,7 @@ function Login_form() {
     const handle_login = () => navigate(-1);
     return (
         <Container>
-        <div className="d-flex justify-content-center bg-light login">
+        <div className="d-flex justify-content-center bg-light login" style={{fontSize:'1.2rem'}}>
         <Form className="p-5">
         <h2 className="p-2 my-3">Sign In</h2>
             <Form.Group className="mb-5" controlId="formBasicEmail">
@@ -64,7 +56,7 @@ function Login_form() {
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" placeholder="Password" onChange={get_password}/>
             </Form.Group>
-            <Form.Label className="login-message">
+            <Form.Label className="login-message" style={{display:'none'}}>
                 Invalid Credentials
             </Form.Label>
             <Button variant="danger" type="submit" className="w-100" onClick={(e)=>{e.preventDefault();login_validation(email,password,handle_login)}}>
