@@ -1,12 +1,11 @@
 import { useNavigate, Link } from "react-router-dom";
 import { Button, Container, Form } from "react-bootstrap";
-import "./login_form.css";
 
 var email = "";
 var password = "";
 
 // validate user credentials
-async function login_validation(email, password, handle_login) {
+async function LoginValidation(email, password, handle_login) {
   var credentials = { emailid: String(email), password: String(password) };
   const settings = {
     method: "POST",
@@ -27,20 +26,20 @@ async function login_validation(email, password, handle_login) {
   }
 }
 
-function get_email(e) {
+function GetEmail(e) {
   email = e.target.value;
   document.getElementsByClassName("login-message")[0].style.display = "none";
 }
-function get_password(e) {
+function GetPassword(e) {
   password = e.target.value;
 }
 
-function prevent_default(e) {
+function PreventDefault(e) {
   e.preventDefault();
 }
-function Login_form() {
+function LoginForm() {
   const navigate = useNavigate();
-  const handle_login = () => navigate(-1);
+  const HandleLogin = () => navigate(-1);
   return (
     <Container>
       <div className="d-flex justify-content-center bg-light login">
@@ -51,7 +50,7 @@ function Login_form() {
             <Form.Control
               type="email"
               placeholder="Enter email"
-              onChange={get_email}
+              onChange={GetEmail}
             />
           </Form.Group>
           <Form.Group className="mb-5" controlId="formBasicPassword">
@@ -59,7 +58,7 @@ function Login_form() {
             <Form.Control
               type="password"
               placeholder="Password"
-              onChange={get_password}
+              onChange={GetPassword}
             />
           </Form.Group>
           <Form.Label className="login-message">Invalid Credentials</Form.Label>
@@ -68,8 +67,8 @@ function Login_form() {
             type="submit"
             className="w-100"
             onClick={(e) => {
-              e.preventDefault();
-              login_validation(email, password, handle_login);
+              e.PreventDefault();
+              LoginValidation(email, password, HandleLogin);
             }}
           >
             Login
@@ -83,4 +82,4 @@ function Login_form() {
   );
 }
 
-export default Login_form;
+export default LoginForm;

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function BusRow({user:{_id,emailid, gender}, idx}) {
+function User({user:{_id,emailid, gender}, idx}) {
 
   return (
         <tr key={_id}>
@@ -11,4 +11,4 @@ function BusRow({user:{_id,emailid, gender}, idx}) {
         </tr>
   )
 }
-export default BusRow
+export default User

@@ -12,7 +12,7 @@ function BusRow({
     return invokeModal(!isShow);
   };
 
-  const handledeletebus = async () => {
+  const HandleDeleteBus = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:4000/bus/${_id}`, {
         method: "DELETE",
@@ -23,7 +23,7 @@ function BusRow({
     }
   };
 
-  const handleView = () => {
+  const HandleView = () => {
     try {
       <handleView />;
     } catch (error) {}
@@ -65,7 +65,7 @@ function BusRow({
             as={Button}
             variant="outline-danger"
             className=""
-            onClick={() => handledeletebus()}
+            onClick={() => HandleDeleteBus()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

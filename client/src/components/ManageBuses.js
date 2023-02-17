@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import Bus from './Bus'
 
 
-export default function Bus_Component() {
+export default function BusComponent() {
 // set state
   const [buses, setbuses] = useState([]);
   const userId = localStorage.getItem('user_id')

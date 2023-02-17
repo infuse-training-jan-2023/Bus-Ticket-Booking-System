@@ -8,9 +8,26 @@
 	background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
 }
 
+.registeration-message{
+	display: none;
+}
+.passwords-message{
+	display: none;
+}
+
+
 .ticket-span {
 	display: none;
 	font-weight: 500;
+}
+
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
+
+.login{
+	font-size: 1.2rem;
+}
+.login-message{
+	display: none;
 }
 
 @media screen and (max-width: 992px) {

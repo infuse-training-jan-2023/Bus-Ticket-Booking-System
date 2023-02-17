@@ -2,7 +2,7 @@ import {React} from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default function Sample() {
+export default function HomePage() {
   return (
     <Container className='mt-2'>
         <Row className='justify-content-center align-item-center'> 

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router";
 import User from './User'
 
 
-export default function User_Component() {
+export default function UserComponent() {
 // set state
   const [users, setusers] = useState([]);
   const userId = localStorage.getItem('user_id')

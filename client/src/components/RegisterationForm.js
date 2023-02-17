@@ -1,8 +1,7 @@
-import "./registration_form.css";
 import { useNavigate, Link } from "react-router-dom";
 import { Button, Container, Form } from "react-bootstrap";
 
-var user = {
+let user = {
   emailid: "",
   gender: "Male",
   password: "",
@@ -10,7 +9,7 @@ var user = {
   is_admin: false,
 };
 
-async function register_user(user, handle_register) {
+async function RegisterUser(user, handle_register) {
 
   const settings = {
     method: "POST",
@@ -55,7 +54,9 @@ function get_gender(e) {
 
 function Registration_form() {
   const navigate = useNavigate();
-  const handle_register = () => navigate("/");
+  const handle_register = () => {
+  navigate(-2)
+  };
   return (
     <Container>
       <div className="d-flex justify-content-center bg-light">
@@ -122,7 +123,7 @@ function Registration_form() {
             className="w-100"
             onClick={(e) => {
               e.preventDefault();
-              register_user(user, handle_register);
+              RegisterUser(user, handle_register);
             }}
           >
             Register

@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { Button, Container, Row, Col } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
-import BusCard from "./busCard";
+import BusCard from "./BusCard";
 
 export default function BusSeatBooking() {
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -235,7 +235,7 @@ export default function BusSeatBooking() {
             </div>
             <div className="border text-wrap text-center">
               <h4 className="mt-3">Selected seats:</h4>
-              <div>{selectedSeats.join(", ") || "None"}</div>
+              <div className="font-weight-bold" style={{"font-weight": "bold"}}>{selectedSeats.join(", ") || "None"}</div>
               <div>
                 <p>Total Number of selected Seats : {selectedSeats.length}</p>
               </div>
