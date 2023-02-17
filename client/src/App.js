@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Login_form from './components/LoginForm';
-import Registration_form from './components/RegisterationForm';
+import Login_form from './components/login_form';
+import Registration_form from './components/registeration_form';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SearchPage from './components/SearchPage';
 import UserProfile from './components/UserProfile'
