@@ -7,6 +7,5 @@ class TestFetchUsers:
 
     def test_fetch_all_users(self):
         response = requests.get('http://127.0.0.1:4000/users')
-        print(response.json())
         assert response.text!="Error"
 

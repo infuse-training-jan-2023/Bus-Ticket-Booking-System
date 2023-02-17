@@ -1,6 +1,6 @@
 import { useEffect, useState,useRef } from 'react'
 import {Card, Button, Container, Row, Col} from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams} from 'react-router-dom'
 import Ticket from './ticketCard'
 import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
 import '@progress/kendo-theme-default/dist/all.css';
@@ -8,14 +8,9 @@ import '@progress/kendo-theme-default/dist/all.css';
 export default function Payment() {
 	const {ticket_id} = useParams()
 	const pdfExportComponent = useRef(null)
+	const userId = localStorage.getItem('user_id')
 
-
-	const exportPDFWithMethod = () => {
-		let element = document.querySelector('.k-grid') || document.body;
-		savePDF(element, {
-		paperSize: 'A4'
-		});
-	};
+	const navigate=useNavigate()
 
 	const exportPDFWithComponent = () => {
 		if (pdfExportComponent.current) {
@@ -29,7 +24,6 @@ export default function Payment() {
             const response = await fetch(`http://127.0.0.1:4000/payment_success/${ticket_id}`, {method: 'GET'})
             const ticket_res = await response.json()
             setTicket(ticket_res)
-            // console.log(ticket)
         }  
         catch (error) {
             console.log('Error:', error);
@@ -37,6 +31,7 @@ export default function Payment() {
 	}
 
 	useEffect(() => {
+		if (!userId) navigate("/login");
 		fetchATicket()
 	}, [])
 

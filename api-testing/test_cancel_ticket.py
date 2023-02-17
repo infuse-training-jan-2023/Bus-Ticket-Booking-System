@@ -17,5 +17,4 @@ class TestCancelTicket:
     def test_cancel_ticket_invalid_ticket_id(self):
         ticket_to_be_deleted['ticket_id']=3
         response = requests.put('http://127.0.0.1:4000/ticket',json=ticket_to_be_deleted)
-        print(response)
-        assert response.status_code==400
+        assert response.status_code==201

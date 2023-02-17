@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react'
 import {Card, Col, Row, Button} from 'react-bootstrap'
 import moment from 'moment'
 import '../App.css'
+import { useNavigate } from 'react-router'
 
 export default function Ticket(props) {
   const {id, bus_id, doj, ticketPrice, selectedSeats, status, set_cancel, showStatus} = props
   const days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"]
   const day = days[new Date(doj).getDay()]
   const [bus, setBus] = useState([])
+  const userId = localStorage.getItem('user_id')
+
+  const navigate=useNavigate()
   
   const fetchBus = async() => {
     try {
@@ -30,7 +34,6 @@ export default function Ticket(props) {
           },
           body: JSON.stringify({"ticket_id": id, "date": doj}),})
         const data = await response.json()
-        // setCancelStatus(data)
         set_cancel(data)
     }  
     catch (error) {
@@ -39,6 +42,7 @@ export default function Ticket(props) {
   }
 
   useEffect(() => {
+    if (!userId) navigate("/login");
     fetchBus()
   }, [bus_id])
 
@@ -47,7 +51,11 @@ export default function Ticket(props) {
     className="mb-2 p-4 bg-light text-center"
   >
     <Row className='justify-content-md-center align-items-center'>
-      <p style={{fontWeight: 'bold'}}>Date of Journey: {moment(doj).format('MMM Do YYYY')}</p>
+      <div className='d-flex gap-3 justify-content-md-center'>
+        <p style={{fontWeight: 'bold'}}>Ticket Id: {id}</p>
+        <p style={{fontWeight: 'bold'}}>Bus Id: {bus_id}</p>
+        <p style={{fontWeight: 'bold'}}>Date of Journey: {moment(doj).format('MMM Do YYYY')}</p>
+      </div>
       <Col xs={12} md={8}>
           <Row>
               <Col sm>
