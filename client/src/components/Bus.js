@@ -23,12 +23,6 @@ function BusRow({
     }
   };
 
-  const HandleView = () => {
-    try {
-      <handleView />;
-    } catch (error) {}
-  };
-
   return (
     <>
       <tr key={_id}>

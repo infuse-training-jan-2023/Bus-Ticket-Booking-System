@@ -1,8 +1,6 @@
 import { useNavigate,Link } from 'react-router-dom';
 import {Button,Container,Form } from "react-bootstrap";
 
-
-
 var email = ''
 var password = ''
 
@@ -15,7 +13,7 @@ async function login_validation(email,password,handle_login){
       body:JSON.stringify(credentials)
   };
   const fetchResponse = await fetch('http://127.0.0.1:4000/login', settings);
-  if(fetchResponse.status==401){
+  if(fetchResponse.status === 401){
     document.getElementsByClassName('login-message')[0].style.display='block'
   }
   else{
@@ -37,10 +35,7 @@ function get_password(e){
     password = e.target.value
 }
 
-function prevent_default(e){
-    e.preventDefault()
-}
-function Login_form() {
+function LoginForm() {
     const navigate = useNavigate();
     const handle_login = () => navigate(-1);
     return (
@@ -71,7 +66,7 @@ function Login_form() {
      );
 }
 
-export default Login_form;
+export default LoginForm;
 
 
 

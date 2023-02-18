@@ -21,17 +21,8 @@
 	font-weight: 500;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Raleway:400,700');
-
-.login{
-	font-size: 1.2rem;
-}
-.login-message{
-	display: none;
-}
-
 @media screen and (max-width: 992px) {
-	.ticket-span, .duration, .text-muted {
+	.ticket-span, .duration, .selected-seats {
 		display: inline;
 		font-style: normal !important;
 		font-size: 1rem !important;

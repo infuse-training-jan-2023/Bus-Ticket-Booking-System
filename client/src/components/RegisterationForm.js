@@ -9,15 +9,15 @@ var user = {'emailid':'','gender':'','password':'','confirm_password':'','is_adm
         headers: {Accept: 'application/json','Content-Type': 'application/json'},
         body:JSON.stringify(user)
     };
-    if(user.password == '' || user.gender == '' || user.emailid == '') {
+    if(user.password === '' || user.gender === '' || user.emailid === '') {
       document.getElementsByClassName('error-message')[0].style.display='block'
     }
-    else if(user.password!==user.confirm_password){
+    else if(user.password !== user.confirm_password){
       document.getElementsByClassName('passwords-message')[0].style.display='block'
     }
     else{
       const fetchResponse = await fetch('http://127.0.0.1:4000/register', settings);
-      if( fetchResponse.status==400){
+      if(fetchResponse.status === 400){
         document.getElementsByClassName('passwords-message')[0].style.display='none'
         document.getElementsByClassName('registeration-message')[0].style.display='block'
       }
@@ -48,7 +48,7 @@ function get_gender(e){
     user.gender = e.target.value
 }
 
-function Registration_form() {
+function RegistrationForm() {
     const navigate = useNavigate();
     const handle_register = () => navigate(-2);
     return (
@@ -115,4 +115,4 @@ function Registration_form() {
      );
 }
 
-export default Registration_form;
+export default RegistrationForm;
