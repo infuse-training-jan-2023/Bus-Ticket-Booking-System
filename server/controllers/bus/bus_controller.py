@@ -52,3 +52,13 @@ def delete_bus(bus_id):
     if stat == {}:
         return Response({"Error": "Failed to delete the bus"}, mimetype="application/json", status=400)
     return Response(json.dumps(stat), mimetype="application/json", status=201)
+
+# admin add bus
+@bus_controller.route('/bus', methods = ['POST'])
+def add_bus():
+    request_data = request.get_json()
+    new_bus = bus.add_bus(request_data)
+    if new_bus == {}:
+        return Response(json.dumps({"Error": "Failed to add data"}), mimetype="application/json", status=400)
+    json_data = Encoder().encode(new_bus)
+    return Response(json_data, mimetype="application/json", status=201)
