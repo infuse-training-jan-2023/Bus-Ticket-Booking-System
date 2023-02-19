@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom'
 
 let id = 0
 
@@ -10,20 +11,54 @@ export default function AddBus() {
   const [dTime, setDTime] = useState('')  
   const [allRoutines, setAllRoutines] = useState([])
 
+  const navigate=useNavigate()
+
   const addBus = () => {
+    
+    fields['routine'] = allRoutines.map(({day, arrival_time, departure_time}) => ({day, arrival_time, departure_time}))
+    console.log(fields)
     if(Object.keys(fields).length < 4) {
         alert("Please fill all the fields")
     } 
     else if(fields.start_city === fields.destination_city) {
         alert("Start city and destination city can't be same")
     }
+    else if(fields.bus_type==null){
+        alert("Please select the bus Type")
+    }
     else if(fields.seat_price > 3000) {
         alert("Price can't be greater than Rs.3000")
     }
-
-    fields['routines'] = allRoutines.map(({day, arrival_time, departure_time}) => ({day, arrival_time, departure_time}))
-    console.log(fields)
+    else if(fields.seat_price < 100){
+        alert("Please enter correct seat price")
+    }
+    else if((fields.routine).length==0){
+        alert("please add atleast one routine for the bus")
+    }
+    else{
+    addBusToDB()
+    }
   }
+
+  const addBusToDB = async () => {
+    try {
+      const response = await fetch("http://127.0.0.1:4000/bus", {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify(fields),
+      });
+      const data = await response.json();
+      console.log(data)
+    
+      //navigate('/buses');
+    } catch (error) {
+      console.log(error);
+    }
+    navigate('/manage_buses')
+  };
 
   const addRoutine = () => {
     setDay('')
@@ -49,7 +84,7 @@ export default function AddBus() {
                     <Form.Select onChange={(e) => {setFields(prev => ({...prev, 'start_city': e.target.value}))}}>
                         <option>Choose Start City</option>
                         <option value='goa'>Goa</option>
-                        <option value='banglore'>Banglore</option>
+                        <option value='bangalore'>Banglore</option>
                         <option value='delhi'>Delhi</option>
                     </Form.Select>
                 </Form.Group>
@@ -59,7 +94,7 @@ export default function AddBus() {
                     <Form.Select onChange={(e) => {setFields(prev => ({...prev, 'destination_city': e.target.value}))}}>
                         <option>Choose Destination City</option>
                         <option value='goa'>Goa</option>
-                        <option value='banglore'>Banglore</option>
+                        <option value='bangalore'>Banglore</option>
                         <option value='delhi'>Delhi</option>
                     </Form.Select>
                 </Form.Group>

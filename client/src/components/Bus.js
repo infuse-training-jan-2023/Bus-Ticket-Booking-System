@@ -1,6 +1,6 @@
 // Customer.js
 import { Row, Col, Button, Modal } from "react-bootstrap";
-import React from "react";
+import React, { useState } from "react";
 
 // deconstructed props
 function BusRow({
@@ -8,6 +8,7 @@ function BusRow({
   idx,
 }) {
   const [isShow, invokeModal] = React.useState(false);
+  const [deleted,isdeleted]=useState('false')
   const initModal = () => {
     return invokeModal(!isShow);
   };
@@ -18,6 +19,7 @@ function BusRow({
         method: "DELETE",
       });
       const res = await response.json();
+      isdeleted('true')
     } catch (error) {
       return error;
     }
