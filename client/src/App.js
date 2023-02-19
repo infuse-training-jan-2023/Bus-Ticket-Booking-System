@@ -12,6 +12,7 @@ import BusComponent from './components/ManageBuses'
 import PageNotFound from './components/PageNotFound'
 import NavBar from './components/Navbar'
 import Footer from './components/Footer'
+import AddBus from './components/AddBus';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/manage_buses" element={<BusComponent />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/register" element={<RegistrationForm />} />
+        <Route path="/add_bus" element={<AddBus />}/>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     <Footer/>
