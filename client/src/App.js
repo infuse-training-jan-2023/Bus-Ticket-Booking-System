@@ -1,17 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
-import Login_form from './components/login_form';
-import Registration_form from './components/registeration_form';
+import Login_form from './components/LoginForm';
+import Registration_form from './components/RegisterationForm';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SearchPage from './components/searchPage';
-import UserProfile from './components/userProfile'
-import BusSeatBooking from './components/seatBooking'
+import SearchPage from './components/SearchPage';
+import UserProfile from './components/UserProfile'
+import BusSeatBooking from './components/SeatBooking'
 import Payment from './components/Payment'
-import User_Component from './components/getUsers'
+import User_Component from './components/ManageUsers'
 import Sample from './components/HomePage'
-import Bus_Component from './components/getBuses'
+import Bus_Component from './components/ManageBuses'
 import PageNotFound from './components/PageNotFound'
-import NavBar from './components/navbar'
-import Footer from './components/footer'
+import NavBar from './components/Navbar'
+import Footer from './components/Footer'
 
 
 function App() {
