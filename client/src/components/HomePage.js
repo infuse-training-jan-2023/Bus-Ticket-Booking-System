@@ -2,16 +2,17 @@ import {React} from 'react'
 import { Container, Row, Col, Button, Card } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 
-export default function Sample() {
+export default function HomePage() {
   return (
     <Container className='mt-2'>
-        <Row className='justify-content-center align-item-center'> 
-            <Col sm className='mt-2'>
+        <Row className='justify-content-center'> 
+            <Col sm className='mt-5'>
                 <h2 className='mb-3 display-5'>Online Ticket Booking Sytem</h2>
                 <p className='text-muted lead fs-3'>Test our buses for us</p>
                 <div className='mt-5'><Button as={Link} to='/search_bus' variant='danger' className='px-5 fs-5'> Get Started </Button></div></Col>
             <Col sm className='mt-2'>
-                <img className='img-fluid' src='https://img.freepik.com/free-vector/red-tourist-bus-with-open-luggage-compartment-vector-illustration_1284-46228.jpg?w=996&t=st=1676506208~exp=1676506808~hmac=4647547e090ca018978bb353cd40801a2031937c38cbcc7ec2862f8b9cd2760b'  alt='bus_image'/>
+                {/* <img className='img-fluid' src='https://img.freepik.com/free-vector/red-tourist-bus-with-open-luggage-compartment-vector-illustration_1284-46228.jpg?w=996&t=st=1676506208~exp=1676506808~hmac=4647547e090ca018978bb353cd40801a2031937c38cbcc7ec2862f8b9cd2760b'  alt='bus_image'/> */}
+                <img className='img-fluid' src='../../images/buss.jpg'  alt='bus_image'/>
             </Col>
         </Row>
         <Row>
@@ -36,7 +37,7 @@ export default function Sample() {
         </Row>
         <Row className='bg-light text-center'>
             <div className='mx-auto w-75 mb-5 pt-2'>
-                 <h2 style={{marginBottom: '2rem'}}>Online Bus booking on IntrCity SmartBus</h2>
+                 <h2 style={{marginBottom: '2rem'}}>Online Bus booking on Infuse Bus Travels</h2>
                  <p className='lead'>Infuse Bus Travels is India's widest player for Bus bookings in India. We promise our bus travellers a consistent performance with the most comfortable and reliable journey experience. Here you can find the best online bus ticketing as well as exceptional onboard services. The brand operates a branded fleet of dependable buses that provide safe, secure, and punctual travel.</p>
             </div>
             <div className='mx-auto w-75 mb-5'>

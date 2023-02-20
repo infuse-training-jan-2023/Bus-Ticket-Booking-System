@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
-import BusCard from './busCard'
+import BusCard from './BusCard'
 
 export default function SearchPage() {
   const cities = ['goa', 'bangalore', 'delhi']

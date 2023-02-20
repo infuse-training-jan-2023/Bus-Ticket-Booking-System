@@ -6,7 +6,16 @@ class Bus:
     def __init__(self)->None:
         self.db = Database()
         self.table_name = 'Bus'
-
+    
+    def add_bus(self, new_bus):
+        try:
+            new_bus['booked_seat'] = []
+            get_bus = self.db.create(self.table_name, new_bus)
+            return {"Success": True}
+        except Exception as e:
+            print(e)
+            return {}
+        
     def delete_bus(self, bus_id):
         try:
             # self.db.get_database().Bus.delete_one({"_id": ObjectId(bus_id)})

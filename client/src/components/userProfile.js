@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
-import Ticket from './ticketCard'
+import Ticket from './TicketCard'
 
 export default function UserProfile() {
     const userEmail = localStorage.getItem('emailid')

@@ -1,23 +1,25 @@
 // App.js
 import React, { useEffect, useState } from "react";
-import { Container, Table } from 'react-bootstrap'
+import { Container, Table,Button } from 'react-bootstrap'
 import { useNavigate } from "react-router";
 import Bus from './Bus'
 
 
-export default function Bus_Component() {
+export default function BusComponent() {
 // set state
   const [buses, setbuses] = useState([]);
+  const [deleted,setdeleted]=useState('false')
   const userId = localStorage.getItem('user_id')
   const navigate=useNavigate()
 
-    const fetchUsers = async()=>{
+    const fetchBuses = async()=>{
         try{
             const response = await fetch(`http://127.0.0.1:4000/buses`, {
                 method: 'GET', 
               })
               const buses = await response.json()
               setbuses(buses)
+              setdeleted('deleted')
         }
         catch(error){
         }
@@ -25,13 +27,16 @@ export default function Bus_Component() {
 
   useEffect(() => {
     if (!userId) navigate("/login");
-    fetchUsers()    
+    fetchBuses()    
   }, [buses]);
 
 return (
     <div>
       <Container className='w-75'>
       <h3 className="text-center text-muted">Buses</h3>
+      <div className="text-right">
+      <Button variant='danger' className='text-center'onClick={()=>navigate('/add_bus')}>Add Bus</Button>
+      </div>
       <hr/>
 			<Table style={{margin: 'auto'}}>
 				<thead>

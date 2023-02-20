@@ -1,6 +1,6 @@
 // Customer.js
 import { Row, Col, Button, Modal } from "react-bootstrap";
-import React from "react";
+import React, { useState } from "react";
 
 // deconstructed props
 function BusRow({
@@ -8,25 +8,21 @@ function BusRow({
   idx,
 }) {
   const [isShow, invokeModal] = React.useState(false);
+  const [deleted,isdeleted]=useState('false')
   const initModal = () => {
     return invokeModal(!isShow);
   };
 
-  const handledeletebus = async () => {
+  const HandleDeleteBus = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:4000/bus/${_id}`, {
         method: "DELETE",
       });
       const res = await response.json();
+      isdeleted('true')
     } catch (error) {
       return error;
     }
-  };
-
-  const handleView = () => {
-    try {
-      <handleView />;
-    } catch (error) {}
   };
 
   return (
@@ -65,7 +61,7 @@ function BusRow({
             as={Button}
             variant="outline-danger"
             className=""
-            onClick={() => handledeletebus()}
+            onClick={() => HandleDeleteBus()}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

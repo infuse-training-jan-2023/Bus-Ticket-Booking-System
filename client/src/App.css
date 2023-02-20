@@ -8,13 +8,21 @@
 	background-image: linear-gradient(to bottom right, #002f4b, #dc4225);
 }
 
+.registeration-message{
+	display: none;
+}
+.passwords-message{
+	display: none;
+}
+
+
 .ticket-span {
 	display: none;
 	font-weight: 500;
 }
 
 @media screen and (max-width: 992px) {
-	.ticket-span, .duration, .text-muted {
+	.ticket-span, .duration, .selected-seats {
 		display: inline;
 		font-style: normal !important;
 		font-size: 1rem !important;

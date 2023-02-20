@@ -10,7 +10,7 @@ export default function Ticket(props) {
   const day = days[new Date(doj).getDay()]
   const [bus, setBus] = useState([])
   const userId = localStorage.getItem('user_id')
-
+  const [duration, setDuration] = useState('')
   const navigate=useNavigate()
   
   const fetchBus = async() => {
@@ -23,6 +23,12 @@ export default function Ticket(props) {
     catch (error) {
         console.log('Error:', error);
     }
+  }
+
+  const findDuration = () => {    
+    const duration = (bus[0].departure_time - bus[0].arrival_time) < 0 ? (bus[0].departure_time - bus[0].arrival_time + 2400) : (bus[0].departure_time - bus[0].arrival_time)    
+    const mins = duration.toString().slice(-2), hrs = (duration.toString().length === 3) ? '0' + duration.toString().substring(0, 1) : duration.toString().substring(0, 2)    
+    setDuration(`${hrs}hrs ${mins}mins`)  
   }
 
   const cancelTicket = async() => {
@@ -45,6 +51,11 @@ export default function Ticket(props) {
     if (!userId) navigate("/login");
     fetchBus()
   }, [bus_id])
+
+  useEffect(() => {
+    if(bus.length > 0)
+      findDuration()
+  }, [bus])
 
   return (
     <Card
@@ -70,18 +81,20 @@ export default function Ticket(props) {
               <Col sm>
                   <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}} className='duration'>
                   <span className='ticket-span'>Duration: </span>
-                    {bus.length > 0 && 
-                    ((bus[0].departure_time < bus[0].arrival_time) ?
-                      (((Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().length === 3) ? 
-                      '0' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 1) 
-                      : 
-                      (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 2)) + 'hrs ' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().slice(-2) + 'mins'
-                    :
-                    ((Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().length === 3) ? 
-                      '0' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 1) 
-                      : 
-                      Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 2)) + 'hrs ' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().slice(-2) + 'mins'
-                    )
+                    {
+                    // bus.length > 0 && 
+                    // ((bus[0].departure_time < bus[0].arrival_time) ?
+                    //   (((Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().length === 3) ? 
+                    //   '0' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 1) 
+                    //   : 
+                    //   (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 2)) + 'hrs ' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().slice(-2) + 'mins'
+                    // :
+                    // ((Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().length === 3) ? 
+                    //   '0' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 1) 
+                    //   : 
+                    //   Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 2)) + 'hrs ' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().slice(-2) + 'mins'
+                    // )
+                    duration
                   }</div>
                   <div className='ticket-span-arrow'><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
               </Col>           
@@ -96,7 +109,7 @@ export default function Ticket(props) {
               </Col>
           </Row>
           <Row>
-            <div className='text-muted'>
+            <div className='text-muted selected-seats'>
               Seats booked: {selectedSeats && selectedSeats.map(s => <span>{s} </span>)}
             </div>
           </Row>

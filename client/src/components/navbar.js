@@ -15,7 +15,7 @@ export default function NavBar() {
     <Navbar expand="lg" className="px-2">
       <Container fluid>
         <Navbar.Brand href="/" style={{ fontWeight: "700" }}>
-          Infuse <img src="../images/bus.png" width={60} height={60} /> Travels
+          Infuse <img src="../images/bus.png" width={60} height={60} alt="bus"/> Travels
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll" className="justify-content-end">
