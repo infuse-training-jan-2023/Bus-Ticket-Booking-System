@@ -30,8 +30,10 @@ export default function UserProfile() {
     return (
         <Container>
             <div className='mt-5'>
-                <p className='mb-5'>Email: {userEmail}</p>
-                <h4>{tickets.length} Tickets booked</h4>
+                <p className='fs-2 text-center' style={{fontWeight: 'bold'}}>USER PROFILE</p>
+                <p className='fs-3'>Email: {userEmail}</p>
+                <hr/>
+                <h3>{tickets.length} Tickets booked</h3>
                 {tickets.length > 0 && tickets.map(ticket => {
                     return <Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} status={ticket.status} set_cancel={set_cancel} showStatus={true}/>
                 })

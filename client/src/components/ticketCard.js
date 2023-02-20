@@ -14,15 +14,23 @@ export default function Ticket(props) {
   const userId = localStorage.getItem('user_id')
   const [duration, setDuration] = useState('')
   const navigate=useNavigate()
-  
+  const currentDate = (new Date()).getTime(), bookedDate = (new Date(doj)).getTime()
+
   const fetchBus = async() => {
-    const bus_res = await fetchBusByIdAndDay(bus_id, day)
-    setBus(bus_res)
+    try {
+        const response = await fetch(`http://127.0.0.1:4000/bus?bus_id=${bus_id}&day=${day}`, {method: 'GET'})
+        const bus_res = await response.json()
+        setBus(bus_res)
+        // console.log(bus)
+    }  
+    catch (error) {
+        console.log('Error:', error);
+    }
   }
 
   const findDuration = () => {
-    const duration = (bus[0].departure_time - bus[0].arrival_time) < 0 ? (bus[0].departure_time - bus[0].arrival_time + 2400) : (bus[0].departure_time - bus[0].arrival_time)    
-    const mins = duration.toString().slice(-2), hrs = (duration.toString().length === 3) ? '0' + duration.toString().substring(0, 1) : duration.toString().substring(0, 2)    
+    const duration = (bus[0].departure_time - bus[0].arrival_time) < 0 ? ((bus[0].departure_time - bus[0].arrival_time) + 2400) : (bus[0].departure_time - bus[0].arrival_time)
+    const mins = duration.toString().slice(-2), hrs = (duration.toString().length === 3) ? '0' + duration.toString().substring(0, 1) : duration.toString().substring(0, 2)
     setDuration(`${hrs}hrs ${mins}mins`)
   }
 
@@ -46,10 +54,10 @@ export default function Ticket(props) {
     className="mb-2 p-4 bg-light text-center"
   >
     <Row className='justify-content-md-center align-items-center'>
-      <div className='d-flex gap-3 justify-content-md-center'>
+      <div className='d-flex gap-3 justify-content-md-center flex-wrap'>
         <p style={{fontWeight: 'bold'}}>Ticket Id: {id}</p>
         <p style={{fontWeight: 'bold'}}>Bus Id: {bus_id}</p>
-        <p style={{fontWeight: 'bold'}}>Date of Journey: {moment(doj).format('MMM Do YYYY')}</p>
+        <p style={{fontWeight: 'bold'}}>DOJ: {moment(doj).format('MMM Do YYYY')}</p>
       </div>
       <Col xs={12} md={8}>
           <Row>
@@ -64,22 +72,9 @@ export default function Ticket(props) {
               </Col>
               <Col sm>
                   <div style={{fontStyle: 'italic', fontSize: '0.8rem', marginBottom: '0'}} className='duration'>
-                  <span className='ticket-span'>Duration: </span>
-                    {
-                    // bus.length > 0 && 
-                    // ((bus[0].departure_time < bus[0].arrival_time) ?
-                    //   (((Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().length === 3) ? 
-                    //   '0' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 1) 
-                    //   : 
-                    //   (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().substring(0, 2)) + 'hrs ' + (Math.abs(bus[0].departure_time - bus[0].arrival_time)+2400).toString().slice(-2) + 'mins'
-                    // :
-                    // ((Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().length === 3) ? 
-                    //   '0' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 1) 
-                    //   : 
-                    //   Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().substring(0, 2)) + 'hrs ' + Math.abs(bus[0].departure_time - bus[0].arrival_time).toString().slice(-2) + 'mins'
-                    // )
-                    duration
-                  }</div>
+                    <span className='ticket-span'>Duration: </span>
+                    {duration}
+                  </div>
                   <div className='ticket-span-arrow'><img src='../../images/right-arrow.png' width={150} height={20} alt="Arrow"/></div>
               </Col>           
               <Col sm>                
@@ -101,7 +96,8 @@ export default function Ticket(props) {
       <Col className='m-2' sm>
           <div><span className='ticket-span'>Price: </span>Rs.{ticketPrice}</div>
           <div>
-            {status && showStatus && <Button variant="danger" style={{width: '100%'}} onClick={cancelTicket}>Cancel</Button>}
+            {bookedDate > currentDate && status && showStatus && <Button variant="danger" style={{width: '100%'}} onClick={cancelTicket}>Cancel</Button>}
+            {bookedDate < currentDate && status && showStatus && <p className='text-danger'>Ticket expired</p>}
             {!status && showStatus && <p className='text-danger'>Ticket is cancelled</p>}
           </div>
       </Col>

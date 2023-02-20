@@ -7,7 +7,7 @@ import UserProfile from './components/UserProfile'
 import BusSeatBooking from './components/SeatBooking'
 import Payment from './components/Payment'
 import User_Component from './components/ManageUsers'
-import Sample from './components/HomePage'
+import HomePage from './components/HomePage'
 import Bus_Component from './components/ManageBuses'
 import PageNotFound from './components/PageNotFound'
 import NavBar from './components/Navbar'
@@ -21,7 +21,7 @@ function App() {
   <BrowserRouter>
     <NavBar/>
       <Routes>
-        <Route index element={<Sample />} />
+        <Route index element={<HomePage />} />
         <Route path="/search_bus" element={<SearchPage />} />
         <Route path="/book_ticket/:id/:doj" element={<BusSeatBooking />} />
         <Route path="/user_profile" element={<UserProfile />} />

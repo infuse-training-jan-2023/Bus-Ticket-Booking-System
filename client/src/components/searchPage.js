@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useRef, useState } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import BusCard from './BusCard'
 import {fetchBusByFilters} from '../API/BusAPI'
@@ -23,31 +23,40 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false)
   const [sortValue, setSortValue] = useState('seat_price')
   const [doj, setDOJ] = useState('')
+  const dateData = useRef(null)
 
   const timeQuery = [
     {
-      'routine.arrival_time': {'$gt': 0, '$lte': 600}
+      // 'routine.arrival_time': {'$lte': 600}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "arrival_time": {'$lte': 600}}}
     },
     {
-      'routine.arrival_time': {'$gt': 600, '$lte': 1200}
+      // 'routine.arrival_time': {'$gt': 600, '$lte': 1200}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "arrival_time": {'$gt': 600, '$lte': 1200}}}
     },
     {
-      'routine.arrival_time': {'$gt': 1200, '$lte': 1800}
+      // 'routine.arrival_time': {'$gt': 1200, '$lte': 1800}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "arrival_time": {'$gt': 1200, '$lte': 1800}}}
     },
     {
-      'routine.arrival_time': {'$gt': 1800}
+      // 'routine.arrival_time': {'$gt': 1800}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "arrival_time": {'$gt': 1800}}}
     },
     {
-      'routine.departure_time': {'$gt': 0, 'lte': 600}
+      // 'routine.departure_time': {'lte': 600}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "departure_time": {'$lte': 600}}}
     },
     {
-      'routine.departure_time': {'$gt': 600, '$lte': 1200}
+      // 'routine.departure_time': {'$gt': 600, '$lte': 1200}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "departure_time": {'$gt': 600, '$lte': 1200}}}
     },
     {
-      'routine.departure_time': {'$gt': 1200, '$lte': 1800}
+      // 'routine.departure_time': {'$gt': 1200, '$lte': 1800}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "departure_time": {'$gt': 1200, '$lte': 1800}}}
     },
     {
-      'routine.departure_time': {'$gt': 1800}
+      // 'routine.departure_time': {'$gt': 1800}
+      "routine": {"$elemMatch": {"day": filters["routine.day"], "departure_time": {'$gt': 1800}}}
     }
   ]
 
@@ -105,10 +114,6 @@ export default function SearchPage() {
     let x = []
 
     x.push({
-      "routine.day": filters["routine.day"]
-    })
-
-    x.push({
       "seat_price": {'$lte': Number(priceLimit)}
     })
 
@@ -125,6 +130,7 @@ export default function SearchPage() {
     }
 
     filters["$and"] = x 
+    // console.log(JSON.stringify(filters))
     setAddFilter(Math.floor((Math.random() * 1000) + 1))
   }
   
@@ -148,7 +154,19 @@ export default function SearchPage() {
       setDOJ(filters["routine.day"])
       filters["routine.day"] = days[inputDate.getDay()]
     }
+
+    console.log(filters)
     setSearch(Math.floor((Math.random() * 1000) + 1))
+    setEarlyMorning(false)
+    setMorning(false)
+    setAfternoon(false)
+    setEvening(false)
+    setACBusType(false)
+    setNACBusType(false)
+    setPriceLimit(3000)
+    document.querySelectorAll('input[type=checkbox]').forEach(el => el.checked = false)
+    if(filters["$and"])
+      delete filters.$and
   }
 
 
@@ -196,6 +214,10 @@ export default function SearchPage() {
     }
   }, [search, addFilter]);
 
+  let currentMonth = `0${new Date().getMonth() + 1}`
+  let inpDate = `${new Date().getFullYear()}-${currentMonth.slice(-2)}-${new Date().getDate()}`
+  const [date, setDate] = useState(inpDate)
+
   return (
     <Container>
         <Row style={{border: '1px solid #ccc'}} className='my-5 p-3'>
@@ -226,14 +248,15 @@ export default function SearchPage() {
                 </Col>
                 <Col sm={4}>
                   <div class='input-group' id='datetimepicker1'>
-                    <input type='date' class="form-control" required onChange={e => {
-                      setField("routine.day", e.target.value)
+                    <input type='date' class="form-control" defaultValue={date} required onChange={e => {
+                      setField("routine.day", e.target.value);
+                      setDate(e.target.value)
                     }}/>
                   </div>
                 </Col>
             </Row>
             <Row className='justify-content-end px-3'>
-              <Button variant='danger' style={{width: '20%'}} onClick={handleSearch}>Search</Button>
+              <Button variant='danger'className='w-25 mt-3 px-2' onClick={handleSearch}>Search</Button>
             </Row>
           </Form>
         </Row>
@@ -253,8 +276,8 @@ export default function SearchPage() {
                   <div className='mb-4'>
                     <h5>Bus Time</h5>
                     <select class="form-select form-select-md mb-3" onChange={(e) => {handleCheckBoxes(e)}}>
-                      <option value="arrival_time">Arrival at {filters["destination_city"].toUpperCase()}</option>
-                      <option value="departure_time">Departure from {filters["start_city"].toUpperCase()}</option>
+                      <option value="arrival_time">Arrival from {filters["start_city"].toUpperCase()}</option>
+                      <option value="departure_time">Departure to {filters["destination_city"].toUpperCase()}</option>
                     </select>
                     <Form.Check className='timeCheck' type="checkbox" label="Before 06:00" onClick={(e) => {setEarlyMorning(e.target.checked)}}/>
                     <Form.Check className='timeCheck' type="checkbox" label="06:00 to 12:00" onClick={(e) => {setMorning(e.target.checked)}}/>
@@ -290,7 +313,7 @@ export default function SearchPage() {
             </Col>
           </Row>
         ) : (
-          !loading ? (<p></p>) : (<p className='text-center'>No data found</p>)
+          <p className='text-center'>No data found</p>
         )}
     </Container>
   )
