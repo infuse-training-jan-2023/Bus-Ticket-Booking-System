@@ -11,9 +11,9 @@ export const fetchTicketById = async(ticket_id) => {
     }
 }
 
-export const fetchTicketsByEmail = async(userId) => {
+export const fetchTicketsByEmail = async(user_id) => {
     try {
-        const response = await fetch(`${url}ticket/${userId}`, {method: 'GET'})
+        const response = await fetch(`${url}ticket/${user_id}`, {method: 'GET'})
         const data = await response.json()
         return data
     }  

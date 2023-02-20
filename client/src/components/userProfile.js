@@ -33,10 +33,16 @@ export default function UserProfile() {
                 <p className='fs-2 text-center' style={{fontWeight: 'bold'}}>USER PROFILE</p>
                 <p className='fs-3'>Email: {userEmail}</p>
                 <hr/>
-                <h3>{tickets.length} Tickets booked</h3>
-                {tickets.length > 0 && tickets.map(ticket => {
-                    return <Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} status={ticket.status} set_cancel={set_cancel} showStatus={true}/>
-                })
+                {tickets ?
+                    <>
+                        <h3>{tickets.length} Tickets booked</h3>
+                        {tickets.map(ticket => {
+                            return <Ticket id={ticket._id} bus_id={ticket.bus_id} doj={ticket.date} ticketPrice={ticket.ticket_price} selectedSeats={ticket.selected_seats} status={ticket.status} set_cancel={set_cancel} showStatus={true}/>
+                        })
+                        }
+                    </>
+                    :
+                    <p>No tickets booked</p>
                 }
             </div>
         </Container>
