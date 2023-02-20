@@ -1,7 +1,8 @@
 import { React, useEffect, useState } from "react";
-import { Button, Container, Row, Col } from "react-bootstrap";
-import { useNavigate, useParams } from "react-router-dom";
-import BusCard from "./BusCard";
+import { Button, Container, Row, Col } from "react-bootstrap"
+import { useNavigate, useParams } from "react-router-dom"
+import BusCard from "./BusCard"
+import {fetchBusById} from '../API/BusAPI'
 
 export default function BusSeatBooking() {
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -93,11 +94,7 @@ export default function BusSeatBooking() {
   };
 
   const fetchBus = async () => {
-    try {
-      const response = await fetch(`http://127.0.0.1:4000/bus/${id}`, {
-        method: "GET",
-      });
-      const bus_res = await response.json();
+      const bus_res = await fetchBusById(id)
       setBus(bus_res);
       setSeatPrice(bus_res["seat_price"]);
       const routes = bus_res["booked_seat"];
@@ -107,17 +104,13 @@ export default function BusSeatBooking() {
           setArrivalTime(element.arrival_time);
           setDepartureTime(element.departure_time);
         }
-      });
-
+      })
       routes.forEach((element) => {
         if (element.date_of_journey === `${doj}`) {
           setBookedSeats(element.seat_numbers);
         }
-      });
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+      })
+  }
 
   const userId = localStorage.getItem("user_id");
   useEffect(() => {

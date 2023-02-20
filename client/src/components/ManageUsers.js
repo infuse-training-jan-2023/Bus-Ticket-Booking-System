@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table} from 'react-bootstrap'
 import { useNavigate } from "react-router";
+import { fetchAllUsers } from "../API/UserAPI";
 import User from './User'
 
 
@@ -11,18 +12,10 @@ export default function UserComponent() {
   const userId = localStorage.getItem('user_id')
   const navigate=useNavigate()
 
-    const fetchUsers = async()=>{
-        try{
-            const response = await fetch(`http://127.0.0.1:4000/users`, {
-                method: 'GET', 
-              })
-              const users = await response.json()
-              setusers(users)
-        }
-        catch(error){
-            return error;
-        }
-    }
+  const fetchUsers = async()=>{
+    const users = await fetchAllUsers()
+    setusers(users)
+  }
 
   useEffect(() => {
     if (!userId) navigate("/login");

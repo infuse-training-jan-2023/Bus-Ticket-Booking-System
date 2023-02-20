@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Row, Col, Form, Button, Table } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
+import {addNewBus} from '../API/BusAPI'
 
 let id = 0
 
@@ -36,27 +37,13 @@ export default function AddBus() {
         alert("please add atleast one routine for the bus")
     }
     else{
-    addBusToDB()
+        addBusToDB()
     }
   }
 
   const addBusToDB = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:4000/bus", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify(fields),
-      });
-      const data = await response.json();
-      console.log(data)
-    
-      //navigate('/buses');
-    } catch (error) {
-      console.log(error);
-    }
+    const res = await addNewBus(fields)
+    console.log(res)
     navigate('/manage_buses')
   };
 
@@ -72,6 +59,11 @@ export default function AddBus() {
         allRoutines.filter(r => r.id !== idx)
       )
   }
+
+  useEffect(() => {
+    if(!localStorage.getItem('is_admin'))
+        navigate('/login')
+  }, [])
 
   return (
     <Container>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Container } from 'react-bootstrap'
 import { useNavigate } from "react-router-dom"
+import { fetchTicketsByEmail } from '../API/TicketAPI'
 import Ticket from './TicketCard'
 
 export default function UserProfile() {
@@ -9,15 +10,8 @@ export default function UserProfile() {
 
     const [tickets, setTickets] = useState([])
     const fetchTickets = async() => {
-        try {
-            const response = await fetch(`http://127.0.0.1:4000/ticket/${userId}`, {method: 'GET'})
-            const ticket_res = await response.json()
-            setTickets(ticket_res)
-            console.log(tickets)
-        }  
-        catch (error) {
-            console.log('Error:', error);
-        }
+        const ticket_res = await fetchTicketsByEmail(userId)
+        setTickets(ticket_res)
     }
 
     const [cancel, setCancel] = useState('')

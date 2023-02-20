@@ -1,5 +1,6 @@
 import { useNavigate,Link } from 'react-router-dom';
 import {Button,Container,Form } from "react-bootstrap";
+import { registerUser } from '../API/UserAPI';
 
 var user = {'emailid':'','gender':'','password':'','confirm_password':'','is_admin':false}
   async function register_user(user,handle_register){
@@ -16,7 +17,7 @@ var user = {'emailid':'','gender':'','password':'','confirm_password':'','is_adm
       document.getElementsByClassName('passwords-message')[0].style.display='block'
     }
     else{
-      const fetchResponse = await fetch('http://127.0.0.1:4000/register', settings);
+      const fetchResponse = await registerUser(user);
       if(fetchResponse.status === 400){
         document.getElementsByClassName('passwords-message')[0].style.display='none'
         document.getElementsByClassName('registeration-message')[0].style.display='block'
@@ -30,8 +31,6 @@ var user = {'emailid':'','gender':'','password':'','confirm_password':'','is_adm
       }
     }
   }
-
-
 
 function get_email(e){
     user.emailid = e.target.value

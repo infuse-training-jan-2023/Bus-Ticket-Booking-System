@@ -1,36 +1,31 @@
 import { useNavigate,Link } from 'react-router-dom';
 import {Button,Container,Form } from "react-bootstrap";
+import { loginUser } from '../API/UserAPI';
 
 var email = ''
 var password = ''
 
 // validate user credentials
 async function login_validation(email,password,handle_login){
-    var credentials = {'emailid': String(email),'password':String(password)}
-    const settings = {
-      method: 'POST',
-      headers: {Accept: 'application/json','Content-Type': 'application/json'},
-      body:JSON.stringify(credentials)
-  };
-  const fetchResponse = await fetch('http://127.0.0.1:4000/login', settings);
-  if(fetchResponse.status === 401){
-    document.getElementsByClassName('login-message')[0].style.display='block'
-  }
-  else{
-    document.getElementsByClassName('login-message')[0].style.display='none'
-    const data = await fetchResponse.json()
-    window.localStorage.setItem("user_id", data._id);
-    window.localStorage.setItem("is_admin",data.is_admin);
-    window.localStorage.setItem("emailid",data.emailid);
-    handle_login()
-  }
+    const fetchResponse = await loginUser(email,password)
+    if(fetchResponse.status === 401){
+        document.getElementsByClassName('login-message')[0].style.display='block'
+    }
+    else{
+        document.getElementsByClassName('login-message')[0].style.display='none'
+        const data = await fetchResponse.json()
+        window.localStorage.setItem("user_id", data._id);
+        window.localStorage.setItem("is_admin",data.is_admin);
+        window.localStorage.setItem("emailid",data.emailid);
+        handle_login()
+    }
 }
-
 
 function get_email(e){
     email = e.target.value
     document.getElementsByClassName('login-message')[0].style.display='none'
 }
+
 function get_password(e){
     password = e.target.value
 }

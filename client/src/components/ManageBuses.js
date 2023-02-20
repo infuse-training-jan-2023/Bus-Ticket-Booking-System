@@ -2,33 +2,29 @@
 import React, { useEffect, useState } from "react";
 import { Container, Table,Button } from 'react-bootstrap'
 import { useNavigate } from "react-router";
+import { fetchAllBuses } from "../API/BusAPI";
 import Bus from './Bus'
 
-
 export default function BusComponent() {
-// set state
-  const [buses, setbuses] = useState([]);
-  const [deleted,setdeleted]=useState('false')
+  const [buses, setbuses] = useState([])
   const userId = localStorage.getItem('user_id')
   const navigate=useNavigate()
 
-    const fetchBuses = async()=>{
-        try{
-            const response = await fetch(`http://127.0.0.1:4000/buses`, {
-                method: 'GET', 
-              })
-              const buses = await response.json()
-              setbuses(buses)
-              setdeleted('deleted')
-        }
-        catch(error){
-        }
-    }      
+  const fetchBuses = async() => {
+    const buses = await fetchAllBuses()
+    setbuses(buses)
+  }  
+  
+  const [cancel, setCancel] = useState('')
+  const deleteBusStatus = (data) => {
+      setCancel(data)
+      console.log(cancel)
+  }
 
   useEffect(() => {
     if (!userId) navigate("/login");
     fetchBuses()    
-  }, [buses]);
+  }, [userId, cancel]);
 
 return (
     <div>
@@ -51,7 +47,7 @@ return (
 					</tr>
 				</thead>
 				<tbody>
-					{ buses.length > 0 && buses.map((bus, idx) => <Bus key={bus._id} bus={bus} idx={idx}/>) }
+					{ buses.length > 0 && buses.map((bus, idx) => <Bus key={bus._id} bus={bus} idx={idx} deleteBusStatus={deleteBusStatus}/>) }
 				</tbody>
 			</Table>
 		</Container>

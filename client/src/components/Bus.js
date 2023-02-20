@@ -1,29 +1,22 @@
 // Customer.js
 import { Row, Col, Button, Modal } from "react-bootstrap";
-import React, { useState } from "react";
+import React from "react";
+import { deleteBus } from "../API/BusAPI";
 
-// deconstructed props
 function BusRow({
   bus: { _id, bus_type, start_city, destination_city, seat_price, routine },
   idx,
+  deleteBusStatus
 }) {
-  const [isShow, invokeModal] = React.useState(false);
-  const [deleted,isdeleted]=useState('false')
+  const [isShow, invokeModal] = React.useState(false)
   const initModal = () => {
-    return invokeModal(!isShow);
+    return invokeModal(!isShow)
   };
 
-  const HandleDeleteBus = async () => {
-    try {
-      const response = await fetch(`http://127.0.0.1:4000/bus/${_id}`, {
-        method: "DELETE",
-      });
-      const res = await response.json();
-      isdeleted('true')
-    } catch (error) {
-      return error;
-    }
-  };
+  const HandleDeleteBus = async() => {
+      const res = await deleteBus(_id);
+      deleteBusStatus(res)
+  }
 
   return (
     <>

@@ -1,6 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import BusCard from './BusCard'
+import {fetchBusByFilters} from '../API/BusAPI'
 
 export default function SearchPage() {
   const cities = ['goa', 'bangalore', 'delhi']
@@ -123,7 +124,6 @@ export default function SearchPage() {
       })
     }
 
-
     filters["$and"] = x 
     setAddFilter(Math.floor((Math.random() * 1000) + 1))
   }
@@ -153,20 +153,22 @@ export default function SearchPage() {
 
 
   const fetchBus = async() => {
-      try {
-        const response = await fetch('http://127.0.0.1:4000/bus_search', {
-          method: 'POST', 
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify(filters),
-        })
-        const bus_res = await response.json()
-        setBuses(bus_res)
-      }  
-      catch (error) {
-        console.log('Error:', error);
-      }
+      // try {
+      //   const response = await fetch('http://127.0.0.1:4000/bus_search', {
+      //     method: 'POST', 
+      //     headers: {
+      //       'Content-Type': 'application/json; charset=UTF-8',
+      //     },
+      //     body: JSON.stringify(filters),
+      //   })
+      //   const bus_res = await response.json()
+      //   setBuses(bus_res)
+      // }  
+      // catch (error) {
+      //   console.log('Error:', error);
+      // }
+      const bus_res = await fetchBusByFilters(filters)
+      setBuses(bus_res)
   }
 
   const sortBuses = (order) => {

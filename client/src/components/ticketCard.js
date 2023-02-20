@@ -3,6 +3,8 @@ import {Card, Col, Row, Button} from 'react-bootstrap'
 import moment from 'moment'
 import '../App.css'
 import { useNavigate } from 'react-router'
+import { fetchBusByIdAndDay } from '../API/BusAPI'
+import { updateTicketStatus } from '../API/TicketAPI'
 
 export default function Ticket(props) {
   const {id, bus_id, doj, ticketPrice, selectedSeats, status, set_cancel, showStatus} = props
@@ -14,37 +16,19 @@ export default function Ticket(props) {
   const navigate=useNavigate()
   
   const fetchBus = async() => {
-    try {
-        const response = await fetch(`http://127.0.0.1:4000/bus?bus_id=${bus_id}&day=${day}`, {method: 'GET'})
-        const bus_res = await response.json()
-        setBus(bus_res)
-        console.log(bus)
-    }  
-    catch (error) {
-        console.log('Error:', error);
-    }
+    const bus_res = await fetchBusByIdAndDay(bus_id, day)
+    setBus(bus_res)
   }
 
-  const findDuration = () => {    
+  const findDuration = () => {
     const duration = (bus[0].departure_time - bus[0].arrival_time) < 0 ? (bus[0].departure_time - bus[0].arrival_time + 2400) : (bus[0].departure_time - bus[0].arrival_time)    
     const mins = duration.toString().slice(-2), hrs = (duration.toString().length === 3) ? '0' + duration.toString().substring(0, 1) : duration.toString().substring(0, 2)    
-    setDuration(`${hrs}hrs ${mins}mins`)  
+    setDuration(`${hrs}hrs ${mins}mins`)
   }
 
   const cancelTicket = async() => {
-    try {
-        const response = await fetch("http://127.0.0.1:4000/ticket", {          
-          method: 'PUT', 
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: JSON.stringify({"ticket_id": id, "date": doj}),})
-        const data = await response.json()
-        set_cancel(data)
-    }  
-    catch (error) {
-        console.log('Error:', error);
-    }
+    const ticket_res = await updateTicketStatus(id, doj)
+    set_cancel(ticket_res)
   }
 
   useEffect(() => {

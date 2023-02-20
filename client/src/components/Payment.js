@@ -2,8 +2,9 @@ import { useEffect, useState,useRef } from 'react'
 import {Card, Button, Container, Row, Col} from 'react-bootstrap'
 import { Link, useNavigate, useParams} from 'react-router-dom'
 import Ticket from './TicketCard'
-import { PDFExport, savePDF } from '@progress/kendo-react-pdf';
+import { PDFExport } from '@progress/kendo-react-pdf';
 import '@progress/kendo-theme-default/dist/all.css';
+import { fetchTicketById } from '../API/TicketAPI';
 
 export default function Payment() {
 	const {ticket_id} = useParams()
@@ -14,20 +15,14 @@ export default function Payment() {
 
 	const exportPDFWithComponent = () => {
 		if (pdfExportComponent.current) {
-		pdfExportComponent.current.save();
+			pdfExportComponent.current.save();
 		}
 	};
 
 	const [ticket, setTicket] = useState({})
 	const fetchATicket = async() => {
-        try {
-            const response = await fetch(`http://127.0.0.1:4000/payment_success/${ticket_id}`, {method: 'GET'})
-            const ticket_res = await response.json()
-            setTicket(ticket_res)
-        }  
-        catch (error) {
-            console.log('Error:', error);
-        }
+        const ticket_res = await fetchTicketById(ticket_id)
+        setTicket(ticket_res)
 	}
 
 	useEffect(() => {
