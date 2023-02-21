@@ -50,7 +50,7 @@ export default function Ticket(props) {
       <div className='d-flex gap-3 justify-content-md-center flex-wrap'>
         <p style={{fontWeight: 'bold'}}>Ticket Id: {id}</p>
         <p style={{fontWeight: 'bold'}}>Bus Id: {bus_id}</p>
-        <p style={{fontWeight: 'bold'}}>DOJ: {moment(doj).format('MMM Do YYYY')}</p>
+        <p style={{fontWeight: 'bold'}}>Date: {moment(doj).format('MMM Do YYYY')}</p>
       </div>
       <Col xs={12} md={8}>
           <Row>
@@ -82,7 +82,13 @@ export default function Ticket(props) {
           </Row>
           <Row>
             <div className='text-muted selected-seats'>
-              Seats booked: {selectedSeats && selectedSeats.map(s => <span>{s} </span>)}
+              Seats booked: {selectedSeats && selectedSeats.map((s, idx) => {
+                if(idx !== selectedSeats.length - 1)
+                  return(<span>{s}, </span>)
+                else
+                  return(<span>{s}</span>)
+                })}
+
             </div>
           </Row>
       </Col>

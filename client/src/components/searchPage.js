@@ -23,7 +23,6 @@ export default function SearchPage() {
   const [loading, setLoading] = useState(false)
   const [sortValue, setSortValue] = useState('seat_price')
   const [doj, setDOJ] = useState('')
-  const dateData = useRef(null)
 
   const timeQuery = [
     {
@@ -169,7 +168,6 @@ export default function SearchPage() {
       delete filters.$and
   }
 
-
   const fetchBus = async() => {
       const bus_res = await fetchBusByFilters(filters)
       setBuses(bus_res)
@@ -202,7 +200,7 @@ export default function SearchPage() {
 
   let currentMonth = `0${new Date().getMonth() + 1}`
   let inpDate = `${new Date().getFullYear()}-${currentMonth.slice(-2)}-${new Date().getDate()}`
-  const [date, setDate] = useState(inpDate)
+  const [date, setDate] = useState('')
 
   return (
     <Container>
@@ -290,12 +288,13 @@ export default function SearchPage() {
                 <span><Button variant='danger' onClick={() => sortBuses('asc')}>&uarr;</Button></span>
                 <span><Button variant='danger' onClick={() => sortBuses('desc')}>&darr;</Button></span>
               </div>
-              {buses.length !== 0 && buses.map(bus => {
+              {buses.length > 0 ? buses.map(bus => {
                 return(
                   <BusCard id={bus.id} startCity={bus.start_city} destinationCity={bus.destination_city} seatPrice={bus.seat_price} arrivalTime={bus.arrival_time} departureTime={bus.departure_time} buttonType="Book" dateOfJourney={doj} showDate={false}/>
                 )
-              })
-              }
+              }) 
+              : <p className='text-center'>No data found</p>
+            }
             </Col>
           </Row>
         ) : (

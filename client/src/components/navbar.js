@@ -5,6 +5,7 @@ export default function NavBar() {
   const navigate = useNavigate();
   const uid = window.localStorage.getItem("user_id");
   const isadmin = window.localStorage.getItem("is_admin");
+  const currentLocation = window.location.href
 
   function handleLogout() {
     window.localStorage.clear();
