@@ -171,20 +171,6 @@ export default function SearchPage() {
 
 
   const fetchBus = async() => {
-      // try {
-      //   const response = await fetch('http://127.0.0.1:4000/bus_search', {
-      //     method: 'POST', 
-      //     headers: {
-      //       'Content-Type': 'application/json; charset=UTF-8',
-      //     },
-      //     body: JSON.stringify(filters),
-      //   })
-      //   const bus_res = await response.json()
-      //   setBuses(bus_res)
-      // }  
-      // catch (error) {
-      //   console.log('Error:', error);
-      // }
       const bus_res = await fetchBusByFilters(filters)
       setBuses(bus_res)
   }

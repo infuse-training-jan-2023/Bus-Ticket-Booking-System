@@ -3,6 +3,7 @@ import { Button, Container, Row, Col } from "react-bootstrap"
 import { useNavigate, useParams } from "react-router-dom"
 import BusCard from "./BusCard"
 import {fetchBusById} from '../API/BusAPI'
+import { bookTicket } from "../API/TicketAPI";
 
 export default function BusSeatBooking() {
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -68,29 +69,17 @@ export default function BusSeatBooking() {
   const [ticket, setTicket] = useState("");
   const navigate = useNavigate();
   const handleBookNowClick = async () => {
-    try {
-      const post_data = {
-        selected_seats: selectedSeats,
-        date: doj,
-        bus_id: bus["_id"],
-        user_id: localStorage.getItem("user_id"),
-        ticket_price: seatPrice * selectedSeats.length,
-        day: `${getweekday(day)}`,
-      };
-      const response = await fetch("http://127.0.0.1:4000/ticket", {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8",
-        },
-        body: JSON.stringify(post_data),
-      });
-      const data = await response.json();
-      setTicket(data.ticket_id);
-      navigate(`/payment/${data.ticket_id}`);
-    } catch (error) {
-      console.log(error);
-    }
+    const post_data = {
+      selected_seats: selectedSeats,
+      date: doj,
+      bus_id: bus["_id"],
+      user_id: localStorage.getItem("user_id"),
+      ticket_price: seatPrice * selectedSeats.length,
+      day: `${getweekday(day)}`,
+    };
+    const data = await bookTicket(post_data)
+    setTicket(data.ticket_id);
+    navigate(`/payment/${data.ticket_id}`);
   };
 
   const fetchBus = async () => {

@@ -14,7 +14,7 @@ export default function NavBar() {
   return (
     <Navbar expand="lg" className="px-2">
       <Container fluid>
-        <Navbar.Brand href="/" style={{ fontWeight: "700" }}>
+        <Navbar.Brand href="/" style={{ fontWeight: "700" }} className='text-wrap'>
           Infuse <img src="../images/bus.png" width={60} height={60} alt="bus"/> Travels
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -42,7 +42,7 @@ export default function NavBar() {
           {uid ? (
             <>
               <Button
-                variant="outline-0"
+                variant={currentLocation === 'http://localhost:3000/user_profile'? "outline-danger" : 'outline-0'}
                 onClick={() => navigate("/user_profile")}
               >
                 <svg

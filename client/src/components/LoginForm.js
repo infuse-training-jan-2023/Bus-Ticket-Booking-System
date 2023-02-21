@@ -1,6 +1,8 @@
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate,Link, } from 'react-router-dom';
 import {Button,Container,Form } from "react-bootstrap";
 import { loginUser } from '../API/UserAPI';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 var email = ''
 var password = ''
@@ -32,6 +34,7 @@ function get_password(e){
 
 function LoginForm() {
     const navigate = useNavigate();
+    
     const handle_login = () => navigate(-1);
     return (
         <Container>

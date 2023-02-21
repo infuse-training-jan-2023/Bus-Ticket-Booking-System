@@ -17,15 +17,8 @@ export default function Ticket(props) {
   const currentDate = (new Date()).getTime(), bookedDate = (new Date(doj)).getTime()
 
   const fetchBus = async() => {
-    try {
-        const response = await fetch(`http://127.0.0.1:4000/bus?bus_id=${bus_id}&day=${day}`, {method: 'GET'})
-        const bus_res = await response.json()
-        setBus(bus_res)
-        // console.log(bus)
-    }  
-    catch (error) {
-        console.log('Error:', error);
-    }
+    const bus_res = await fetchBusByIdAndDay(bus_id, day)
+    setBus(bus_res)
   }
 
   const findDuration = () => {

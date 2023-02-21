@@ -11,30 +11,36 @@ export default function AddBus() {
   const [aTime, setATime] = useState('')
   const [dTime, setDTime] = useState('')  
   const [allRoutines, setAllRoutines] = useState([])
+  const [error, setError] = useState('')
 
   const navigate=useNavigate()
 
   const addBus = () => {
-    
     fields['routine'] = allRoutines.map(({day, arrival_time, departure_time}) => ({day, arrival_time, departure_time}))
     console.log(fields)
     if(Object.keys(fields).length < 4) {
-        alert("Please fill all the fields")
+        setError("Please fill all the fields")
+        return
     } 
     else if(fields.start_city === fields.destination_city) {
-        alert("Start city and destination city can't be same")
+        setError("Start city and destination city can't be same")
+        return
     }
     else if(fields.bus_type==null){
-        alert("Please select the bus Type")
+        setError("Please select the bus Type")
+        return
     }
     else if(fields.seat_price > 3000) {
-        alert("Price can't be greater than Rs.3000")
+        setError("Price can't be greater than Rs.3000")
+        return
     }
     else if(fields.seat_price < 100){
-        alert("Please enter correct seat price")
+        setError("Please enter correct seat price")
+        return
     }
     else if((fields.routine).length==0){
-        alert("please add atleast one routine for the bus")
+        setError("please add atleast one routine for the bus")
+        return
     }
     else{
         addBusToDB()
@@ -67,6 +73,7 @@ export default function AddBus() {
 
   return (
     <Container>
+        
         <h2>Add bus details</h2>
         <hr/>
         <Form className='my-3'>
